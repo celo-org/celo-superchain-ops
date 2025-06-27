@@ -66,7 +66,7 @@ sign version team hd-path='':
     TEAM={{team}}
     just check-team $TEAM
 
-    HD_PATH={{hd-path}}
+    HD_PATH="{{hd-path}}"
 
     OPCM=$(cat upgrades/$VERSION.json | jq -r .opcm)
     PARENT_CALLDATA=$(cat upgrades/$VERSION.json | jq -r .calldata)
@@ -101,9 +101,30 @@ sign version team hd-path='':
         SIG=$(cast wallet sign --ledger $CHILD_TX_HASH)
     else
         echo "Signing Ledger wallet under $HD_PATH derivation path..."
-        SIG=$(cast wallet sign --ledger --mnemonic-derivation-path $HD_PATH $CHILD_TX_HASH)
+        SIG=$(cast wallet sign --ledger --hd-path "$HD_PATH" $CHILD_TX_HASH)
     fi
     echo "Your signature for child tx hash: $SIG"
+
+sign_ledger version team ledger_app account_index='0':
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    LEDGER_APP="{{ledger_app}}"
+    ACCOUNT_INDEX="{{account_index}}"
+
+    case $LEDGER_APP in
+    "celo")
+        HD_PATH="m/44'/52752'/0'/0/$ACCOUNT_INDEX"
+        ;;
+    "eth")
+        HD_PATH="m/44'/60'/0'/0/$ACCOUNT_INDEX"
+        ;;
+    *)
+        echo "Invalid ledger_app: $LEDGER_APP. Must be 'celo' or 'eth'." && exit 1
+        ;;
+    esac
+
+    just sign {{version}} {{team}} "$HD_PATH"
 
 exec safe to calldata op sig:
     #!/usr/bin/env bash
