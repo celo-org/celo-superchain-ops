@@ -56,7 +56,7 @@ simulate version:
     PARENT_CALLDATA=$(cat upgrades/$VERSION.json | jq -r .calldata)
     echo "Link to Tenderly sim: https://dashboard.tenderly.co/TENDERLY_USERNAME/TENDERLY_PROJECT/simulator/new?network=1&contractAddress=$OPCM&from=$FROM&rawFunctionInput=$PARENT_CALLDATA"
 
-sign version team hd_path:
+sign version team hd-path='':
     #!/usr/bin/env bash
     set -euo pipefail
 
@@ -66,7 +66,7 @@ sign version team hd_path:
     TEAM={{team}}
     just check-team $TEAM
 
-    HD_PATH="{{hd_path}}"
+    HD_PATH="{{hd-path}}"
 
     OPCM=$(cat upgrades/$VERSION.json | jq -r .opcm)
     PARENT_CALLDATA=$(cat upgrades/$VERSION.json | jq -r .calldata)
