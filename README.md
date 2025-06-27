@@ -22,7 +22,7 @@ just sign_ledger v3 clabs celo
 
 If you need to use a different account index:
 ```bash
-just sign_ledger v2 clabs celo 1
+just sign_ledger v2 clabs celo <index>
 ```
 
 ### If you are a member of the `council` team:
