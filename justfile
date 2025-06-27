@@ -52,7 +52,7 @@ simulate version:
     just check-version $VERSION
 
     FROM=$(cast wallet address --private-key $SENDER_PK)
-    OPCM=$(cat upgrades/$VERSION.json | jq -r .opcm)
+    OPCM=$(cat upgrades/$VERSION.json | jq -r .to)
     PARENT_CALLDATA=$(cat upgrades/$VERSION.json | jq -r .calldata)
     echo "Link to Tenderly sim: https://dashboard.tenderly.co/TENDERLY_USERNAME/TENDERLY_PROJECT/simulator/new?network=1&contractAddress=$OPCM&from=$FROM&rawFunctionInput=$PARENT_CALLDATA"
 
@@ -68,7 +68,7 @@ sign version team hd-path='':
 
     HD_PATH={{hd-path}}
 
-    OPCM=$(cat upgrades/$VERSION.json | jq -r .opcm)
+    OPCM=$(cat upgrades/$VERSION.json | jq -r .to)
     PARENT_CALLDATA=$(cat upgrades/$VERSION.json | jq -r .calldata)
     PARENT_NONCE=$(cat upgrades/$VERSION.json | jq -r .nonce.parent)
     PARENT_TX_HASH=$(cast call $PARENT_SAFE_ADDRESS \
