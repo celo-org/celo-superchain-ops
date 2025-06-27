@@ -41,7 +41,7 @@ just sign_ledger v3 council celo
 
 If you need to use a different account index:
 ```bash
-just sign_ledger v2 council celo 1
+just sign_ledger v2 council celo <index>
 ```
 
 ## Available Commands
