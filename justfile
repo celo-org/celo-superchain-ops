@@ -56,7 +56,7 @@ simulate version:
     PARENT_CALLDATA=$(cat upgrades/$VERSION.json | jq -r .calldata)
     echo "Link to Tenderly sim: https://dashboard.tenderly.co/TENDERLY_USERNAME/TENDERLY_PROJECT/simulator/new?network=1&contractAddress=$OPCM&from=$FROM&rawFunctionInput=$PARENT_CALLDATA"
 
-sign version team hd-path='':
+sign version team hd_path='':
     #!/usr/bin/env bash
     set -euo pipefail
 
@@ -66,7 +66,7 @@ sign version team hd-path='':
     TEAM={{team}}
     just check-team $TEAM
 
-    HD_PATH="{{hd-path}}"
+    HD_PATH="{{hd_path}}"
 
     OPCM=$(cat upgrades/$VERSION.json | jq -r .opcm)
     PARENT_CALLDATA=$(cat upgrades/$VERSION.json | jq -r .calldata)
@@ -97,13 +97,22 @@ sign version team hd-path='':
     echo "Child tx hash: $CHILD_TX_HASH"
 
     if [ -z ${HD_PATH:-} ]; then
+        ACCOUNT=$(cast wallet address --ledger)
+        echo "Your account is $ACCOUNT"
+
         echo "Signing Ledger wallet under default derivation path..."
         SIG=$(cast wallet sign --ledger $CHILD_TX_HASH)
     else
+        ACCOUNT=$(cast wallet address --ledger --hd-path "$HD_PATH")
+        echo "Your account is $ACCOUNT"
+
         echo "Signing Ledger wallet under $HD_PATH derivation path..."
         SIG=$(cast wallet sign --ledger --hd-path "$HD_PATH" $CHILD_TX_HASH)
     fi
     echo "Your signature for child tx hash: $SIG"
+
+    export $ACCOUNT
+    export $SIG
 
 sign_ledger version team ledger_app account_index='0':
     #!/usr/bin/env bash
@@ -125,6 +134,30 @@ sign_ledger version team ledger_app account_index='0':
     esac
 
     just sign {{version}} {{team}} "$HD_PATH"
+
+print_json v2 v3 account:
+    echo "Copy and forward following JSON to your facilitator:"
+    echo "{\"v2\": \"{{v2}}\", \"v3\": \"{{v3}}\", \"account\": \"{{account}}\"}" | jq
+
+sign_all team hd_path='':
+    just sign v2 {{team}} {{hd_path}}
+    V2_SIG=$SIG
+    ACCOUNT=$ACCOUNT
+
+    just sign v3 {{team}} {{hd_path}}
+    V3_SIG=$SIG
+
+    just print_json $V2_SIG $V3_SIG $ACCOUNT
+
+sign_all_ledger team ledger_app account_index='0':
+    just sign_ledger v2 {{team}} {{ledger_app}} {{account_index}}
+    V2_SIG=$SIG
+    ACCOUNT=$ACCOUNT
+
+    just sign_ledger v3 {{team}} {{ledger_app}} {{account_index}}
+    V3_SIG=$SIG
+
+    just print_json $V2_SIG $V3_SIG $ACCOUNT
 
 exec safe to calldata op sig:
     #!/usr/bin/env bash
