@@ -96,10 +96,12 @@ sign version team hd-path='':
     )
     echo "Child tx hash: $CHILD_TX_HASH"
 
-    if [ -z ${HD_PATH:-} ]
-        SIG=$(cast wallet sign --ledger)
+    if [ -z ${HD_PATH:-} ]; then
+        echo "Signing Ledger wallet under default derivation path..."
+        SIG=$(cast wallet sign --ledger $CHILD_TX_HASH)
     else
-        SIG=$(cast wallet sign --ledger --mnemonic-derivation-path $HD_PATH)
+        echo "Signing Ledger wallet under $HD_PATH derivation path..."
+        SIG=$(cast wallet sign --ledger --mnemonic-derivation-path $HD_PATH $CHILD_TX_HASH)
     fi
     echo "Your signature for child tx hash: $SIG"
 
