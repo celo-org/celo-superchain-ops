@@ -83,6 +83,9 @@ just sign_all_ledger council
 If you need to use a different ledger app account index: 
 ```bash
 just sign_all_ledger council [eth|celo] <index>
+
+# example
+just sign_all_ledger council eth 1
 ```
 
 ### If you are a member of the `clabs` team:
@@ -92,6 +95,9 @@ You will need to sign the transactions for the `clabs` safe for both `v2` and `v
 Sign for `v2` and `v3` (uses the Ethereum Ledger app by default):
 ```bash
 just sign_all_ledger clabs
+
+# example
+just sign_all_ledger clabs eth 1
 ```
 
 If you need to use a different ledger app or account index
