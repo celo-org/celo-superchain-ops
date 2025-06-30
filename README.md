@@ -56,7 +56,7 @@ Rename `.env.sample` to `.env` and fill in the required environment variables. Y
 
 The main command you will be using is `sign_all_ledger`. This command will ask you to sign two transactions (v2 and v3) on your Ledger device. After successful signing, it will generate an `out.json` file. This file contains the signatures and needs to be sent back to cLabs. Please check the account value in this file to make sure it matches the account you intended to sign with.
 
-The default derivation path used is the Ethereum derivation path (`m/44'/60'/0'/0/<account_index>`).
+The default derivation path used is the Ethereum derivation path (`m/44'/60'/0'/0/<account_index>`). If you will choose celo ledger app make sure you have the Eth Recovery app open on your Ledger - [see below](#ledger-workaround-for-celo-app-users)
 
 ### Simulation of v2 and v3 upgrade
 
@@ -80,7 +80,7 @@ Sign for `v2` and `v3` (uses the Ethereum Ledger app by default):
 just sign_all_ledger council
 ```
 
-If you need to use a different ledger app account index:  (**if you choose celo ledger app make sure you have the Eth Recovery app open on your Ledger - see below**):
+If you need to use a different ledger app account index: 
 ```bash
 just sign_all_ledger council [eth|celo] <index>
 ```
@@ -94,7 +94,7 @@ Sign for `v2` and `v3` (uses the Ethereum Ledger app by default):
 just sign_all_ledger clabs
 ```
 
-If you need to use a different ledger app or account index (**if you choose celo ledger app make sure you have the Eth Recovery app open on your Ledger - see below**):
+If you need to use a different ledger app or account index
 ```bash
 just sign_all_ledger clabs [eth|celo] <index>
 ```
