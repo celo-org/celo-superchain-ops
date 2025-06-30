@@ -109,7 +109,7 @@ sign version team hd_path='':
     echo "Child tx hash: $CHILD_TX_HASH"
     echo "Child tx data: $CHILD_TX_DATA"
 
-    CHILD_HASH_SIGN=0x${CHILD_DOMAIN_HASH}${CHILD_TX_HASH}
+    CHILD_HASH_SIGN=0x${CHILD_DOMAIN_HASH:2}${CHILD_TX_HASH:2}
 
     if [ -z ${HD_PATH:-} ]; then
         ACCOUNT=$(cast wallet address --ledger)
