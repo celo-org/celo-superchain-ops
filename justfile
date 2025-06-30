@@ -74,7 +74,7 @@ sign version team hd_path='':
     PARENT_CALLDATA=$(cat upgrades/$VERSION.json | jq -r .calldata)
     PARENT_NONCE=$(cat upgrades/$VERSION.json | jq -r .nonce.parent)
     PARENT_TX_HASH=$(cast call $PARENT_SAFE_ADDRESS \
-        "getTransactionHash(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
+        "encodeTransactionData(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
         $OPCM $VALUE $PARENT_CALLDATA $OP_DELEGATECALL $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $PARENT_NONCE \
         -r $RPC_URL
     )
@@ -92,7 +92,7 @@ sign version team hd_path='':
         ;;
     esac
     CHILD_TX_HASH=$(cast call $CHILD_SAFE_ADDRESS \
-        "getTransactionHash(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
+        "encodeTransactionData(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
         $PARENT_SAFE_ADDRESS $VALUE $CHILD_CALLDATA $OP_CALL $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $CHILD_NONCE \
         -r $RPC_URL
     )
