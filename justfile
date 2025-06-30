@@ -155,10 +155,10 @@ sign_ledger version team ledger_app account_index='0':
 
     case $LEDGER_APP in
     "celo")
-        HD_PATH="m/44'/52752'/0'/0/$ACCOUNT_INDEX"
+        HD_PATH="m/44'/52752'/$ACCOUNT_INDEX'/0/0"
         ;;
     "eth")
-        HD_PATH="m/44'/60'/0'/0/$ACCOUNT_INDEX"
+        HD_PATH="m/44'/60'/$ACCOUNT_INDEX'/0/0"
         ;;
     *)
         echo "Invalid ledger_app: $LEDGER_APP. Must be 'celo' or 'eth'." && exit 1
