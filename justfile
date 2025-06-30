@@ -91,6 +91,10 @@ sign version team hd_path='':
         CHILD_NONCE=$(cat upgrades/$VERSION.json | jq -r .nonce.council)
         ;;
     esac
+    CHILD_DOMAIN_HASH=$(cast call $CHILD_SAFE_ADDRESS \
+        "domainSeparator()(bytes32)" \
+        -r $RPC_URL
+    )
     CHILD_TX_HASH=$(cast call $CHILD_SAFE_ADDRESS \
         "getTransactionHash(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
         $PARENT_SAFE_ADDRESS $VALUE $CHILD_CALLDATA $OP_CALL $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $CHILD_NONCE \
@@ -101,21 +105,26 @@ sign version team hd_path='':
         $PARENT_SAFE_ADDRESS $VALUE $CHILD_CALLDATA $OP_CALL $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $CHILD_NONCE \
         -r $RPC_URL
     )
+    echo "Child domain hash: $CHILD_DOMAIN_HASH"
     echo "Child tx hash: $CHILD_TX_HASH"
     echo "Child tx data: $CHILD_TX_DATA"
+
+    CHILD_HASH_SIGN=0x${CHILD_DOMAIN_HASH}${CHILD_TX_HASH}
 
     if [ -z ${HD_PATH:-} ]; then
         ACCOUNT=$(cast wallet address --ledger)
         echo "Your account is $ACCOUNT"
 
         echo "Signing Ledger wallet under default derivation path..."
-        SIG=$(cast wallet sign --ledger $CHILD_TX_DATA)
+        # SIG=$(cast wallet sign --ledger $CHILD_TX_DATA)
+        SIG=$(echo $CHILD_HASH_SIGN | ./eip712sign -ledger)
     else
         ACCOUNT=$(cast wallet address --ledger --hd-path "$HD_PATH")
         echo "Your account is $ACCOUNT"
 
         echo "Signing Ledger wallet under $HD_PATH derivation path..."
-        SIG=$(cast wallet sign --ledger --hd-path "$HD_PATH" $CHILD_TX_DATA)
+        # SIG=$(cast wallet sign --ledger --hd-path "$HD_PATH" $CHILD_TX_DATA)
+        SIG=$(echo $CHILD_HASH_SIGN | ./eip712sign -ledger -hd-paths "$HD_PATH")
     fi
     echo "Your signature for child tx hash: $SIG"
 
