@@ -16,6 +16,12 @@ export REFUND_RECEIVER := "0x0000000000000000000000000000000000000000"
 default:
     just --list
 
+install-eip712sign:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    REPO_ROOT=$(git rev-parse --show-toplevel)
+    GOBIN="${REPO_ROOT}" go install github.com/base/eip712sign@v0.0.11
+
 check-version version:
     #!/usr/bin/env bash
     set -euo pipefail
