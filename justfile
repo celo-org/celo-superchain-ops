@@ -119,11 +119,11 @@ sign version team hd_path='':
 
     case $VERSION in
     "v2")
-        V3_SIG=$(cat out.json | jq .v3)
+        V3_SIG=$(cat out.json | jq -r .v3)
         just create_json $SIG $V3_SIG $ACCOUNT
         ;;
     "v3")
-        V2_SIG=$(cat out.json | jq .v2)
+        V2_SIG=$(cat out.json | jq -r .v2)
         just create_json $V2_SIG $SIG $ACCOUNT
         ;;
     esac
