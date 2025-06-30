@@ -109,7 +109,7 @@ sign version team hd_path='':
     echo "Child tx hash: $CHILD_TX_HASH"
     echo "Child tx data: $CHILD_TX_DATA"
 
-    CHILD_HASH_SIGN=0x${CHILD_DOMAIN_HASH:2}${CHILD_TX_HASH:2}
+    # CHILD_HASH_SIGN=0x${CHILD_DOMAIN_HASH:2}${CHILD_TX_HASH:2}
 
     if [ -z ${HD_PATH:-} ]; then
         ACCOUNT=$(cast wallet address --ledger)
@@ -117,14 +117,16 @@ sign version team hd_path='':
 
         echo "Signing Ledger wallet under default derivation path..."
         # SIG=$(cast wallet sign --ledger $CHILD_TX_DATA)
-        SIG=$(echo $CHILD_HASH_SIGN | ./eip712sign -ledger)
+        # SIG=$(echo $CHILD_HASH_SIGN | ./eip712sign -ledger)
+        SIG=$(echo $CHILD_TX_DATA | ./eip712sign -ledger)
     else
         ACCOUNT=$(cast wallet address --ledger --hd-path "$HD_PATH")
         echo "Your account is $ACCOUNT"
 
         echo "Signing Ledger wallet under $HD_PATH derivation path..."
         # SIG=$(cast wallet sign --ledger --hd-path "$HD_PATH" $CHILD_TX_DATA)
-        SIG=$(echo $CHILD_HASH_SIGN | ./eip712sign -ledger -hd-paths "$HD_PATH")
+        # SIG=$(echo $CHILD_HASH_SIGN | ./eip712sign -ledger -hd-paths "$HD_PATH")
+        SIG=$(echo $CHILD_TX_DATA | ./eip712sign -ledger -hd-paths "$HD_PATH")
     fi
     echo "Your signature for child tx hash: $SIG"
 
