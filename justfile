@@ -132,17 +132,21 @@ sign version team hd_path='':
     echo "Your signature for child tx hash: $SIG"
 
     if [ ! -f out.json ]; then
-        just create_json 0x0 0x0 0x0
+        just create_json 0x0 0x0 0x0 0x0 0x0 0x0 0x0
     fi
 
     case $VERSION in
     "v2")
-        V3_SIG=$(cat out.json | jq -r .v3)
-        just create_json $SIG $V3_SIG $ACCOUNT
+        V3_HASH=$(cat out.json | jq -r .v3_hash)
+        V3_DATA=$(cat out.json | jq -r .v3_data)
+        V3_SIG=$(cat out.json | jq -r .v3_sig)
+        just create_json $CHILD_TX_HASH $CHILD_TX_DATA $SIG $V3_HASH $V3_DATA $V3_SIG $ACCOUNT
         ;;
     "v3")
-        V2_SIG=$(cat out.json | jq -r .v2)
-        just create_json $V2_SIG $SIG $ACCOUNT
+        V2_HASH=$(cat out.json | jq -r .v2_hash)
+        V2_DATA=$(cat out.json | jq -r .v2_data)
+        V2_SIG=$(cat out.json | jq -r .v2_sig)
+        just create_json $V2_HASH $V2_DATA $V2_SIG $CHILD_TX_HASH $CHILD_TX_DATA $SIG $ACCOUNT
         ;;
     esac
 
@@ -167,8 +171,8 @@ sign_ledger version team ledger_app account_index='0':
 
     just sign {{version}} {{team}} "$HD_PATH"
 
-create_json v2 v3 account:
-    echo "{\"v2\": \"{{v2}}\", \"v3\": \"{{v3}}\", \"account\": \"{{account}}\"}" > out.json
+create_json v2_hash v2_data v2_sig v3_hash v3_data v3_sig account:
+    echo "{\"v2_hash\": \"{{v2_hash}}\", \"v2_data\": \"{{v2_data}}\", \"v2_sig\": \"{{v2_sig}}\", \"v3_hash\": \"{{v3_hash}}\", \"v3_data\": \"{{v3_data}}\", \"v3_sig\": \"{{v3_sig}}\", \"account\": \"{{account}}\"}" > out.json
 
 print_json:
     echo "Copy and forward following JSON to your facilitator:"
