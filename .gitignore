@@ -1,0 +1,4 @@
+.env
+out.json
+.tmp
+eip712sign

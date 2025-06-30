@@ -1,0 +1,20 @@
+[tools]
+
+# Core dependencies
+go = "1.23.10"
+just = "1.37.0"
+
+# Foundry dependencies
+# Foundry is a special case because it supplies multiple binaries at the same
+# GitHub release, so we need to use the aliasing trick to get mise to not error
+# The git ref here should be on the `stable` branch.
+# WARNING: DO NOT CHANGE FORGE/CAST/ANVIL VERSIONS UNLESS ABSOLUTELY NECESSARY!
+# The forge release below includes a fix for: https://github.com/foundry-rs/foundry/issues/10302
+forge = "v1.1.0" # https://github.com/foundry-rs/foundry/releases/tag/v1.1.0
+cast = "v1.1.0"
+anvil = "v1.1.0"
+
+[alias]
+forge = "ubi:foundry-rs/foundry[exe=forge]"
+cast = "ubi:foundry-rs/foundry[exe=cast]"
+anvil = "ubi:foundry-rs/foundry[exe=anvil]"
