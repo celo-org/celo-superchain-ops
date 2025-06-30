@@ -97,7 +97,7 @@ sign version team hd_path='':
         -r $RPC_URL
     )
     CHILD_TX_DATA=$(cast call $CHILD_SAFE_ADDRESS \
-        "encodeTransactionData(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
+        "encodeTransactionData(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes)" \
         $PARENT_SAFE_ADDRESS $VALUE $CHILD_CALLDATA $OP_CALL $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $CHILD_NONCE \
         -r $RPC_URL
     )
