@@ -96,13 +96,14 @@ Sign for `v2` and `v3` (uses the Ethereum Ledger app by default):
 ```bash
 just sign_all_ledger clabs
 
-# example
-just sign_all_ledger clabs eth 1
 ```
 
 If you need to use a different ledger app or account index
 ```bash
 just sign_all_ledger clabs [eth|celo] <index>
+
+# example
+just sign_all_ledger clabs eth 1
 ```
 
 ### Ledger Workaround for Celo App Users
