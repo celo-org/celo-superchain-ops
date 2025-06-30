@@ -1,0 +1,9 @@
+{
+    "dependencies": {
+        "@ledgerhq/hw-app-eth": "^6.45.9",
+        "@ledgerhq/hw-transport-node-hid": "^6.29.8",
+        "@types/node": "^24.0.7",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.8.3"
+    }
+}
