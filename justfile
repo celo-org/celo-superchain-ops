@@ -74,7 +74,7 @@ sign version team hd_path='':
     PARENT_CALLDATA=$(cat upgrades/$VERSION.json | jq -r .calldata)
     PARENT_NONCE=$(cat upgrades/$VERSION.json | jq -r .nonce.parent)
     PARENT_TX_HASH=$(cast call $PARENT_SAFE_ADDRESS \
-        "encodeTransactionData(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
+        "getTransactionHash(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
         $OPCM $VALUE $PARENT_CALLDATA $OP_DELEGATECALL $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $PARENT_NONCE \
         -r $RPC_URL
     )
@@ -92,24 +92,30 @@ sign version team hd_path='':
         ;;
     esac
     CHILD_TX_HASH=$(cast call $CHILD_SAFE_ADDRESS \
+        "getTransactionHash(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
+        $PARENT_SAFE_ADDRESS $VALUE $CHILD_CALLDATA $OP_CALL $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $CHILD_NONCE \
+        -r $RPC_URL
+    )
+    CHILD_TX_DATA=$(cast call $CHILD_SAFE_ADDRESS \
         "encodeTransactionData(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
         $PARENT_SAFE_ADDRESS $VALUE $CHILD_CALLDATA $OP_CALL $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $CHILD_NONCE \
         -r $RPC_URL
     )
     echo "Child tx hash: $CHILD_TX_HASH"
+    echo "Child tx data: $CHILD_TX_DATA"
 
     if [ -z ${HD_PATH:-} ]; then
         ACCOUNT=$(cast wallet address --ledger)
         echo "Your account is $ACCOUNT"
 
         echo "Signing Ledger wallet under default derivation path..."
-        SIG=$(cast wallet sign --ledger $CHILD_TX_HASH)
+        SIG=$(cast wallet sign --ledger $CHILD_TX_DATA)
     else
         ACCOUNT=$(cast wallet address --ledger --hd-path "$HD_PATH")
         echo "Your account is $ACCOUNT"
 
         echo "Signing Ledger wallet under $HD_PATH derivation path..."
-        SIG=$(cast wallet sign --ledger --hd-path "$HD_PATH" $CHILD_TX_HASH)
+        SIG=$(cast wallet sign --ledger --hd-path "$HD_PATH" $CHILD_TX_DATA)
     fi
     echo "Your signature for child tx hash: $SIG"
 
