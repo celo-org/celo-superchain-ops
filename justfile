@@ -105,18 +105,17 @@ sign version team hd_path='':
     echo "Child tx data: $CHILD_TX_DATA"
 
     if [ -z ${HD_PATH:-} ]; then
-        ACCOUNT=$(cast wallet address --ledger)
-        echo "Your account is $ACCOUNT"
-
         echo "Signing Ledger wallet under default derivation path..."
         echo $CHILD_TX_DATA | ./eip712sign -ledger > .tmp
     else
-        ACCOUNT=$(cast wallet address --ledger --hd-path "$HD_PATH")
-        echo "Your account is $ACCOUNT"
-
         echo "Signing Ledger wallet under $HD_PATH derivation path..."
         echo $CHILD_TX_DATA | ./eip712sign -ledger -hd-paths "$HD_PATH" > .tmp
     fi
+    
+    ACCOUNT=$(cat .tmp | grep Signer)
+    ACCOUNT="${ACCOUNT#Signer: }"
+    echo "Your account is $ACCOUNT"
+
     SIG=$(cat .tmp | grep Signature)
     SIG="${SIG#Signature: }"
     echo "Your signature for child tx hash: $SIG"
