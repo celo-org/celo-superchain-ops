@@ -2,6 +2,50 @@
 
 Repository created to be equivalent of Optimism SuperchainOps, but for Celo Mainnet
 
+## Installation
+
+### Install and configure Mise
+
+First install Mise:
+```bash
+./scripts/install-mise.sh
+```
+
+To ensure `mise` works correctly, you must activate it in your shell, which sets up the proper environment for your tools (like forge, just, go, etc.).
+
+After running the installation script above, you will see the following log output:
+
+```bash
+mise: installing mise...
+#################### 100.0%
+mise: installed successfully to /Users/<username>/.local/bin/mise
+mise: run the following to activate mise in your shell:
+echo "eval \"\$(/Users/<username>/.local/bin/mise activate zsh)\"" >> "/Users/<username>/.zshrc"
+
+mise: run `mise doctor` to verify this is setup correctly
+```
+
+You must follow the remaining instructions in the log output to fully activate mise in your shell (i.e. add the eval command to your shell profile). Please note, the log output may be different for you depending on your shell.
+
+### Install projects deps with Mise
+
+Than make Mise trust current project:
+```bash
+mise trust
+```
+
+Install project dependencies with Mise:
+```bash
+mise install
+```
+
+### Install other dependencies
+
+Install EIP712 dependency with Just:
+```bash
+just install-eip712sign
+```
+
 ## Current Release Process
 
 The release process involves two teams: `clabs` and `council`. Each team needs to sign transactions for both `v2` and `v3` to approve the new release.
