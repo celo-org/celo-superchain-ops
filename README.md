@@ -75,7 +75,7 @@ just simulate v3
 
 You will need to sign the transactions for the `council` safe for both `v2` and `v3`.
 
-Specify the ledger app and account index to use, indexes start at 0: 
+Specify the ledger app and account index to use, indices start at 0: 
 ```bash
 just sign_all_ledger council [eth|celo] <index> 
 
