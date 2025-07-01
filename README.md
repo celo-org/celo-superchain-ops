@@ -87,7 +87,7 @@ just sign_all_ledger council eth 1
 
 You will need to sign the transactions for the `clabs` safe for both `v2` and `v3`.
 
-Specify the ledger app and account index to use, indexes start at 0: 
+Specify the ledger app and account index to use, indices start at 0: 
 ```bash
 just sign_all_ledger clabs [eth|celo] <index>
 
