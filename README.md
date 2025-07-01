@@ -75,14 +75,9 @@ just simulate v3
 
 You will need to sign the transactions for the `council` safe for both `v2` and `v3`.
 
-Sign for `v2` and `v3` (uses the Ethereum Ledger app by default):
+Specify the ledger app and account index to use, indices start at 0: 
 ```bash
-just sign_all_ledger council
-```
-
-If you need to use a different ledger app account index: 
-```bash
-just sign_all_ledger council [eth|celo] <index>
+just sign_all_ledger council [eth|celo] <index> 
 
 # example
 just sign_all_ledger council eth 1
@@ -92,13 +87,7 @@ just sign_all_ledger council eth 1
 
 You will need to sign the transactions for the `clabs` safe for both `v2` and `v3`.
 
-Sign for `v2` and `v3` (uses the Ethereum Ledger app by default):
-```bash
-just sign_all_ledger clabs
-
-```
-
-If you need to use a different ledger app or account index
+Specify the ledger app and account index to use, indices start at 0: 
 ```bash
 just sign_all_ledger clabs [eth|celo] <index>
 
