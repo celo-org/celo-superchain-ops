@@ -189,7 +189,7 @@ This provides both flexibility (you can use custom HD paths with `sign_all`) and
 
 ## How it will be executed
 
-Full process will look like that
+Full process will look like that:
 1. This signing routine is distributed to individual signers
 2. Signers are signing and forwarding outputed JSON to Facilitator
 3. Facilitator will perform `approveHash()` on child multisigs (cLabs and Security Council) with given signatures
