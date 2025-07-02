@@ -116,7 +116,7 @@ Now, from the `celo-superchain-ops` repository, run the `compare_v3.sh` script:
 
 ### Simulation of v2 and v3 upgrade
 
-To simulate the v2 and v3 upgrades, you can use the following commands which output tenderly link for each upgrade. For more details on how to verify the simulation, please refer to the [Tenderly verification guide](./README_tenderly_verification.md).
+To simulate the v2 and v3 upgrades, you can use the following commands which output tenderly link for each upgrade. For more details on how to verify the simulation, please refer to the [Tenderly verification guide](./TENDERLY.md).
 
 **Note:** To properly view the simulation, you may need to enable "Dev" mode in Tenderly. This switch is located in the top-right corner of the Tenderly interface.
 
