@@ -4,7 +4,7 @@ Repository created to be equivalent of Optimism SuperchainOps, but for Celo Main
 
 ## Installation
 
-You will need to install a number of software dependencies to effectively use to the Celo SuperchainOps. We use mise as a dependency manager for these tools. Once properly installed, mise will provide the correct versions for each tool. mise does not replace any other installations of these binaries and will only serve these binaries when you are working inside of the Celo SuperchainOps directory.
+You will need to install a number of software dependencies to effectively use to the Celo SuperchainOps. We use Mise as a dependency manager for these tools. Once properly installed, Mise will provide the correct versions for each tool. Mise does not replace any other installations of these binaries and will only serve these binaries when you are working inside of the Celo SuperchainOps directory.
 
 ### Install and configure Mise
 
