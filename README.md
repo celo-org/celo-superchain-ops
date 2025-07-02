@@ -62,6 +62,51 @@ The main command you will be using is `sign_all_ledger`. This command will ask y
 
 The default derivation path used is the Ethereum derivation path (`m/44'/60'/0'/0/<account_index>`). If you will choose celo ledger app make sure you have the Eth Recovery app open on your Ledger - [see below](#ledger-workaround-for-celo-app-users)
 
+### Verify bytecode of v2 and v3 upgrade
+
+To verify the bytecode, it is first necessary to clone the [celo-org/optimism](https://github.com/celo-org/optimism) repository. After cloning, you will need to check out the specific tags for each upgrade, build the contracts, and then run the comparison scripts.
+
+**Note:** The comparison scripts (`compare_v2.sh`, `compare_v3.sh`) are located in the `celo-superchain-ops` repository and need to be executed from there. You will need to provide an absolute path to the `forge-artifacts` directory inside the `optimism` repository.
+
+**1. Clone the `optimism` repository:**
+
+```bash
+git clone https://github.com/celo-org/optimism
+```
+Let's assume you cloned it into a directory like `/path/to/optimism`.
+
+**2. Verify V2 bytecode:**
+
+First, checkout the V2 tag and build the contracts inside the `optimism` repository:
+```bash
+cd /path/to/optimism
+git checkout celo-contracts/v2.0.0-1
+cd packages/contracts-bedrock
+forge build
+```
+
+Now, from the `celo-superchain-ops` repository, run the `compare_v2.sh` script:
+```bash
+# from /path/to/celo-superchain-ops
+./scripts/compare_v2.sh /path/to/optimism/packages/contracts-bedrock/forge-artifacts
+```
+
+**3. Verify V3 bytecode:**
+
+First, checkout the V3 tag and build the contracts inside the `optimism` repository:
+```bash
+cd /path/to/optimism
+git checkout celo-contracts/v3.0.0--1
+cd packages/contracts-bedrock
+forge build
+```
+
+Now, from the `celo-superchain-ops` repository, run the `compare_v3.sh` script:
+```bash
+# from /path/to/celo-superchain-ops
+./scripts/compare_v3.sh /path/to/optimism/packages/contracts-bedrock/forge-artifacts
+```
+
 ### Simulation of v2 and v3 upgrade
 
 To simulate the v2 and v3 upgrades, you can use the following commands which output tenderly link for each upgrade:

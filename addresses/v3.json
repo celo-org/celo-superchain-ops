@@ -1,6 +1,6 @@
 {
   "DelayedWETHImpl": "0x1e121e21e1a11ae47c0efe8a7e13ae3eb4923796",
-  "OptimismPortalImpl": "0x215a5ff85308a72a772f09b520da71d3520e9ac7",
+  "OptimismPortal2Impl": "0x215a5ff85308a72a772f09b520da71d3520e9ac7",
   "PreimageOracleSingleton": "0x1fb8cdfc6831fc866ed9c51af8817da5c287add3",
   "MipsSingleton": "0xaa59a0777648bc75cd10364083e878c1ccd6112a",
   "SystemConfigImpl": "0x9c61c5a8ff9408b83ac92571278550097a9d2bb5",
