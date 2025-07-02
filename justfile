@@ -212,6 +212,8 @@ create_json v2_hash v2_data v2_sig v3_hash v3_data v3_sig account:
     echo "{\"v2_hash\": \"{{v2_hash}}\", \"v2_data\": \"{{v2_data}}\", \"v2_sig\": \"{{v2_sig}}\", \"v3_hash\": \"{{v3_hash}}\", \"v3_data\": \"{{v3_data}}\", \"v3_sig\": \"{{v3_sig}}\", \"account\": \"{{account}}\"}" > out.json
 
 print_json grand_child='':
+    #!/usr/bin/env bash
+    set -euo pipefail
     GRAND_CHILD={{grand_child}}
     if [ -z ${GRAND_CHILD:-} ]; then
         echo "Copy and forward following JSON to your facilitator:"
