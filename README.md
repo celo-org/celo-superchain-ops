@@ -4,6 +4,8 @@ Repository created to be equivalent of Optimism SuperchainOps, but for Celo Main
 
 ## Installation
 
+You will need to install a number of software dependencies to effectively use to the Celo SuperchainOps. We use mise as a dependency manager for these tools. Once properly installed, mise will provide the correct versions for each tool. mise does not replace any other installations of these binaries and will only serve these binaries when you are working inside of the Celo SuperchainOps directory.
+
 ### Install and configure Mise
 
 First install Mise:
@@ -53,6 +55,8 @@ just install-eip712sign
 Rename `.env.sample` to `.env` and fill in the required environment variables. You can use the `.env.sample` file as a reference.
 
 ## Current release steps (v2 and v3) Isthmus
+
+The V2 release is based on [https://docs.optimism.io/notices/upgrade-13](https://docs.optimism.io/notices/upgrade-13) and the V3 release is based on [https://docs.optimism.io/notices/upgrade-14](https://docs.optimism.io/notices/upgrade-14). Both releases include custom Celo changes, such as the Custom gas token feature (see [https://docs.optimism.io/notices/custom-gas-tokens-deprecation](https://docs.optimism.io/notices/custom-gas-tokens-deprecation) for more details) and the CeloSuperchainConfig. The rebase of V2 and V3 on top of existing Celo changes has been audited. More information can be found in the `audits/V2_and_V3_report.pdf` file.
 
 The main command you will be using is `sign_all_ledger`. This command will ask you to sign two transactions (v2 and v3) on your Ledger device. After successful signing, it will generate an `out.json` file. This file contains the signatures and needs to be sent back to cLabs. Please check the account value in this file to make sure it matches the account you intended to sign with.
 
