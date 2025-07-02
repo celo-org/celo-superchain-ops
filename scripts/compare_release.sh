@@ -54,9 +54,10 @@ for key in $(jq -r 'keys[]' $JSON_FILE); do
 
     if [ ! -f "$artifact_path" ]; then
         echo "----------------------------------------"
-        echo "SKIPPING: $key"
+        echo "FAILED: $key"
         echo "Artifact not found at: $artifact_path"
         echo "----------------------------------------"
+        failed_contracts+=("$key")
         continue
     fi
 
