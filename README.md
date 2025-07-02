@@ -56,7 +56,16 @@ Rename `.env.sample` to `.env` and fill in the required environment variables. Y
 
 ## Current release steps (v2 and v3) Isthmus
 
-The V2 release is based on [https://docs.optimism.io/notices/upgrade-13](https://docs.optimism.io/notices/upgrade-13) and the V3 release is based on [https://docs.optimism.io/notices/upgrade-14](https://docs.optimism.io/notices/upgrade-14). Both releases include custom Celo changes, such as the Custom gas token feature (see [https://docs.optimism.io/notices/custom-gas-tokens-deprecation](https://docs.optimism.io/notices/custom-gas-tokens-deprecation) for more details) and the CeloSuperchainConfig. The rebase of V2 and V3 on top of existing Celo changes has been audited. More information can be found in the `audits/V2_and_V3_report.pdf` file.
+This section outlines the process for signing the Celo Mainnet V2 and V3 upgrades. As a signer, you are approving the transactions that will execute these upgrades on-chain.
+
+### Summary for Signers
+
+*   **What are you signing?** You are signing two transactions that approve the V2 and V3 upgrades for Celo Mainnet. These upgrades are based on Optimism's Bedrock [v13](https://docs.optimism.io/notices/upgrade-13) and [v14](https://docs.optimism.io/notices/upgrade-14), with Celo-specific modifications.
+*   **What are the changes?** The detailed changes, including the rebase on top of existing Celo features, have been audited. You can find the full report in [audits/V2_and_V3_report.pdf](./audits/V2_and_V3_report.pdf). Additionally, this repository provides scripts to verify the contract bytecode and simulate the upgrades, allowing you to confirm the changes independently.
+*   **What is the expected output?** After signing with your Ledger, the process will generate an `out.json` file. This file contains your signatures and must be sent to cLabs to be included in the final transaction.
+*   **What is `mise`?** `mise` is a tool that manages the versions of software dependencies (like `go`, `forge`, etc.) used in this repository. It ensures that you are using the correct versions for all commands without interfering with your system's existing installations.
+
+The V2 release is based on [https://docs.optimism.io/notices/upgrade-13](https://docs.optimism.io/notices/upgrade-13) and the V3 release is based on [https://docs.optimism.io/notices/upgrade-14](https://docs.optimism.io/notices/upgrade-14). Both releases include custom Celo changes, such as the Custom gas token feature (see [https://docs.optimism.io/notices/custom-gas-tokens-deprecation](https://docs.optimism.io/notices/custom-gas-tokens-deprecation) for more details) and the CeloSuperchainConfig. The rebase of V2 and V3 on top of existing Celo changes has been audited. More information can be found in the [audits/V2_and_V3_report.pdf](./audits/V2_and_V3_report.pdf) file.
 
 The main command you will be using is `sign_all_ledger`. This command will ask you to sign two transactions (v2 and v3) on your Ledger device. After successful signing, it will generate an `out.json` file. This file contains the signatures and needs to be sent back to cLabs. Please check the account value in this file to make sure it matches the account you intended to sign with.
 
