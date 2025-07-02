@@ -186,3 +186,12 @@ The `sign_all_ledger` command is a convenience wrapper that:
 3. Calls the original `sign` command with the generated HD path
 
 This provides both flexibility (you can use custom HD paths with `sign_all`) and convenience (you can use predefined app paths with `sign_all_ledger`).
+
+## How it will be executed
+
+Full process will look like that
+1. This signing routine is distributed to individual signers
+2. Signers are signing and forwarding outputed JSON to Facilitator
+3. Facilitator will perform `approveHash()` on child multisigs (cLabs and Security Council) with given signatures
+4. Both child multisigs will approve execution of upgrade on parent multisig (owner of Celo OpStack)
+5. Facilitator will perform `OPCM.upgrade()` on parent multisig with approved hashes from child multisigs
