@@ -10,7 +10,7 @@ CONTRACT_ADDRESS=$1
 ARTIFACT_FILE=$2
 
 # Fetch deployed bytecode from chain
-DEPLOYED_BYTECODE=$(cast code "$CONTRACT_ADDRESS" --rpc-url https://eth.llamarpc.com | tr -d '\n')
+DEPLOYED_BYTECODE=$(cast code "$CONTRACT_ADDRESS" --rpc-url "${RPC_URL:-https://eth.llamarpc.com}" | tr -d '\n')
 
 if [ -z "$DEPLOYED_BYTECODE" ]; then
   echo "Error: Failed to fetch bytecode."

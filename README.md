@@ -52,7 +52,7 @@ just install-eip712sign
 
 ### Setup environment variables
 
-Rename `.env.sample` to `.env` and fill in the required environment variables. You can use the `.env.sample` file as a reference.
+Rename `.env.sample` to `.env` and fill in the required environment variables. You can use the `.env.sample` file as a reference. The `RPC_URL` should be set to the RPC URL of an L1 Ethereum mainnet node.
 
 ## Current release steps (v2 and v3) Isthmus
 
@@ -116,7 +116,7 @@ Now, from the `celo-superchain-ops` repository, run the `compare_v3.sh` script:
 
 ### Simulation of v2 and v3 upgrade
 
-To simulate the v2 and v3 upgrades, you can use the following commands which output tenderly link for each upgrade.
+To simulate the v2 and v3 upgrades, you can use the following commands which output tenderly link for each upgrade. For more details on how to verify the simulation, please refer to the [Tenderly verification guide](./README_tenderly_verification.md).
 
 **Note:** To properly view the simulation, you may need to enable "Dev" mode in Tenderly. This switch is located in the top-right corner of the Tenderly interface.
 
