@@ -2,6 +2,10 @@
 
 Repository created to be equivalent of Optimism SuperchainOps, but for Celo Mainnet
 
+### Purpose
+
+For a detailed explanation of the purpose of this tool, the smart contracts involved, and the upgrade process, please see [PURPOSE.md](./PURPOSE.md).
+
 ## Installation
 
 You will need to install a number of software dependencies to effectively use to the Celo SuperchainOps. We use Mise as a dependency manager for these tools. Once properly installed, Mise will provide the correct versions for each tool. Mise does not replace any other installations of these binaries and will only serve these binaries when you are working inside of the Celo SuperchainOps directory.
@@ -60,7 +64,7 @@ This section outlines the process for signing the Celo Mainnet V2 and V3 upgrade
 
 ### Summary for Signers
 
-*   **What are you signing?** You are signing two transactions that approve the V2 and V3 upgrades for Celo Mainnet. These upgrades are based on Optimism's Bedrock [v13](https://docs.optimism.io/notices/upgrade-13) and [v14](https://docs.optimism.io/notices/upgrade-14), with Celo-specific modifications.
+*   **What are you signing?** You are signing two transactions that approve the [V2](https://github.com/celo-org/optimism/tree/celo-contracts/v2.0.0-1) and [V3](https://github.com/celo-org/optimism/tree/celo-contracts/v3.0.0--1) upgrades for Celo Mainnet. These upgrades are based on Optimism's Bedrock [v13](https://docs.optimism.io/notices/upgrade-13) and [v14](https://docs.optimism.io/notices/upgrade-14), with Celo-specific modifications.
 *   **What are the changes?** The detailed changes, including the rebase on top of existing Celo features, have been audited. You can find the full report in [audits/V2_and_V3_report.pdf](./audits/V2_and_V3_report.pdf). Additionally, this repository provides scripts to verify the contract bytecode and simulate the upgrades, allowing you to confirm the changes independently.
 *   **What is the expected output?** After signing with your Ledger, the process will generate an `out.json` file. This file contains your signatures and must be sent to cLabs to be included in the final transaction.
 *   **What is `mise`?** `mise` is a tool that manages the versions of software dependencies (like `go`, `forge`, etc.) used in this repository. It ensures that you are using the correct versions for all commands without interfering with your system's existing installations.
