@@ -83,6 +83,8 @@ just sign_all_ledger council [eth|celo] <index>
 just sign_all_ledger council eth 1
 ```
 
+**After signing ensure to send the outputed JSON to your Facilitator.**
+
 ### If you are a member of the `clabs` team:
 
 You will need to sign the transactions for the `clabs` safe for both `v2` and `v3`.
@@ -94,6 +96,8 @@ just sign_all_ledger clabs [eth|celo] <index>
 # example
 just sign_all_ledger clabs eth 1
 ```
+
+**After signing ensure to send the outputed JSON to your Facilitator.**
 
 ### Ledger Workaround for Celo App Users
 
