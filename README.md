@@ -4,6 +4,8 @@ Repository created to be equivalent of Optimism SuperchainOps, but for Celo Main
 
 ## Installation
 
+You will need to install a number of software dependencies to effectively use to the Celo SuperchainOps. We use Mise as a dependency manager for these tools. Once properly installed, Mise will provide the correct versions for each tool. Mise does not replace any other installations of these binaries and will only serve these binaries when you are working inside of the Celo SuperchainOps directory.
+
 ### Install and configure Mise
 
 First install Mise:
@@ -50,17 +52,73 @@ just install-eip712sign
 
 ### Setup environment variables
 
-Rename `.env.sample` to `.env` and fill in the required environment variables. You can use the `.env.sample` file as a reference.
+Rename `.env.sample` to `.env` and fill in the required environment variables. You can use the `.env.sample` file as a reference. The `RPC_URL` should be set to the RPC URL of an L1 Ethereum mainnet node.
 
 ## Current release steps (v2 and v3) Isthmus
+
+This section outlines the process for signing the Celo Mainnet V2 and V3 upgrades. As a signer, you are approving the transactions that will execute these upgrades on-chain.
+
+### Summary for Signers
+
+*   **What are you signing?** You are signing two transactions that approve the V2 and V3 upgrades for Celo Mainnet. These upgrades are based on Optimism's Bedrock [v13](https://docs.optimism.io/notices/upgrade-13) and [v14](https://docs.optimism.io/notices/upgrade-14), with Celo-specific modifications.
+*   **What are the changes?** The detailed changes, including the rebase on top of existing Celo features, have been audited. You can find the full report in [audits/V2_and_V3_report.pdf](./audits/V2_and_V3_report.pdf). Additionally, this repository provides scripts to verify the contract bytecode and simulate the upgrades, allowing you to confirm the changes independently.
+*   **What is the expected output?** After signing with your Ledger, the process will generate an `out.json` file. This file contains your signatures and must be sent to cLabs to be included in the final transaction.
+*   **What is `mise`?** `mise` is a tool that manages the versions of software dependencies (like `go`, `forge`, etc.) used in this repository. It ensures that you are using the correct versions for all commands without interfering with your system's existing installations.
 
 The main command you will be using is `sign_all_ledger`. This command will ask you to sign two transactions (v2 and v3) on your Ledger device. After successful signing, it will generate an `out.json` file. This file contains the signatures and needs to be sent back to cLabs. Please check the account value in this file to make sure it matches the account you intended to sign with.
 
 The default derivation path used is the Ethereum derivation path (`m/44'/60'/0'/0/<account_index>`). If you will choose celo ledger app make sure you have the Eth Recovery app open on your Ledger - [see below](#ledger-workaround-for-celo-app-users)
 
+### Verify bytecode of v2 and v3 upgrade
+
+To verify the bytecode, it is first necessary to clone the [celo-org/optimism](https://github.com/celo-org/optimism) repository. After cloning, you will need to check out the specific tags for each upgrade, build the contracts, and then run the comparison scripts.
+
+**Note:** The comparison scripts (`compare_v2.sh`, `compare_v3.sh`) are located in the `celo-superchain-ops` repository and need to be executed from there. You will need to provide an absolute path to the `forge-artifacts` directory inside the `optimism` repository.
+
+**1. Clone the `optimism` repository:**
+
+```bash
+git clone https://github.com/celo-org/optimism
+```
+Let's assume you cloned it into a directory like `/path/to/optimism`.
+
+**2. Verify V2 bytecode:**
+
+First, checkout the V2 tag and build the contracts inside the `optimism` repository:
+```bash
+cd /path/to/optimism
+git checkout celo-contracts/v2.0.0-1
+cd packages/contracts-bedrock
+forge build
+```
+
+Now, from the `celo-superchain-ops` repository, run the `compare_v2.sh` script:
+```bash
+# from /path/to/celo-superchain-ops
+./scripts/compare_v2.sh /path/to/optimism/packages/contracts-bedrock/forge-artifacts
+```
+
+**3. Verify V3 bytecode:**
+
+First, checkout the V3 tag and build the contracts inside the `optimism` repository:
+```bash
+cd /path/to/optimism
+git checkout celo-contracts/v3.0.0--1
+cd packages/contracts-bedrock
+forge build
+```
+
+Now, from the `celo-superchain-ops` repository, run the `compare_v3.sh` script:
+```bash
+# from /path/to/celo-superchain-ops
+./scripts/compare_v3.sh /path/to/optimism/packages/contracts-bedrock/forge-artifacts
+```
+
 ### Simulation of v2 and v3 upgrade
 
-To simulate the v2 and v3 upgrades, you can use the following commands which output tenderly link for each upgrade:
+To simulate the v2 and v3 upgrades, you can use the following commands which output tenderly link for each upgrade. For more details on how to verify the simulation, please refer to the [Tenderly verification guide](./TENDERLY.md).
+
+**Note:** To properly view the simulation, you may need to enable "Dev" mode in Tenderly. This switch is located in the top-right corner of the Tenderly interface.
 
 ```bash
 just simulate v2

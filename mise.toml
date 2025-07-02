@@ -3,6 +3,7 @@
 # Core dependencies
 go = "1.23.10"
 just = "1.37.0"
+jq = "latest"
 
 # Foundry dependencies
 # Foundry is a special case because it supplies multiple binaries at the same
