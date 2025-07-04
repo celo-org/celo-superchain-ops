@@ -112,16 +112,17 @@ sign version team hd_path='' grand_child='':
     echo "Child tx data: $CHILD_TX_DATA"
 
     if [ -z ${GRAND_CHILD:-} ]; then
-        if [ -n ${TEST_PK:-} ]; then
-            echo $CHILD_TX_DATA | ./eip712sign -private-key ${TEST_PK:2} > .tmp
-        else
-            if [ -z ${HD_PATH:-} ]; then
+    echo "Attempting to generate payload for child at: $CHILD_SAFE_ADDRESS" 
+        if [ -z ${TEST_PK:-} ]; then
+             if [ -z ${HD_PATH:-} ]; then
                 echo "Signing Ledger wallet under default derivation path..."
                 echo $CHILD_TX_DATA | ./eip712sign -ledger > .tmp
             else
                 echo "Signing Ledger wallet under $HD_PATH derivation path..."
                 echo $CHILD_TX_DATA | ./eip712sign -ledger -hd-paths "$HD_PATH" > .tmp
             fi
+        else
+            echo $CHILD_TX_DATA | ./eip712sign -private-key ${TEST_PK:2} > .tmp
         fi
     else
         echo "Attempting to generate payload for grand child at: $GRAND_CHILD"
@@ -148,16 +149,17 @@ sign version team hd_path='' grand_child='':
         echo "Grand child tx hash: $GRAND_CHILD_TX_HASH"
         echo "Grand child tx data: $GRAND_CHILD_TX_DATA"
 
-        if [ -n ${TEST_PK:-} ]; then
-            echo $GRAND_CHILD_TX_DATA | ./eip712sign -private-key ${TEST_PK:2} > .tmp
-        else
-            if [ -z ${HD_PATH:-} ]; then
+        if [ -z ${TEST_PK:-} ]; then
+             if [ -z ${HD_PATH:-} ]; then
                 echo "Signing Ledger wallet under default derivation path..."
                 echo $GRAND_CHILD_TX_DATA | ./eip712sign -ledger > .tmp
             else
                 echo "Signing Ledger wallet under $HD_PATH derivation path..."
                 echo $GRAND_CHILD_TX_DATA | ./eip712sign -ledger -hd-paths "$HD_PATH" > .tmp
             fi
+        else
+            echo "TEST_PK ${TEST_PK:-}"
+            echo $GRAND_CHILD_TX_DATA | ./eip712sign -private-key ${TEST_PK:2} > .tmp
         fi
     fi
     
