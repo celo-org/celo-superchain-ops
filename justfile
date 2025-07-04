@@ -112,12 +112,16 @@ sign version team hd_path='' grand_child='':
     echo "Child tx data: $CHILD_TX_DATA"
 
     if [ -z ${GRAND_CHILD:-} ]; then
-        if [ -z ${HD_PATH:-} ]; then
-            echo "Signing Ledger wallet under default derivation path..."
-            echo $CHILD_TX_DATA | ./eip712sign -ledger > .tmp
+        if [ -n ${TEST_PK:-} ]; then
+            echo $CHILD_TX_DATA | ./eip712sign -private-key ${TEST_PK:2} > .tmp
         else
-            echo "Signing Ledger wallet under $HD_PATH derivation path..."
-            echo $CHILD_TX_DATA | ./eip712sign -ledger -hd-paths "$HD_PATH" > .tmp
+            if [ -z ${HD_PATH:-} ]; then
+                echo "Signing Ledger wallet under default derivation path..."
+                echo $CHILD_TX_DATA | ./eip712sign -ledger > .tmp
+            else
+                echo "Signing Ledger wallet under $HD_PATH derivation path..."
+                echo $CHILD_TX_DATA | ./eip712sign -ledger -hd-paths "$HD_PATH" > .tmp
+            fi
         fi
     else
         echo "Attempting to generate payload for grand child at: $GRAND_CHILD"
@@ -139,12 +143,16 @@ sign version team hd_path='' grand_child='':
         echo "Grand child tx hash: $GRAND_CHILD_TX_HASH"
         echo "Grand child tx data: $GRAND_CHILD_TX_DATA"
 
-        if [ -z ${HD_PATH:-} ]; then
-            echo "Signing Ledger wallet under default derivation path..."
-            echo $GRAND_CHILD_TX_DATA | ./eip712sign -ledger > .tmp
+        if [ -n ${TEST_PK:-} ]; then
+            echo $GRAND_CHILD_TX_DATA | ./eip712sign -private-key ${TEST_PK:2} > .tmp
         else
-            echo "Signing Ledger wallet under $HD_PATH derivation path..."
-            echo $GRAND_CHILD_TX_DATA | ./eip712sign -ledger -hd-paths "$HD_PATH" > .tmp
+            if [ -z ${HD_PATH:-} ]; then
+                echo "Signing Ledger wallet under default derivation path..."
+                echo $GRAND_CHILD_TX_DATA | ./eip712sign -ledger > .tmp
+            else
+                echo "Signing Ledger wallet under $HD_PATH derivation path..."
+                echo $GRAND_CHILD_TX_DATA | ./eip712sign -ledger -hd-paths "$HD_PATH" > .tmp
+            fi
         fi
     fi
     
@@ -228,8 +236,11 @@ print_json grand_child='':
     cat out.json | jq
 
 sign_all team hd_path='' grand_child='':
-    just sign v2 {{team}} {{hd_path}} {{grand_child}}
-    just sign v3 {{team}} {{hd_path}} {{grand_child}}
+    #!/usr/bin/env bash
+    set -euo pipefail
+    HD_PATH={{hd_path}}
+    just sign v2 {{team}} "$HD_PATH" {{grand_child}}
+    just sign v3 {{team}} "$HD_PATH" {{grand_child}}
     just print_json {{grand_child}}
 
 sign_all_ledger team ledger_app account_index='0' grand_child='':

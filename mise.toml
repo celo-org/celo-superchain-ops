@@ -4,6 +4,9 @@
 go = "1.23.10"
 just = "1.37.0"
 
+# Test dependencies
+bats = "1.12.0"
+
 # Foundry dependencies
 # Foundry is a special case because it supplies multiple binaries at the same
 # GitHub release, so we need to use the aliasing trick to get mise to not error
