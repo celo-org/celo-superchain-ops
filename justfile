@@ -127,10 +127,12 @@ sign version team hd_path='' grand_child='':
         echo "Attempting to generate payload for grand child at: $GRAND_CHILD"
         GRAND_CHILD_VERSION=$(cast call $GRAND_CHILD "VERSION()(string)" -r $RPC_URL)
         if [ $VERSION = "v2" ]; then
-            GRAND_CHILD_NONCE=$(cast call $GRAND_CHILD "nonce()(uint256)" -r $RPC_URL)
+            # GRAND_CHILD_NONCE=$(cast call $GRAND_CHILD "nonce()(uint256)" -r $RPC_URL)
+            GRAND_CHILD_NONCE=2
         else
-            GRAND_CHILD_NONCE=$(cast call $GRAND_CHILD "nonce()(uint256)" -r $RPC_URL)
-            GRAND_CHILD_NONCE=$(($GRAND_CHILD_NONCE + 1))
+            # GRAND_CHILD_NONCE=$(cast call $GRAND_CHILD "nonce()(uint256)" -r $RPC_URL)
+            # GRAND_CHILD_NONCE=$(($GRAND_CHILD_NONCE + 1))
+            GRAND_CHILD_NONCE=3
         fi
         echo "Detected grand child at version: $GRAND_CHILD_VERSION with nonce: $GRAND_CHILD_NONCE"
 
