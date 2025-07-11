@@ -1,0 +1,33 @@
+name: Run tests in Bats
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  my_test:
+    runs-on: ubuntu-latest
+    name: Run tests in Bats
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Bats
+        id: setup-bats
+        uses: bats-core/bats-action@3.0.0
+      - name: Install Mise 
+        run: |
+          curl https://mise.run | sh
+          echo "$HOME/.local/share/mise/bin" >> $GITHUB_PATH
+          echo "$HOME/.local/share/mise/shims" >> $GITHUB_PATH
+      - name: Install deps
+        run: |
+          mise trust
+          mise install
+      - name: Install signer
+        run: just install-eip712sign
+      - name: Run tests
+        shell: bash
+        run: RPC_URL=https://ethereum-rpc.publicnode.com ./test.sh
