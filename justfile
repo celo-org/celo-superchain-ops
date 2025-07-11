@@ -229,14 +229,14 @@ print_json grand_child='':
     set -euo pipefail
     GRAND_CHILD={{grand_child}}
     if [ -z ${GRAND_CHILD:-} ]; then
-        echo "Copy and forward following JSON to your facilitator:"
+        echo -e "\e[1;33mCopy and forward following JSON to your facilitator:\e[0m"
     else
-        echo \
-            "Important! Your signer is a nested Gnosis Safe wallet.\n" \
+        echo -e \
+            "\e[1;33mImportant! Your signer is a nested Gnosis Safe wallet.\n" \
             "Regular path supports structure: (Celo Multisig) > (Council Multisig) > (Hardware Wallet).\n" \
             "Your structure is as following: (Celo Multisig) > (Council Multisig) > (Nested Multisig) > (Your Wallet).\n" \
             "Ensure required number of members within your nested Gnosis Safe wallet will run this script.\n" \
-            "Copy and forward full output of current script and following JSON to your facilitator:"
+            "Copy and forward full output of current script and following JSON to your facilitator:\e[0m"
     fi
     cat out.json | jq
 

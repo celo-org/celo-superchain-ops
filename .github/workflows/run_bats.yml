@@ -1,4 +1,4 @@
-name: Run Bats
+name: Run tests in Bats
 on:
   pull_request:
     branches:
@@ -10,7 +10,7 @@ on:
 jobs:
   my_test:
     runs-on: ubuntu-latest
-    name: Run Bats
+    name: Run tests in Bats
     steps:
       - name: Checkout
         uses: actions/checkout@v2
