@@ -59,10 +59,11 @@ simulate version:
 
     if [ $VERSION = "v2" ]; then
         URL="https://dashboard.tenderly.co/explorer/vnet/4c92d88c-598f-42fd-bfdc-c837b8d697cc/tx/0x7c44fe8c5c48931a322f0b986957c677b8871922ab152307e06f7319cd85f639"
-    else if [ $VERSION = "v3" ]; then
+    elif [ $VERSION = "v3" ]; then
         URL="https://dashboard.tenderly.co/explorer/vnet/4c92d88c-598f-42fd-bfdc-c837b8d697cc/tx/0x8d37735f7be725450d35187ea24f9050341a601817a2152c6fefa7a1192597da"
-    else if [ $VERSION = "succinct" ]; then
-        URL="https://dashboard.tenderly.co"
+    elif [ $VERSION = "succinct" ]; then
+        URL="https://dashboard.tenderly.co/explorer/vnet/1823ba17-a1b9-4301-b4ac-b2797d8349bd/tx/0x81f7f5786fc42b6df6c4c2fc7fd1c9940ead3e7260857ddea67f2f28daef1970"
+        echo "Pre-deployment sim tx: https://dashboard.tenderly.co/explorer/vnet/1823ba17-a1b9-4301-b4ac-b2797d8349bd/tx/0xdbe7bb8ef0d700915c5178f49767f5fd07497ed8b5690d36b4e212de2cd50a71"
     fi
     echo "Link to Tenderly sim: $URL"
 

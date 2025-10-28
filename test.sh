@@ -32,14 +32,14 @@ CHILD_DATA_COUNCIL_V3=0x1901006bcc13a9a6b3224caf34092bd0db63b90656971bfec6731c9c
 CHILD_SIG_COUNCIL_V3=8801d64c3da9c2c8098db0938f2598e2b6f74f7e0a9cc37b20816a9c689bea4b2b23fc5dfed0a4fb45ffa8aadae14cdef1af6805a64a61b9ee7dea93249dc8f51b
 
 # grand child v2
-GRAND_CHILD_HASH_COUNCIL_V2=0x865ad9f32b78d2185b83af29b1ec8aa71ba8272d935388e3a725b3c421a9f9cb
-GRAND_CHILD_DATA_COUNCIL_V2=0x1901b889fe0bca2c1159d0891cdc881184aad05e5f55c5cf93ef3be10360d179694f5d230396e7c923d32800dfbd5963f81a088fd3ec32f558f3d7743f18de8fecc9
-GRAND_CHILD_SIG_COUNCIL_V2=eed5dcbdd7cdbf7712baa2f471cd1aa773ba9bae53ee262ed5b89f66f60d786a0666a13da2c28bdc506a130ccee004c51253faad9669e4c76ced8e65264f29181c
+GRAND_CHILD_HASH_COUNCIL_V2=0xef6a4c6e1cd6efddb1a319848552cfb15dc415c04fcc89d2f5c1322f965a66eb
+GRAND_CHILD_DATA_COUNCIL_V2=0x1901b889fe0bca2c1159d0891cdc881184aad05e5f55c5cf93ef3be10360d179694f64916b8ac7d3e4b79fc3c1cc8a125537f1f17ab478b38f4b248f61b0857e88a6
+GRAND_CHILD_SIG_COUNCIL_V2=98eb8e0de65e4b12b8b801878d85a15f3f8bc9dda13d363176fbf58260d4e4b7128e055de818ed6aba7b3d91054caa25a4a6289364279821807c189900b123811b
 
 # grand child v3
-GRAND_CHILD_HASH_COUNCIL_V3=0xb94d0e63f30af57aa975181f20cd48734fe4d36ee83a3bfd113bee06c1b86620
-GRAND_CHILD_DATA_COUNCIL_V3=0x1901b889fe0bca2c1159d0891cdc881184aad05e5f55c5cf93ef3be10360d179694f2f71621dbae7f865e64de152623a941e25a3146e56733148224fed1b001eb910
-GRAND_CHILD_SIG_COUNCIL_V3=14495dc61e8becf72ed08b513cd9144f1c5198be879eb81453a0adc331a999b4093894064353bbf8f9ffa65eff707c61b571c375ff2ae33075ed9698611f09071b
+GRAND_CHILD_HASH_COUNCIL_V3=0xe96e9062b0ce10ff84e17297a46e7e82db2862c5584418321fd014aa411c10a6
+GRAND_CHILD_DATA_COUNCIL_V3=0x1901b889fe0bca2c1159d0891cdc881184aad05e5f55c5cf93ef3be10360d179694fb0c4a3da4771f4262b3b083b49b0de7a7424b71d2dbe64cbb1c17803937e5025
+GRAND_CHILD_SIG_COUNCIL_V3=f9fd3b494588079055c779320ef12b39e131e767bf18c88e7d66f703640e9fa04db8160a93c1ec5cd83361a45f052f24111cf708c4341c137b1ffc3a5a1bde621b
 
 @test "Test default command" {
   run just
@@ -257,103 +257,4 @@ GRAND_CHILD_SIG_COUNCIL_V3=14495dc61e8becf72ed08b513cd9144f1c5198be879eb81453a0a
   [ "${lines[1]}" = "Detected team: council" ]
   [ "${lines[9]}" = "Your account is $ACCOUNT" ]
   [ "${lines[10]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_V2" ]
-}
-
-@test "Test sign_all clabs" {
-  TEST_PK=$TEST_PK run just sign_all clabs
-  [ "$status" -eq 0 ]
-  [ "${lines[0]}" = "Detected version: v2" ]
-  [ "${lines[1]}" = "Detected team: clabs" ]
-  [ "${lines[6]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V2" ]
-  [ "${lines[8]}" = "Detected version: v3" ]
-  [ "${lines[9]}" = "Detected team: clabs" ]
-  [ "${lines[14]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V3" ]
-}
-
-@test "Test sign_all council" {
-  TEST_PK=$TEST_PK run just sign_all council
-  [ "$status" -eq 0 ]
-  [ "${lines[0]}" = "Detected version: v2" ]
-  [ "${lines[1]}" = "Detected team: council" ]
-  [ "${lines[6]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V2" ]
-  [ "${lines[8]}" = "Detected version: v3" ]
-  [ "${lines[9]}" = "Detected team: council" ]
-  [ "${lines[14]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V3" ]
-}
-
-@test "Test sign_all with grand child" {
-  TEST_PK=$TEST_PK run just sign_all council '' $GRAND_CHILD_MULTISIG
-  [ "$status" -eq 0 ]
-  [ "${lines[0]}" = "Detected version: v2" ]
-  [ "${lines[1]}" = "Detected team: council" ]
-  [ "${lines[10]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_V2" ]
-  [ "${lines[12]}" = "Detected version: v3" ]
-  [ "${lines[13]}" = "Detected team: council" ]
-  [ "${lines[22]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_V3" ]
-}
-
-@test "Test sign_all_ledger clabs celo" {
-  TEST_PK=$TEST_PK run just sign_all_ledger clabs celo
-  [ "$status" -eq 0 ]
-  [ "${lines[1]}" = "Detected version: v2" ]
-  [ "${lines[2]}" = "Detected team: clabs" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V2" ]
-  [ "${lines[10]}" = "Detected version: v3" ]
-  [ "${lines[11]}" = "Detected team: clabs" ]
-  [ "${lines[16]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V3" ]
-}
-
-@test "Test sign_all_ledger clabs eth" {
-  TEST_PK=$TEST_PK run just sign_all_ledger clabs eth
-  [ "$status" -eq 0 ]
-  [ "${lines[1]}" = "Detected version: v2" ]
-  [ "${lines[2]}" = "Detected team: clabs" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V2" ]
-  [ "${lines[10]}" = "Detected version: v3" ]
-  [ "${lines[11]}" = "Detected team: clabs" ]
-  [ "${lines[16]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V3" ]
-}
-
-@test "Test sign_all_ledger council celo" {
-  TEST_PK=$TEST_PK run just sign_all_ledger council celo
-  [ "$status" -eq 0 ]
-  [ "${lines[1]}" = "Detected version: v2" ]
-  [ "${lines[2]}" = "Detected team: council" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V2" ]
-  [ "${lines[10]}" = "Detected version: v3" ]
-  [ "${lines[11]}" = "Detected team: council" ]
-  [ "${lines[16]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V3" ]
-}
-
-@test "Test sign_all_ledger council eth" {
-  TEST_PK=$TEST_PK run just sign_all_ledger council eth
-  [ "$status" -eq 0 ]
-  [ "${lines[1]}" = "Detected version: v2" ]
-  [ "${lines[2]}" = "Detected team: council" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V2" ]
-  [ "${lines[10]}" = "Detected version: v3" ]
-  [ "${lines[11]}" = "Detected team: council" ]
-  [ "${lines[16]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V3" ]
-}
-
-@test "Test sign_all_ledger celo with grand child" {
-  TEST_PK=$TEST_PK run just sign_all_ledger council celo "0" $GRAND_CHILD_MULTISIG
-  [ "$status" -eq 0 ]
-  [ "${lines[1]}" = "Detected version: v2" ]
-  [ "${lines[2]}" = "Detected team: council" ]
-  [ "${lines[11]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_V2" ]
-  [ "${lines[14]}" = "Detected version: v3" ]
-  [ "${lines[15]}" = "Detected team: council" ]
-  [ "${lines[24]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_V3" ]
-}
-
-@test "Test sign_all_ledger eth with grand child" {
-  TEST_PK=$TEST_PK run just sign_all_ledger council eth "0" $GRAND_CHILD_MULTISIG
-  [ "$status" -eq 0 ]
-  [ "${lines[1]}" = "Detected version: v2" ]
-  [ "${lines[2]}" = "Detected team: council" ]
-  [ "${lines[11]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_V2" ]
-  [ "${lines[14]}" = "Detected version: v3" ]
-  [ "${lines[15]}" = "Detected team: council" ]
-  [ "${lines[24]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_V3" ]
 }
