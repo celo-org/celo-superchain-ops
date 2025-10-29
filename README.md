@@ -99,7 +99,7 @@ This signing phase is part of a larger upgrade process:
 
 The main command you will be using is `sign_ledger`. This command will ask you to sign one transaction on your Ledger device. After successful signing, it will generate an `out.json` file. This file contains the signature and needs to be sent back to the facilitator. **Please verify the account value in this file matches the account you intended to sign with.**
 
-The default derivation path used is the Ethereum derivation path (`m/44'/60'/0'/0/<account_index>`). If you choose the Celo ledger app, make sure you have the Eth Recovery app open on your Ledger - [see below](#ledger-workaround-for-celo-app-users)
+The default derivation path used is the Ethereum derivation path (`m/44'/60'/<account_index>'/0/0`). If you choose the Celo ledger app, make sure you have the Eth Recovery app open on your Ledger - [see below](#ledger-workaround-for-celo-app-users)
 
 ### Decode OpSuccinct Upgrade Calldata
 
@@ -273,7 +273,7 @@ just sign <version> <team> [hd_path] [grand_child]
 **Examples:**
 ```bash
 # Sign with custom Celo derivation path
-just sign succinct clabs "m/44'/52752'/0'/0/1"
+just sign succinct clabs "m/44'/52752'/1'/0/0"
 
 # Sign with custom Ethereum derivation path
 just sign succinct council "m/44'/60'/1'/0/0"
