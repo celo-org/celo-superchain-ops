@@ -11,7 +11,7 @@ export SAFE_TX_GAS := "0"
 export BASE_GAS := "0"
 export GAS_PRICE := "0"
 export GAS_TOKEN := "0x0000000000000000000000000000000000000000"
-export REFUND_RECEIVER := "0x0000000000000000000000000000000000000000"
+export REFUND_RECEIVER := "0x95ffac468e37ddeef407ffef18f0cc9e86d8f13b"
 
 default:
     just --list
@@ -62,7 +62,7 @@ simulate version:
     elif [ $VERSION = "v3" ]; then
         URL="https://dashboard.tenderly.co/explorer/vnet/4c92d88c-598f-42fd-bfdc-c837b8d697cc/tx/0x8d37735f7be725450d35187ea24f9050341a601817a2152c6fefa7a1192597da"
     elif [ $VERSION = "succinct" ]; then
-        URL="https://dashboard.tenderly.co/explorer/vnet/9b337857-77e3-47e6-8681-2636550d3a2d/tx/0x1cc8966b194d2ccbb8f6de8f11e304450f3037a387139b9be7ad34cf9513f376"
+        URL="https://dashboard.tenderly.co/explorer/vnet/053b540e-ae59-42c8-80a0-1250820dc894/tx/0x55742ec449b9659f3a5662c5b2f6d6a92d9d955a39eeaaeaf1df1726a3f2ff3f"
     fi
     echo "Link to Tenderly sim: $URL"
 
