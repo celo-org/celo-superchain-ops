@@ -3,9 +3,9 @@
 # This script compares the bytecode of contracts listed in addresses/succinct.json
 # with the bytecode from forge artifacts.
 #
-# NOTE: The OpSuccinct contracts use deterministic CREATE3 deployment. The addresses
-# in addresses/succinct.json are pre-calculated but NOT YET DEPLOYED on mainnet.
-# This script will work properly only after the contracts are deployed.
+# NOTE: The OpSuccinct contracts were deployed using deterministic CREATE3 deployment.
+# The addresses in addresses/succinct.json are for the pre-deployed contracts on mainnet.
+# This script verifies that the on-chain bytecode matches the compiled artifacts.
 #
 # Usage: ./scripts/compare_succinct.sh <path_to_forge_artifacts_folder>
 
@@ -19,20 +19,21 @@ fi
 
 FORGE_ARTIFACTS_DIR=$1
 
-# Display warning about pre-deployment status
-echo "=========================================="
-echo "WARNING: OpSuccinct Pre-Deployment Check"
-echo "=========================================="
+# Display information about deployed contracts
+echo "============================================="
+echo "OpSuccinct Contract Verification"
+echo "============================================="
 echo ""
-echo "The OpSuccinct upgrade uses CREATE3 deterministic deployment."
-echo "Addresses are pre-calculated but contracts are NOT YET DEPLOYED."
+echo "The OpSuccinct contracts were deployed using CREATE3"
+echo "deterministic deployment to pre-calculated addresses:"
 echo ""
-echo "This script will verify bytecode AFTER deployment completes."
-echo "Until deployment, you can verify:"
-echo "  1. The forge artifacts match expected contracts"
-echo "  2. The CREATE3 address calculation (see op-succinct repo)"
+echo "  - AccessManager: 0xf59a19c5578291cb7fd22618d16281adf76f2816"
+echo "  - OPSuccinctFaultDisputeGame: 0x113f434f82ff82678ae7f69ea122791fe1f6b73e"
 echo ""
-echo "Press Enter to continue with forge artifact verification..."
+echo "This script will verify the on-chain bytecode matches"
+echo "the compiled forge artifacts."
+echo ""
+echo "Press Enter to continue with bytecode verification..."
 read
 
 # Call the main compare script with the hardcoded JSON file
