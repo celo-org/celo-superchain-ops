@@ -8,55 +8,37 @@ For a detailed explanation of the purpose of this tool, the smart contracts invo
 
 ## Installation
 
-You will need to install a number of software dependencies to effectively use the Celo SuperchainOps. We use Mise as a dependency manager for these tools. Once properly installed, Mise will provide the correct versions for each tool. Mise does not replace any other installations of these binaries and will only serve these binaries when you are working inside of the Celo SuperchainOps directory.
+This repository uses [Mise](https://mise.jdx.dev/) to manage dependencies (forge, just, go, etc.) without affecting your system installations.
 
-### Install and configure Mise
+### Quick Start
 
-First install Mise:
 ```bash
+# 1. Install and activate Mise
 ./scripts/install-mise.sh
-```
+# Follow the output instructions to activate mise in your shell, then restart terminal
 
-To ensure `mise` works correctly, you must activate it in your shell, which sets up the proper environment for your tools (like forge, just, go, etc.).
-
-After running the installation script above, you will see the following log output:
-
-```bash
-mise: installing mise...
-#################### 100.0%
-mise: installed successfully to /Users/<username>/.local/bin/mise
-mise: run the following to activate mise in your shell:
-echo "eval \"\$(/Users/<username>/.local/bin/mise activate zsh)\"" >> "/Users/<username>/.zshrc"
-
-mise: run `mise doctor` to verify this is setup correctly
-```
-
-You must follow the remaining instructions in the log output to fully activate mise in your shell (i.e. add the eval command to your shell profile). Please note, the log output may be different for you depending on your shell.
-
-After adding eval command it is necessary to restart your terminal or source your shell profile (e.g. `source ~/.zshrc` for Zsh).
-
-### Install project dependencies with Mise
-
-Then make Mise trust current project:
-```bash
+# 2. Install dependencies
 mise trust
-```
-
-Install project dependencies with Mise:
-```bash
 mise install
-```
-
-### Install other dependencies
-
-Install EIP712 dependency with Just:
-```bash
 just install-eip712sign
+
+# 3. Configure environment
+cp .env.sample .env
+# Edit .env and set RPC_URL to an Ethereum mainnet RPC endpoint
 ```
 
-### Setup environment variables
+<details>
+<summary>Detailed Mise Setup Instructions</summary>
 
-Rename `.env.sample` to `.env` and fill in the required environment variables. You can use the `.env.sample` file as a reference. The `RPC_URL` should be set to the RPC URL of an L1 Ethereum mainnet node.
+After running `./scripts/install-mise.sh`, you'll see instructions like:
+
+```bash
+echo "eval \"\$(~/.local/bin/mise activate zsh)\"" >> ~/.zshrc
+```
+
+Follow these instructions for your shell, then restart your terminal or run `source ~/.zshrc`.
+
+</details>
 
 ## Current Release: OpSuccinct Upgrade
 
@@ -69,141 +51,158 @@ This section outlines the process for signing the Celo Mainnet OpSuccinct upgrad
 The OpSuccinct upgrade transitions Celo Mainnet's fault proof system to use **OP Succinct games**, enabling zero-knowledge proof-based dispute resolution. This upgrade:
 
 1. **Switches the game type** from standard Optimism fault proofs to OP Succinct games
-2. **Deploys new contracts** using deterministic CREATE3 deployment:
-   - `AccessManager`: Manages permissions for the OP Succinct system
-   - `OPSuccinctFaultDisputeGame`: Implements ZK-proof based dispute resolution
+2. **Registers pre-deployed contracts** that were deployed using deterministic CREATE3:
+   - `AccessManager` at `0xf59a19c5578291cb7fd22618d16281adf76f2816`: Manages permissions for the OP Succinct system
+   - `OPSuccinctFaultDisputeGame` at `0x113f434f82ff82678ae7f69ea122791fe1f6b73e`: Implements ZK-proof based dispute resolution
 
-The deployment addresses were pre-calculated using CREATE3 (see [celo-org/op-succinct#43](https://github.com/celo-org/op-succinct/pull/43)). This approach allows parameter fine-tuning until the final deployment without changing contract addresses.
+The contracts were deployed using CREATE3 deterministic deployment (see [celo-org/op-succinct#43](https://github.com/celo-org/op-succinct/pull/43)). The governance proposal you're signing registers these deployed contracts with the DisputeGameFactory.
 
 ### Upgrade Workflow Status
 
 This signing phase is part of a larger upgrade process:
 
 - ✅ **Pre-calculate deployment addresses** using CREATE3 deterministic deployment
-- ✅ **Generate upgrade calldata** locally
+- ✅ **Deploy OpSuccinct contracts** to pre-calculated addresses with finalized parameters
+  - AccessManager: `0xf59a19c5578291cb7fd22618d16281adf76f2816`
+  - OPSuccinctFaultDisputeGame: `0x113f434f82ff82678ae7f69ea122791fe1f6b73e`
+- ✅ **Generate upgrade calldata** with initBond set to 0.01 ETH
 - ✅ **Simulate upgrade** locally, on forked network, and in Tenderly vnet
 - ✅ **Prepare signing infrastructure** and test with this repository
 - 🔄 **Gather signatures from multisig signers** ← **You are here**
-- ⏳ **Fine-tune parameters** for official release (can be done until deployment)
-- ⏳ **Deploy contracts** to pre-calculated addresses with finalized parameters
 - ⏳ **Execute governance proposal** to register OP Succinct games in DisputeGameFactory
 - ⏳ **Migrate to OP Succinct proposer** and switch game type in OptimismPortal2
 
 ### Summary for Signers
 
-*   **What are you signing?** You are signing a transaction that approves the OpSuccinct upgrade calldata. This transaction will be executed by the Celo Mainnet multisig to configure the system to recognize OP Succinct games.
-*   **What are the changes?** The upgrade registers OP Succinct contracts with the system. Pre-calculated deployment addresses can be found in [addresses/succinct.json](./addresses/succinct.json). The upgrade transaction details are in [upgrades/succinct.json](./upgrades/succinct.json). Tenderly simulation is available via `just simulate succinct` command.
-*   **What is the expected output?** After signing with your Ledger, the process will generate an `out.json` file containing your signature, account address, transaction hash, and transaction data. This file must be sent to the facilitator (cLabs).
-*   **Why use CREATE3?** CREATE3 deployment ensures addresses remain constant regardless of constructor parameters. This allows the team to optimize parameters until the final deployment without invalidating signatures.
-*   **What is `mise`?** `mise` is a tool that manages the versions of software dependencies (like `go`, `forge`, etc.) used in this repository. It ensures that you are using the correct versions for all commands without interfering with your system's existing installations.
+#### What You're Signing
 
-The main command you will be using is `sign_ledger`. This command will ask you to sign one transaction on your Ledger device. After successful signing, it will generate an `out.json` file. This file contains the signature and needs to be sent back to the facilitator. **Please verify the account value in this file matches the account you intended to sign with.**
+A governance proposal to register pre-deployed OpSuccinct contracts with DisputeGameFactory:
 
-The default derivation path used is the Ethereum derivation path (`m/44'/60'/<account_index>'/0/0`). If you choose the Celo ledger app, make sure you have the Eth Recovery app open on your Ledger - [see below](#ledger-workaround-for-celo-app-users)
+1. **Set initial bond:** 0.01 ETH for game type 42 (OP Succinct)
+2. **Register implementation:** OPSuccinctFaultDisputeGame at `0x113f434f82ff82678ae7f69ea122791fe1f6b73e`
 
-### Decode OpSuccinct Upgrade Calldata
+#### Pre-Deployed Contracts (Already on Mainnet)
 
-To understand exactly what operations the OpSuccinct upgrade performs, you can decode the calldata:
+- **AccessManager:** `0xf59a19c5578291cb7fd22618d16281adf76f2816`
+- **OPSuccinctFaultDisputeGame:** `0x113f434f82ff82678ae7f69ea122791fe1f6b73e`
+
+See [addresses/succinct.json](./addresses/succinct.json) for details.
+
+#### How to Verify
+
+```bash
+# Decode calldata to see exact operations
+./scripts/decode_succinct_calldata.sh
+
+# Simulate in Tenderly
+just simulate succinct
+
+# Verify bytecode (see section below for full instructions)
+./scripts/compare_succinct.sh /path/to/op-succinct/contracts/out
+```
+
+#### Signing Process
+
+1. Run: `just sign_ledger succinct [clabs|council] [eth|celo] <index>`
+2. Sign on your Ledger device
+3. Verify the `out.json` file contains your correct account address
+4. Send `out.json` to the facilitator (cLabs)
+
+**Notes:**
+- 📍 Default path: Ethereum (`m/44'/60'/<index>'/0/0`)
+- 📱 Celo app: See [Ledger workaround](#ledger-workaround-for-celo-app-users)
+- 🔗 Nested multisig: Add address as final parameter (see examples below)
+
+### Verification Options
+
+<details>
+<summary><strong>Option 1: Decode Calldata</strong> (View exact operations)</summary>
 
 ```bash
 ./scripts/decode_succinct_calldata.sh
 ```
 
-This script will:
-- Identify the top-level function call (Multicall3.aggregate3)
-- Extract and decode the two nested operations:
-  1. **setInitBond(gameType=42, bond=0.001 ETH)**: Configures the initial bond amount for OP Succinct games
-  2. **setImplementation(gameType=42, impl=0x113f434f82FF82678AE7f69Ea122791FE1F6b73e)**: Registers the OPSuccinctFaultDisputeGame implementation
-- Display the actual parameter values extracted from the calldata
-- Verify the implementation address matches [addresses/succinct.json](./addresses/succinct.json)
+This shows:
+- **setInitBond:** gameType=42, bond=0.01 ETH
+- **setImplementation:** gameType=42, impl=0x113f434f82FF82678AE7f69Ea122791FE1F6b73e
 
-This provides complete transparency into the operations that will be executed when the upgrade is approved.
+</details>
 
-### Verify OpSuccinct Bytecode
-
-**Important:** The OpSuccinct contracts use CREATE3 deterministic deployment. The addresses in [addresses/succinct.json](./addresses/succinct.json) are **pre-calculated** but not yet deployed on mainnet. Bytecode verification against on-chain code will work after deployment completes.
-
-To verify the bytecode against forge artifacts:
-
-**1. Clone the `op-succinct` repository:**
-
-```bash
-git clone https://github.com/celo-org/op-succinct
-cd op-succinct
-git checkout develop
-```
-
-**2. Build the contracts:**
-
-```bash
-cd contracts
-forge build
-```
-
-**3. Run the comparison script:**
-
-From the `celo-superchain-ops` repository:
-
-```bash
-# from /path/to/celo-superchain-ops
-./scripts/compare_succinct.sh /path/to/op-succinct/contracts/out
-```
-
-**Note:** The script will display a warning that contracts are not yet deployed. Before deployment, you can verify the forge artifacts match the expected contracts. After deployment, the script will verify on-chain bytecode matches the artifacts.
-
-**Understanding CREATE3 Deployment:**
-
-CREATE3 allows addresses to be pre-calculated independently of constructor parameters. Benefits:
-- Addresses remain constant even if constructor parameters change
-- Parameters can be fine-tuned until deployment without invalidating signatures
-- Deployment address is deterministic and verifiable
-
-For implementation details, see the deterministic deployment PR: [celo-org/op-succinct#43](https://github.com/celo-org/op-succinct/pull/43)
-
-### Simulate OpSuccinct Upgrade
-
-To simulate the OpSuccinct upgrade in Tenderly:
+<details>
+<summary><strong>Option 2: Simulate in Tenderly</strong> (Visual confirmation)</summary>
 
 ```bash
 just simulate succinct
 ```
 
-This will display two Tenderly simulation URLs:
-- **Pre-deployment simulation**: Shows the contract deployment transaction
-- **Upgrade simulation**: Shows the governance proposal execution registering OP Succinct games
+Displays two simulation URLs showing contract deployment and governance proposal execution. Enable "Dev" mode in Tenderly UI for best results.
 
-**Note:** To properly view the simulation, you may need to enable "Dev" mode in Tenderly. This switch is located in the top-right corner of the Tenderly interface.
+See [TENDERLY.md](./TENDERLY.md) for detailed verification guide.
 
-For detailed guidance on verifying the simulation, refer to the [Tenderly verification guide](./TENDERLY.md).
+</details>
 
+<details>
+<summary><strong>Option 3: Verify Bytecode</strong> (Check on-chain contracts)</summary>
 
-### If you are a member of the `council` team:
+Contracts are deployed using CREATE3 deterministic deployment ([details](https://github.com/celo-org/op-succinct/pull/43)).
 
-You will need to sign the OpSuccinct upgrade transaction for the `council` safe.
-
-Specify the ledger app and account index to use (indices start at 0):
 ```bash
+# Clone and build op-succinct contracts
+git clone https://github.com/celo-org/op-succinct
+cd op-succinct && git checkout develop
+cd contracts && forge build
+
+# Compare on-chain bytecode with artifacts
+cd /path/to/celo-superchain-ops
+./scripts/compare_succinct.sh /path/to/op-succinct/contracts/out
+```
+
+This verifies on-chain bytecode matches compiled artifacts.
+
+</details>
+
+
+### Sign the Transaction
+
+```bash
+# 👥 Council team
 just sign_ledger succinct council [eth|celo] <index>
 
-# example - using Ethereum app with account index 1
+# 🏢 cLabs team
+just sign_ledger succinct clabs [eth|celo] <index>
+```
+
+**Examples:**
+
+<details open>
+<summary>📝 <strong>Regular Signing (Majority)</strong></summary>
+
+```bash
+# Default account (index 0)
+just sign_ledger succinct clabs eth
+
+# Specific account index
 just sign_ledger succinct council eth 1
 ```
 
-After signing, verify the `out.json` file contains your correct account address, then **send the JSON file to your facilitator.**
+</details>
 
-### If you are a member of the `clabs` team:
+<details>
+<summary>🔗 <strong>Nested Multisig (Mento)</strong></summary>
 
-You will need to sign the OpSuccinct upgrade transaction for the `clabs` safe.
+For signers of nested multisigs within Security Council:
 
-Specify the ledger app and account index to use (indices start at 0):
 ```bash
-just sign_ledger succinct clabs [eth|celo] <index>
-
-# example - using Ethereum app with account index 1
-just sign_ledger succinct clabs eth 1
+just sign_ledger succinct council eth 0 0xMentoMultisigAddress
 ```
 
-After signing, verify the `out.json` file contains your correct account address, then **send the JSON file to your facilitator.**
+Replace `0xMentoMultisigAddress` with your nested multisig address.
+
+</details>
+
+---
+
+**After signing:** ✅ Verify `out.json` contains your correct address, then send to facilitator.
 
 ### Ledger Workaround for Celo App Users
 
@@ -228,99 +227,70 @@ You can use `celo` as the ledger app parameter, but you need to have the Eth Rec
 just sign_ledger succinct clabs celo 1
 ```
 
-## Available Commands
+## Command Reference
 
-### `sign_ledger` - Sign upgrade with ledger app and account index
-
-This command signs the specified upgrade transaction. It will prompt for one signature on your Ledger device and output an `out.json` file with the signature.
+<details>
+<summary>📝 <strong>sign_ledger</strong> - Main signing command</summary>
 
 ```bash
-just sign_ledger <version> <team> <ledger_app> [account_index]
+just sign_ledger <version> <team> <ledger_app> [account_index] [grand_child]
 ```
 
-**Parameters:**
-*   `version`: The upgrade version to sign (`succinct`, `v2`, `v3`)
-*   `team`: The team that is signing (`clabs`, `council`)
-*   `ledger_app`: The Ledger app to use (`eth` or `celo`)
-*   `account_index`: The account index to use (optional, defaults to `0`)
+| Parameter | Options | Default | Description |
+|-----------|---------|---------|-------------|
+| `version` | `succinct`, `v2`, `v3` | - | Upgrade version |
+| `team` | `clabs`, `council` | - | Your team |
+| `ledger_app` | `eth`, `celo` | - | Ledger app |
+| `account_index` | `0`, `1`, `2`... | `0` | Account index |
+| `grand_child` | `0x...` | - | 🔗 Nested multisig address |
 
-**Examples:**
-```bash
-# Sign succinct upgrade using Ethereum app with default account (index 0)
-just sign_ledger succinct clabs eth
+**Derivation paths:**
+- `eth`: `m/44'/60'/<index>'/0/0`
+- `celo`: `m/44'/52752'/<index>'/0/0`
 
-# Sign succinct upgrade using Ethereum app with account index 1
-just sign_ledger succinct clabs eth 1
+</details>
 
-# Sign succinct upgrade using Celo app with workaround and account index 2
-just sign_ledger succinct council celo 2
-```
-
-### `sign` - Sign upgrade with custom HD path
-
-If you need to use a custom HD path, you can use the `sign` command directly. Note that you might need to escape special characters for your shell.
+<details>
+<summary>🔧 <strong>sign</strong> - Custom HD path</summary>
 
 ```bash
 just sign <version> <team> [hd_path] [grand_child]
 ```
 
-**Parameters:**
-*   `version`: The upgrade version to sign (`succinct`, `v2`, `v3`)
-*   `team`: The team that is signing (`clabs`, `council`)
-*   `hd_path`: The hardware wallet derivation path (optional)
-*   `grand_child`: Address of grand child multisig if applicable (optional)
+| Parameter | Options | Default | Description |
+|-----------|---------|---------|-------------|
+| `version` | `succinct`, `v2`, `v3` | - | Upgrade version |
+| `team` | `clabs`, `council` | - | Your team |
+| `hd_path` | Custom path | - | Derivation path (e.g., `m/44'/60'/1'/0/0`) |
+| `grand_child` | `0x...` | - | 🔗 Nested multisig address |
 
-**Examples:**
-```bash
-# Sign with custom Celo derivation path
-just sign succinct clabs "m/44'/52752'/1'/0/0"
+For advanced users needing non-standard derivation paths. Must escape special characters.
 
-# Sign with custom Ethereum derivation path
-just sign succinct council "m/44'/60'/1'/0/0"
-```
+</details>
 
-### `simulate` - View Tenderly simulation
-
-Display the Tenderly simulation URL for an upgrade:
+<details>
+<summary>🔍 <strong>simulate</strong> - Tenderly simulation</summary>
 
 ```bash
 just simulate <version>
 ```
 
-**Example:**
-```bash
-just simulate succinct
-```
+| Parameter | Options | Description |
+|-----------|---------|-------------|
+| `version` | `succinct`, `v2`, `v3` | Upgrade version to simulate |
 
-## Derivation Paths
+Displays Tenderly simulation URLs showing contract deployment and governance proposal execution.
 
-The `sign_ledger` command automatically generates the correct derivation paths based on the chosen ledger app:
+</details>
 
-*   **`eth`**: `m/44'/60'/<account_index>'/0/0`
-*   **`celo`**: `m/44'/52752'/<account_index>'/0/0`
+## Execution Flow
 
-Where `<account_index>` defaults to `0` if not specified.
+1. **Signers** → Sign proposal and send `out.json` to facilitator
+2. **Facilitator** → Collects signatures and performs child multisig approvals (cLabs + Security Council)
+3. **Child Multisigs** → Approve execution on parent multisig
+4. **Parent Multisig** → Executes transaction:
+   - `DisputeGameFactory.setInitBond(42, 0.01 ETH)`
+   - `DisputeGameFactory.setImplementation(42, 0x113f434f82ff82678ae7f69ea122791fe1f6b73e)`
+5. **Post-Execution** → Migrate to OP Succinct proposer and switch game type
 
-## How it works
-
-The `sign_ledger` command is a convenience wrapper that:
-1. Takes the version, team, ledger app, and account index as parameters
-2. Generates the appropriate HD path based on the app choice and account index
-3. Calls the `sign` command with the generated HD path
-
-This provides both flexibility (you can use custom HD paths with `sign`) and convenience (you can use predefined app paths with `sign_ledger`).
-
-## How it will be executed
-
-The full execution process for the OpSuccinct upgrade:
-
-1. **Distribution**: This signing routine is distributed to individual signers
-2. **Signing**: Signers sign the transaction and forward the `out.json` file to the facilitator
-3. **Child Approval**: Facilitator performs approval on child multisigs (cLabs and Security Council) using the collected signatures
-4. **Parent Approval**: Both child multisigs approve the execution on the parent multisig (owner of Celo OpStack)
-5. **Post-Execution Steps** (performed separately after signature collection):
-   - Deploy contracts to pre-calculated CREATE3 addresses with finalized parameters
-   - Execute governance proposal to register OP Succinct games in DisputeGameFactory
-   - Migrate to OP Succinct proposer and switch game type in OptimismPortal
-
-**Note**: Steps 1-4 happen during the signing and approval phase (current phase). Step 5 happens after successful signature collection and represents the actual deployment and migration.
+**Note:** Contracts are already deployed on mainnet ([addresses/succinct.json](./addresses/succinct.json)). This proposal registers them with the system.
