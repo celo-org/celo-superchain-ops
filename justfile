@@ -5,13 +5,13 @@ export CLABS_SAFE_ADDRESS := "0x9Eb44Da23433b5cAA1c87e35594D15FcEb08D34d"
 export COUNCIL_SAFE_ADDRESS := "0xC03172263409584f7860C25B6eB4985f0f6F4636"
 
 export VALUE := "0"
-export OP_CALL := "0"
-export OP_DELEGATECALL := "1"
+export TX_CALL := "0"
+export TX_DELEGATECALL := "1"
 export SAFE_TX_GAS := "0"
 export BASE_GAS := "0"
 export GAS_PRICE := "0"
 export GAS_TOKEN := "0x0000000000000000000000000000000000000000"
-export REFUND_RECEIVER := "0x0000000000000000000000000000000000000000"
+export REFUND_RECEIVER := "0x95ffac468e37ddeef407ffef18f0cc9e86d8f13b"
 
 default:
     just --list
@@ -28,7 +28,7 @@ check-version version:
 
     VERSION={{version}}
     case $VERSION in
-    "v2"|"v3")
+    "v2"|"v3"|"succinct")
         echo "Detected version: $VERSION"
         ;;
     *)
@@ -59,8 +59,10 @@ simulate version:
 
     if [ $VERSION = "v2" ]; then
         URL="https://dashboard.tenderly.co/explorer/vnet/4c92d88c-598f-42fd-bfdc-c837b8d697cc/tx/0x7c44fe8c5c48931a322f0b986957c677b8871922ab152307e06f7319cd85f639"
-    else
+    elif [ $VERSION = "v3" ]; then
         URL="https://dashboard.tenderly.co/explorer/vnet/4c92d88c-598f-42fd-bfdc-c837b8d697cc/tx/0x8d37735f7be725450d35187ea24f9050341a601817a2152c6fefa7a1192597da"
+    elif [ $VERSION = "succinct" ]; then
+        URL="https://dashboard.tenderly.co/explorer/vnet/053b540e-ae59-42c8-80a0-1250820dc894/tx/0x55742ec449b9659f3a5662c5b2f6d6a92d9d955a39eeaaeaf1df1726a3f2ff3f"
     fi
     echo "Link to Tenderly sim: $URL"
 
@@ -77,12 +79,12 @@ sign version team hd_path='' grand_child='':
     HD_PATH="{{hd_path}}"
     GRAND_CHILD="{{grand_child}}"
 
-    OPCM=$(cat upgrades/$VERSION.json | jq -r .opcm)
+    TARGET=$(cat upgrades/$VERSION.json | jq -r .target)
     PARENT_CALLDATA=$(cat upgrades/$VERSION.json | jq -r .calldata)
     PARENT_NONCE=$(cat upgrades/$VERSION.json | jq -r .nonce.parent)
     PARENT_TX_HASH=$(cast call $PARENT_SAFE_ADDRESS \
         "getTransactionHash(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
-        $OPCM $VALUE $PARENT_CALLDATA $OP_DELEGATECALL $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $PARENT_NONCE \
+        $TARGET $VALUE $PARENT_CALLDATA $TX_DELEGATECALL $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $PARENT_NONCE \
         -r $RPC_URL
     )
     echo "Parent tx hash: $PARENT_TX_HASH"
@@ -100,12 +102,12 @@ sign version team hd_path='' grand_child='':
     esac
     CHILD_TX_HASH=$(cast call $CHILD_SAFE_ADDRESS \
         "getTransactionHash(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
-        $PARENT_SAFE_ADDRESS $VALUE $CHILD_CALLDATA $OP_CALL $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $CHILD_NONCE \
+        $PARENT_SAFE_ADDRESS $VALUE $CHILD_CALLDATA $TX_CALL $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $CHILD_NONCE \
         -r $RPC_URL
     )
     CHILD_TX_DATA=$(cast call $CHILD_SAFE_ADDRESS \
         "encodeTransactionData(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes)" \
-        $PARENT_SAFE_ADDRESS $VALUE $CHILD_CALLDATA $OP_CALL $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $CHILD_NONCE \
+        $PARENT_SAFE_ADDRESS $VALUE $CHILD_CALLDATA $TX_CALL $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $CHILD_NONCE \
         -r $RPC_URL
     )
     echo "Child tx hash: $CHILD_TX_HASH"
@@ -126,25 +128,18 @@ sign version team hd_path='' grand_child='':
     else
         echo "Attempting to generate payload for grand child at: $GRAND_CHILD"
         GRAND_CHILD_VERSION=$(cast call $GRAND_CHILD "VERSION()(string)" -r $RPC_URL)
-        if [ $VERSION = "v2" ]; then
-            # GRAND_CHILD_NONCE=$(cast call $GRAND_CHILD "nonce()(uint256)" -r $RPC_URL)
-            GRAND_CHILD_NONCE=2
-        else
-            # GRAND_CHILD_NONCE=$(cast call $GRAND_CHILD "nonce()(uint256)" -r $RPC_URL)
-            # GRAND_CHILD_NONCE=$(($GRAND_CHILD_NONCE + 1))
-            GRAND_CHILD_NONCE=3
-        fi
+        GRAND_CHILD_NONCE=$(cast call $GRAND_CHILD "nonce()(uint256)" -r $RPC_URL)
         echo "Detected grand child at version: $GRAND_CHILD_VERSION with nonce: $GRAND_CHILD_NONCE"
 
         GRAND_CHILD_CALLDATA=$(cast calldata 'approveHash(bytes32)' $CHILD_TX_HASH)
         GRAND_CHILD_TX_HASH=$(cast call $GRAND_CHILD \
             "getTransactionHash(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
-            $CHILD_SAFE_ADDRESS $VALUE $GRAND_CHILD_CALLDATA $OP_CALL $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $GRAND_CHILD_NONCE \
+            $CHILD_SAFE_ADDRESS $VALUE $GRAND_CHILD_CALLDATA $TX_CALL $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $GRAND_CHILD_NONCE \
             -r $RPC_URL
         )
         GRAND_CHILD_TX_DATA=$(cast call $GRAND_CHILD \
             "encodeTransactionData(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes)" \
-            $CHILD_SAFE_ADDRESS $VALUE $GRAND_CHILD_CALLDATA $OP_CALL $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $GRAND_CHILD_NONCE \
+            $CHILD_SAFE_ADDRESS $VALUE $GRAND_CHILD_CALLDATA $TX_CALL $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $GRAND_CHILD_NONCE \
             -r $RPC_URL
         )
         echo "Grand child tx hash: $GRAND_CHILD_TX_HASH"
@@ -175,32 +170,11 @@ sign version team hd_path='' grand_child='':
         echo "Your signature for grand child tx hash: $SIG"
     fi
 
-    if [ ! -f out.json ]; then
-        just create_json 0x0 0x0 0x0 0x0 0x0 0x0 0x0
+    if [ -z ${GRAND_CHILD:-} ]; then
+        just create_json $VERSION $CHILD_TX_HASH $CHILD_TX_DATA $SIG $ACCOUNT
+    else
+        just create_json $VERSION $GRAND_CHILD_TX_HASH $GRAND_CHILD_TX_DATA $SIG $ACCOUNT
     fi
-
-    case $VERSION in
-    "v2")
-        V3_HASH=$(cat out.json | jq -r .v3_hash)
-        V3_DATA=$(cat out.json | jq -r .v3_data)
-        V3_SIG=$(cat out.json | jq -r .v3_sig)
-        if [ -z ${GRAND_CHILD:-} ]; then
-            just create_json $CHILD_TX_HASH $CHILD_TX_DATA $SIG $V3_HASH $V3_DATA $V3_SIG $ACCOUNT
-        else
-            just create_json $GRAND_CHILD_TX_HASH $GRAND_CHILD_TX_DATA $SIG $V3_HASH $V3_DATA $V3_SIG $ACCOUNT
-        fi
-        ;;
-    "v3")
-        V2_HASH=$(cat out.json | jq -r .v2_hash)
-        V2_DATA=$(cat out.json | jq -r .v2_data)
-        V2_SIG=$(cat out.json | jq -r .v2_sig)
-        if [ -z ${GRAND_CHILD:-} ]; then
-            just create_json $V2_HASH $V2_DATA $V2_SIG $CHILD_TX_HASH $CHILD_TX_DATA $SIG $ACCOUNT
-        else
-            just create_json $V2_HASH $V2_DATA $V2_SIG $GRAND_CHILD_TX_HASH $GRAND_CHILD_TX_DATA $SIG $ACCOUNT
-        fi
-        ;;
-    esac
 
 sign_ledger version team ledger_app account_index='0' grand_child='':
     #!/usr/bin/env bash
@@ -223,8 +197,8 @@ sign_ledger version team ledger_app account_index='0' grand_child='':
 
     just sign {{version}} {{team}} "$HD_PATH" {{grand_child}}
 
-create_json v2_hash v2_data v2_sig v3_hash v3_data v3_sig account:
-    echo "{\"v2_hash\": \"{{v2_hash}}\", \"v2_data\": \"{{v2_data}}\", \"v2_sig\": \"{{v2_sig}}\", \"v3_hash\": \"{{v3_hash}}\", \"v3_data\": \"{{v3_data}}\", \"v3_sig\": \"{{v3_sig}}\", \"account\": \"{{account}}\"}" > out.json
+create_json version hash data sig account:
+    echo "{\"version\": \"{{version}}\", \"hash\": \"{{hash}}\", \"data\": \"{{data}}\", \"sig\": \"{{sig}}\", \"account\": \"{{account}}\"}" > out.json
 
 print_json grand_child='':
     #!/usr/bin/env bash
@@ -241,19 +215,6 @@ print_json grand_child='':
             "Copy and forward full output of current script and following JSON to your facilitator:\e[0m"
     fi
     cat out.json | jq
-
-sign_all team hd_path='' grand_child='':
-    #!/usr/bin/env bash
-    set -euo pipefail
-    HD_PATH={{hd_path}}
-    just sign v2 {{team}} "$HD_PATH" {{grand_child}}
-    just sign v3 {{team}} "$HD_PATH" {{grand_child}}
-    just print_json {{grand_child}}
-
-sign_all_ledger team ledger_app account_index='0' grand_child='':
-    just sign_ledger v2 {{team}} {{ledger_app}} {{account_index}} {{grand_child}}
-    just sign_ledger v3 {{team}} {{ledger_app}} {{account_index}} {{grand_child}}
-    just print_json {{grand_child}}
 
 exec safe to calldata op sig:
     #!/usr/bin/env bash
