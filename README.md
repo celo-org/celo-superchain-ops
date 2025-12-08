@@ -83,8 +83,8 @@ A governance proposal to register pre-deployed OpSuccinct contracts with Dispute
 
 #### Pre-Deployed Contracts (Already on Mainnet)
 
-- **AccessManager:** `0xf59a19c5578291cb7fd22618d16281adf76f2816`
-- **OPSuccinctFaultDisputeGame:** `0x113f434f82ff82678ae7f69ea122791fe1f6b73e`
+- **AccessManager:** [`0xf59a19c5578291cb7fd22618d16281adf76f2816`](https://etherscan.io/address/0xf59a19c5578291cb7fd22618d16281adf76f2816)
+- **OPSuccinctFaultDisputeGame:** [`0x113f434f82ff82678ae7f69ea122791fe1f6b73e`](https://etherscan.io/address/0x113f434f82ff82678ae7f69ea122791fe1f6b73e)
 
 See [addresses/succinct.json](./addresses/succinct.json) for details.
 
