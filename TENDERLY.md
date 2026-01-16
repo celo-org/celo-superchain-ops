@@ -56,8 +56,6 @@ Tenderly link for succinct-v102: https://dashboard.tenderly.co/explorer/vnet/394
 Verify the following change:
 - `gameImpls[42]` is updated to `0xc5bd131ceaeb72f15c66418bc2668332ab99de37` (OPSuccinctFaultDisputeGame v1.0.2)
 
-## Deployed Contracts
-
 | Contract                             | Address                                      |
 | ------------------------------------ | -------------------------------------------- |
 | AccessManager                        | 0xf59a19c5578291cb7fd22618d16281adf76f2816   |
