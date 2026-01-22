@@ -35,3 +35,28 @@ Tenderly link for v3: https://dashboard.tenderly.co/explorer/vnet/4c92d88c-598f-
 | L1CrossDomainMessenger           | 0x55093104b76FAA602F9d6c35A5FFF576bE78d753   | 807124f75ff2120b2f26d7e6f9e39c03ee9de212   |
 | L1ERC721Bridge                   | 3C519816C5BdC0a0199147594F83feD4F5847f13   | 7ae1d3bd877a4c5ca257404ce26be93a02c98013   |
 | L1StandardBridge                 | 9C4955b92F34148dbcfDCD82e9c9eCe5CF2badfe   | 28841965b26d41304905a836da5c0921da7dbb84   |
+
+# succinct (OpSuccinct v1.0.0) Upgrade
+
+Tenderly link for succinct: https://dashboard.tenderly.co/explorer/vnet/053b540e-ae59-42c8-80a0-1250820dc894/tx/0x55742ec449b9659f3a5662c5b2f6d6a92d9d955a39eeaaeaf1df1726a3f2ff3f
+
+Verify the following changes:
+- `initBonds[42]` is set to `10000000000000000` (0.01 ETH)
+- `gameImpls[42]` points to `0x113f434f82FF82678AE7f69Ea122791FE1F6b73e` (OPSuccinctFaultDisputeGame)
+
+| Contract                             | Address                                      |
+| ------------------------------------ | -------------------------------------------- |
+| AccessManager                        | 0xf59a19c5578291cb7fd22618d16281adf76f2816   |
+| OPSuccinctFaultDisputeGame          | 0x113f434f82ff82678ae7f69ea122791fe1f6b73e   |
+
+# succinct-v102 (OpSuccinct v1.0.2) Upgrade
+
+Tenderly link for succinct-v102: https://dashboard.tenderly.co/explorer/vnet/39498d1a-4638-47d3-8bbc-010de8f718ce/tx/0x27f7a467c7d7faa3aa9934ffc2810a4d910e2404783aed427a5fa1f732f7e12d
+
+Verify the following change:
+- `gameImpls[42]` is updated to `0xc5bd131ceaeb72f15c66418bc2668332ab99de37` (OPSuccinctFaultDisputeGame v1.0.2)
+
+| Contract                             | Address                                      |
+| ------------------------------------ | -------------------------------------------- |
+| AccessManager                        | 0xf59a19c5578291cb7fd22618d16281adf76f2816   |
+| OPSuccinctFaultDisputeGame          | 0xc5bd131ceaeb72f15c66418bc2668332ab99de37   |
