@@ -28,7 +28,7 @@ check-version version:
 
     VERSION={{version}}
     case $VERSION in
-    "v2"|"v3"|"succinct")
+    "v2"|"v3"|"succinct"|"succinct-v102")
         echo "Detected version: $VERSION"
         ;;
     *)
@@ -57,13 +57,21 @@ simulate version:
     VERSION={{version}}
     just check-version $VERSION
 
-    if [ $VERSION = "v2" ]; then
-        URL="https://dashboard.tenderly.co/explorer/vnet/4c92d88c-598f-42fd-bfdc-c837b8d697cc/tx/0x7c44fe8c5c48931a322f0b986957c677b8871922ab152307e06f7319cd85f639"
-    elif [ $VERSION = "v3" ]; then
-        URL="https://dashboard.tenderly.co/explorer/vnet/4c92d88c-598f-42fd-bfdc-c837b8d697cc/tx/0x8d37735f7be725450d35187ea24f9050341a601817a2152c6fefa7a1192597da"
-    elif [ $VERSION = "succinct" ]; then
+    case $VERSION in
+    "succinct-v102")
+        URL="https://dashboard.tenderly.co/explorer/vnet/39498d1a-4638-47d3-8bbc-010de8f718ce/tx/0x27f7a467c7d7faa3aa9934ffc2810a4d910e2404783aed427a5fa1f732f7e12d"
+        ;;
+    "succinct")
         URL="https://dashboard.tenderly.co/explorer/vnet/053b540e-ae59-42c8-80a0-1250820dc894/tx/0x55742ec449b9659f3a5662c5b2f6d6a92d9d955a39eeaaeaf1df1726a3f2ff3f"
-    fi
+        ;;
+    "v2"|"v3")
+        echo "Simulation URL inactive" && exit 0
+        ;;
+    *)
+        echo "Invalid version: $VERSION" && exit 1
+        ;;
+    esac
+
     echo "Link to Tenderly sim: $URL"
 
 sign version team hd_path='' grand_child='':
@@ -128,7 +136,7 @@ sign version team hd_path='' grand_child='':
     else
         echo "Attempting to generate payload for grand child at: $GRAND_CHILD"
         GRAND_CHILD_VERSION=$(cast call $GRAND_CHILD "VERSION()(string)" -r $RPC_URL)
-        GRAND_CHILD_NONCE=$(cast call $GRAND_CHILD "nonce()(uint256)" -r $RPC_URL)
+        GRAND_CHILD_NONCE=$(cat upgrades/$VERSION.json | jq -r .nonce.grand_child)
         echo "Detected grand child at version: $GRAND_CHILD_VERSION with nonce: $GRAND_CHILD_NONCE"
 
         GRAND_CHILD_CALLDATA=$(cast calldata 'approveHash(bytes32)' $CHILD_TX_HASH)

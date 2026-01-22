@@ -40,70 +40,70 @@ Follow these instructions for your shell, then restart your terminal or run `sou
 
 </details>
 
-## Current Release: OpSuccinct Upgrade
+## Current Release: OpSuccinct v1.0.2 Upgrade
 
-This section outlines the process for signing the Celo Mainnet OpSuccinct upgrade. As a signer, you are approving the transaction that will execute this upgrade on-chain.
+This section outlines the process for signing the Celo Mainnet OpSuccinct v1.0.2 upgrade. As a signer, you are approving the transaction that will execute this upgrade on-chain.
 
-**Previous upgrades:** The v2 and v3 (Isthmus) upgrades have been successfully executed. This repository now supports individual upgrades on a per-release basis.
+**Previous upgrades:** The v2, v3 (Isthmus), and succinct (v1.0.0) upgrades have been successfully executed. This repository now supports individual upgrades on a per-release basis.
 
-### What is the OpSuccinct Upgrade?
+### What is the OpSuccinct v1.0.2 Upgrade?
 
-The OpSuccinct upgrade transitions Celo Mainnet's fault proof system to use **OP Succinct games**, enabling zero-knowledge proof-based dispute resolution. This upgrade:
+The OpSuccinct v1.0.2 upgrade updates Celo Mainnet's fault proof system with the latest **OP Succinct v1.0.2** implementation. This upgrade:
 
-1. **Switches the game type** from standard Optimism fault proofs to OP Succinct games
-2. **Registers pre-deployed contracts** that were deployed using deterministic CREATE3:
-   - `AccessManager` at `0xf59a19c5578291cb7fd22618d16281adf76f2816`: Manages permissions for the OP Succinct system
-   - `OPSuccinctFaultDisputeGame` at `0x113f434f82ff82678ae7f69ea122791fe1f6b73e`: Implements ZK-proof based dispute resolution
+1. **Fixes potential proving failures** for blocks that reference L1 blocks with large excess blob gas
+2. **Reduces on-chain costs by 9x** through concurrent range splitting proof generation in the succinct-proposer
+3. **Registers newly deployed contracts** that were deployed using deterministic CREATE3:
+   - `AccessManager` at `0xF59a19c5578291cB7fd22618D16281aDf76f2816`: Manages permissions for the OP Succinct system
+   - `OPSuccinctFaultDisputeGame` at `0xc5bd131ceaeb72f15c66418bc2668332ab99de37`: Implements ZK-proof based dispute resolution (v1.0.2)
 
-The contracts were deployed using CREATE3 deterministic deployment (see [celo-org/op-succinct#43](https://github.com/celo-org/op-succinct/pull/43)). The governance proposal you're signing registers these deployed contracts with the DisputeGameFactory.
+The contracts were deployed using CREATE3 deterministic deployment. The governance proposal you're signing registers these upgraded contracts with the DisputeGameFactory.
 
 ### Upgrade Workflow Status
 
 This signing phase is part of a larger upgrade process:
 
 - ✅ **Pre-calculate deployment addresses** using CREATE3 deterministic deployment
-- ✅ **Deploy OpSuccinct contracts** to pre-calculated addresses with finalized parameters
-  - AccessManager: `0xf59a19c5578291cb7fd22618d16281adf76f2816`
-  - OPSuccinctFaultDisputeGame: `0x113f434f82ff82678ae7f69ea122791fe1f6b73e`
+- ✅ **Deploy OpSuccinct v1.0.2 contracts** to pre-calculated addresses with finalized parameters
+  - AccessManager: `0xF59a19c5578291cB7fd22618D16281aDf76f2816`
+  - OPSuccinctFaultDisputeGame: `0xc5bd131ceaeb72f15c66418bc2668332ab99de37`
 - ✅ **Generate upgrade calldata** with initBond set to 0.01 ETH
 - ✅ **Simulate upgrade** locally, on forked network, and in Tenderly vnet
 - ✅ **Prepare signing infrastructure** and test with this repository
 - 🔄 **Gather signatures from multisig signers** ← **You are here**
-- ⏳ **Execute governance proposal** to register OP Succinct games in DisputeGameFactory
-- ⏳ **Migrate to OP Succinct proposer** and switch game type in OptimismPortal2
+- ⏳ **Execute governance proposal** to register OP Succinct v1.0.2 games in DisputeGameFactory
+- ⏳ **Switch to OP Succinct v1.0.2 proposer** for improved proof generation
 
 ### Summary for Signers
 
 #### What You're Signing
 
-A governance proposal to register pre-deployed OpSuccinct contracts with DisputeGameFactory:
+A governance proposal to register pre-deployed OpSuccinct v1.0.2 contracts with DisputeGameFactory:
 
-1. **Set initial bond:** 0.01 ETH for game type 42 (OP Succinct)
-2. **Register implementation:** OPSuccinctFaultDisputeGame at `0x113f434f82ff82678ae7f69ea122791fe1f6b73e`
+**Update implementation:** OPSuccinctFaultDisputeGame at `0xc5bd131ceaeb72f15c66418bc2668332ab99de37`
 
 #### Pre-Deployed Contracts (Already on Mainnet)
 
-- **AccessManager:** [`0xf59a19c5578291cb7fd22618d16281adf76f2816`](https://etherscan.io/address/0xf59a19c5578291cb7fd22618d16281adf76f2816)
-- **OPSuccinctFaultDisputeGame:** [`0x113f434f82ff82678ae7f69ea122791fe1f6b73e`](https://etherscan.io/address/0x113f434f82ff82678ae7f69ea122791fe1f6b73e)
+- **AccessManager:** [`0xF59a19c5578291cB7fd22618D16281aDf76f2816`](https://etherscan.io/address/0xF59a19c5578291cB7fd22618D16281aDf76f2816)
+- **OPSuccinctFaultDisputeGame:** [`0xc5bd131ceAEb72F15C66418bc2668332AB99DE37`](https://etherscan.io/address/0xc5bd131ceAEb72F15C66418bc2668332AB99DE37)
 
-See [addresses/succinct.json](./addresses/succinct.json) for details.
+See [addresses/succinct-v102.json](./addresses/succinct-v102.json) for details.
 
 #### How to Verify
 
 ```bash
 # Decode calldata to see exact operations
-./scripts/decode_succinct_calldata.sh
+./scripts/decode_succinct-v102_calldata.sh
 
 # Simulate in Tenderly
-just simulate succinct
+just simulate succinct-v102
 
 # Verify bytecode (see section below for full instructions)
-./scripts/compare_succinct.sh /path/to/op-succinct/contracts/out
+./scripts/compare_succinct-v102.sh /path/to/op-succinct/contracts/out
 ```
 
 #### Signing Process
 
-1. Run: `just sign_ledger succinct [clabs|council] [eth|celo] <index>`
+1. Run: `just sign_ledger succinct-v102 [clabs|council] [eth|celo] <index>`
 2. Sign on your Ledger device
 3. Verify the `out.json` file contains your correct account address
 4. Send `out.json` to the facilitator (cLabs)
@@ -119,12 +119,11 @@ just simulate succinct
 <summary><strong>Option 1: Decode Calldata</strong> (View exact operations)</summary>
 
 ```bash
-./scripts/decode_succinct_calldata.sh
+./scripts/decode_succinct-v102_calldata.sh
 ```
 
 This shows:
-- **setInitBond:** gameType=42, bond=0.01 ETH
-- **setImplementation:** gameType=42, impl=0x113f434f82FF82678AE7f69Ea122791FE1F6b73e
+- **setImplementation:** gameType=42, impl=0xc5bd131ceaeb72f15c66418bc2668332ab99de37
 
 </details>
 
@@ -132,10 +131,10 @@ This shows:
 <summary><strong>Option 2: Simulate in Tenderly</strong> (Visual confirmation)</summary>
 
 ```bash
-just simulate succinct
+just simulate succinct-v102
 ```
 
-Displays two simulation URLs showing contract deployment and governance proposal execution. Enable "Dev" mode in Tenderly UI for best results.
+Displays simulation URL showing governance proposal execution. Enable "Dev" mode in Tenderly UI for best results.
 
 See [TENDERLY.md](./TENDERLY.md) for detailed verification guide.
 
@@ -144,17 +143,17 @@ See [TENDERLY.md](./TENDERLY.md) for detailed verification guide.
 <details>
 <summary><strong>Option 3: Verify Bytecode</strong> (Check on-chain contracts)</summary>
 
-Contracts are deployed using CREATE3 deterministic deployment ([details](https://github.com/celo-org/op-succinct/pull/43)).
+Contracts are deployed using CREATE3 deterministic deployment.
 
 ```bash
 # Clone and build op-succinct contracts
 git clone https://github.com/celo-org/op-succinct
-cd op-succinct && git checkout develop
+cd op-succinct && git checkout v1.0.2
 cd contracts && forge build
 
 # Compare on-chain bytecode with artifacts
 cd /path/to/celo-superchain-ops
-./scripts/compare_succinct.sh /path/to/op-succinct/contracts/out
+./scripts/compare_succinct-v102.sh /path/to/op-succinct/contracts/out
 ```
 
 This verifies on-chain bytecode matches compiled artifacts.
@@ -166,10 +165,10 @@ This verifies on-chain bytecode matches compiled artifacts.
 
 ```bash
 # 👥 Council team
-just sign_ledger succinct council [eth|celo] <index>
+just sign_ledger succinct-v102 council [eth|celo] <index>
 
 # 🏢 cLabs team
-just sign_ledger succinct clabs [eth|celo] <index>
+just sign_ledger succinct-v102 clabs [eth|celo] <index>
 ```
 
 **Examples:**
@@ -179,10 +178,10 @@ just sign_ledger succinct clabs [eth|celo] <index>
 
 ```bash
 # Default account (index 0)
-just sign_ledger succinct clabs eth
+just sign_ledger succinct-v102 clabs eth
 
 # Specific account index
-just sign_ledger succinct council eth 1
+just sign_ledger succinct-v102 council eth 1
 ```
 
 </details>
@@ -193,7 +192,7 @@ just sign_ledger succinct council eth 1
 For signers of nested multisigs within Security Council:
 
 ```bash
-just sign_ledger succinct council eth 0 0xMentoMultisigAddress
+just sign_ledger succinct-v102 council eth 0 0xMentoMultisigAddress
 ```
 
 Replace `0xMentoMultisigAddress` with your nested multisig address.
@@ -224,7 +223,7 @@ Connect as you usually would to the Safe using Celo terminal, but instead of ope
 You can use `celo` as the ledger app parameter, but you need to have the Eth Recovery App open on your device for the signing to succeed.
 
 ```bash
-just sign_ledger succinct clabs celo 1
+just sign_ledger succinct-v102 clabs celo 1
 ```
 
 ## Command Reference
@@ -238,7 +237,7 @@ just sign_ledger <version> <team> <ledger_app> [account_index] [grand_child]
 
 | Parameter | Options | Default | Description |
 |-----------|---------|---------|-------------|
-| `version` | `succinct`, `v2`, `v3` | - | Upgrade version |
+| `version` | `succinct-v102`, `succinct`, `v2`, `v3` | - | Upgrade version |
 | `team` | `clabs`, `council` | - | Your team |
 | `ledger_app` | `eth`, `celo` | - | Ledger app |
 | `account_index` | `0`, `1`, `2`... | `0` | Account index |
@@ -259,7 +258,7 @@ just sign <version> <team> [hd_path] [grand_child]
 
 | Parameter | Options | Default | Description |
 |-----------|---------|---------|-------------|
-| `version` | `succinct`, `v2`, `v3` | - | Upgrade version |
+| `version` | `succinct-v102`, `succinct`, `v2`, `v3` | - | Upgrade version |
 | `team` | `clabs`, `council` | - | Your team |
 | `hd_path` | Custom path | - | Derivation path (e.g., `m/44'/60'/1'/0/0`) |
 | `grand_child` | `0x...` | - | 🔗 Nested multisig address |
@@ -277,7 +276,7 @@ just simulate <version>
 
 | Parameter | Options | Description |
 |-----------|---------|-------------|
-| `version` | `succinct`, `v2`, `v3` | Upgrade version to simulate |
+| `version` | `succinct-v102`, `succinct`, `v2`, `v3` | Upgrade version to simulate |
 
 Displays Tenderly simulation URLs showing contract deployment and governance proposal execution.
 
@@ -289,8 +288,7 @@ Displays Tenderly simulation URLs showing contract deployment and governance pro
 2. **Facilitator** → Collects signatures and performs child multisig approvals (cLabs + Security Council)
 3. **Child Multisigs** → Approve execution on parent multisig
 4. **Parent Multisig** → Executes transaction:
-   - `DisputeGameFactory.setInitBond(42, 0.01 ETH)`
-   - `DisputeGameFactory.setImplementation(42, 0x113f434f82ff82678ae7f69ea122791fe1f6b73e)`
-5. **Post-Execution** → Migrate to OP Succinct proposer and switch game type
+   - `DisputeGameFactory.setImplementation(42, 0xc5bd131ceaeb72f15c66418bc2668332ab99de37)`
+5. **Post-Execution** → Switch to OP Succinct v1.0.2 proposer
 
-**Note:** Contracts are already deployed on mainnet ([addresses/succinct.json](./addresses/succinct.json)). This proposal registers them with the system.
+**Note:** Contracts are already deployed on mainnet ([addresses/succinct-v102.json](./addresses/succinct-v102.json)). This proposal updates the implementation to v1.0.2.
