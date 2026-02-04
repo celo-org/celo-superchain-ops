@@ -56,37 +56,6 @@
       color: var(--text-secondary);
       margin-bottom: 1rem;
     }
-    .radio-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-    .radio-option {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      padding: 0.75rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: border-color 0.2s;
-    }
-    .radio-option:hover {
-      border-color: var(--primary);
-    }
-    .radio-option input[type="radio"] {
-      margin-top: 2px;
-      accent-color: var(--primary);
-    }
-    .radio-option .label {
-      font-weight: 500;
-      font-size: 0.9375rem;
-    }
-    .radio-option .hint {
-      font-size: 0.8125rem;
-      color: var(--text-secondary);
-      margin-top: 0.25rem;
-    }
     .status {
       display: flex;
       align-items: center;
@@ -115,13 +84,38 @@
       word-break: break-all;
     }
     details {
-      margin-top: 1rem;
+      margin-top: 0;
+    }
+    details.card-details {
+      margin-top: 0;
     }
     summary {
-      font-size: 0.8125rem;
-      color: var(--text-secondary);
+      font-size: 0.875rem;
+      color: var(--text);
       cursor: pointer;
-      padding: 0.5rem 0;
+      padding: 0.75rem 0;
+      font-weight: 500;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    summary::-webkit-details-marker {
+      display: none;
+    }
+    summary::before {
+      content: '▶';
+      font-size: 0.625rem;
+      transition: transform 0.2s;
+    }
+    details[open] summary::before {
+      transform: rotate(90deg);
+    }
+    .details-content {
+      padding: 0.75rem 0;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
     }
     .detail-row {
       display: flex;
@@ -219,10 +213,6 @@
       animation: spin 0.8s linear infinite;
       margin-right: 0.5rem;
     }
-    .spinner-dark {
-      border: 2px solid rgba(0,0,0,0.1);
-      border-top-color: var(--text);
-    }
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
@@ -236,45 +226,217 @@
       color: var(--primary);
       text-decoration: none;
     }
+
+    /* Tab styles */
+    .tab-container {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      background: var(--bg);
+      padding: 4px;
+      border-radius: 10px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 0.625rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+      width: auto;
+    }
+    .tab-btn.active {
+      background: var(--card);
+      color: var(--text);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .tab-btn:hover:not(.active) {
+      color: var(--text);
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Steps list */
+    .steps-list {
+      list-style: none;
+      counter-reset: step;
+    }
+    .steps-list li {
+      position: relative;
+      padding-left: 2rem;
+      margin-bottom: 0.875rem;
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+    .steps-list li::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1.5rem;
+      height: 1.5rem;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .steps-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Checklist */
+    .checklist {
+      list-style: none;
+      margin: 0.75rem 0;
+    }
+    .checklist li {
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+    .checklist li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Link styles */
+    .link {
+      color: var(--primary);
+      text-decoration: none;
+      word-break: break-all;
+    }
+    .link:hover {
+      text-decoration: underline;
+    }
+
+    /* Code inline */
+    code {
+      background: var(--bg);
+      padding: 0.125rem 0.375rem;
+      border-radius: 4px;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 0.75rem;
+    }
+
+    /* Info box */
+    .info-box {
+      background: #F0F9FF;
+      border-left: 3px solid #0EA5E9;
+      padding: 0.75rem 1rem;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.8125rem;
+      margin-top: 1rem;
+      color: #0C4A6E;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>WebUI for Celo Superchain Ops</h1>
-      <div class="version">Council Signer - succinct-v102</div>
+      <h1>Celo Superchain Ops</h1>
+      <div class="version">Council Signer — succinct-v102</div>
     </header>
 
     <div id="error-msg" class="error hidden"></div>
     <div id="success-msg" class="success hidden"></div>
 
-    <!-- Derivation Path Selection -->
+    <!-- Before You Sign Instructions -->
     <div class="card">
-      <div class="card-title">Derivation Path</div>
-      <div class="radio-group">
-        <label class="radio-option">
-          <input type="radio" name="derivation" value="eth" checked>
-          <div>
-            <div class="label">ETH (m/44'/60'/...)</div>
-            <div class="hint">Use Ethereum app on Ledger</div>
-          </div>
-        </label>
-        <label class="radio-option">
-          <input type="radio" name="derivation" value="celo">
-          <div>
-            <div class="label">Celo (m/44'/52752'/...)</div>
-            <div class="hint">Use Eth Recovery app on Ledger</div>
-          </div>
-        </label>
+      <div class="card-title">Before You Sign</div>
+      <div class="tab-container">
+        <button class="tab-btn active" data-tab="mobile">Mobile</button>
+        <button class="tab-btn" data-tab="pc">PC</button>
+      </div>
+
+      <div id="tab-mobile" class="tab-content active">
+        <ol class="steps-list">
+          <li>Pair <strong>Ledger Nano X</strong> with your phone via Bluetooth</li>
+          <li>Unlock Ledger and open the <strong>Ethereum</strong> app</li>
+          <li>Open <strong>MetaMask</strong> mobile app</li>
+          <li>Ensure your Ledger account is connected in MetaMask</li>
+          <li>Open this page in MetaMask's built-in browser</li>
+          <li>Tap <strong>Connect</strong> below and approve in MetaMask</li>
+        </ol>
+      </div>
+
+      <div id="tab-pc" class="tab-content">
+        <ol class="steps-list">
+          <li>Connect <strong>Ledger Nano X</strong> via Bluetooth (preferred) or USB</li>
+          <li>Unlock Ledger and open the <strong>Ethereum</strong> app</li>
+          <li>Open <strong>MetaMask</strong> browser extension</li>
+          <li>Ensure your Ledger account is selected</li>
+          <li>Click <strong>Connect</strong> below and approve in MetaMask</li>
+        </ol>
+      </div>
+
+      <div class="info-box">
+        Bluetooth is the recommended connection method for Ledger Nano X.
       </div>
     </div>
 
-    <!-- Ledger App Info -->
+    <!-- What Am I Signing? -->
     <div class="card">
-      <div class="card-title">Ledger App</div>
-      <div id="ledger-info" style="font-size: 0.875rem; line-height: 1.5;">
-        Open the <strong>Ethereum</strong> app on your Ledger device.
-      </div>
+      <details class="card-details">
+        <summary>What am I signing?</summary>
+        <div class="details-content">
+          <p style="margin-bottom: 0.75rem;">
+            You are approving an upgrade to <strong>Celo's fault proof system</strong>. This transaction will:
+          </p>
+          <ul class="checklist">
+            <li>Update the OPSuccinctFaultDisputeGame contract to v1.0.2</li>
+            <li>Reduce on-chain costs by up to 9x</li>
+            <li>Fix potential proving failures for certain blocks</li>
+          </ul>
+          <p style="margin-top: 0.75rem;">
+            Your signature will be collected along with other council members. The upgrade executes only after enough signatures are gathered.
+          </p>
+        </div>
+      </details>
+    </div>
+
+    <!-- Verify in Tenderly -->
+    <div class="card">
+      <details class="card-details">
+        <summary>Verify in Tenderly</summary>
+        <div class="details-content">
+          <p style="margin-bottom: 0.75rem;">
+            Review the simulated transaction before signing:
+          </p>
+          <p style="margin-bottom: 0.75rem;">
+            <a class="link" href="https://dashboard.tenderly.co/explorer/vnet/39498d1a-4638-47d3-8bbc-010de8f718ce/tx/0x27f7a467c7d7faa3aa9934ffc2810a4d910e2404783aed427a5fa1f732f7e12d" target="_blank" rel="noopener">
+              Open Tenderly Simulation →
+            </a>
+          </p>
+          <p style="margin-bottom: 0.5rem;"><strong>What to check:</strong></p>
+          <ul class="checklist">
+            <li>Enable "Dev Mode" (toggle in top right corner)</li>
+            <li>Navigate to "Storage Changes" tab</li>
+            <li>Verify <code>gameImpls[42]</code> updates to <code>0xc5bd...de37</code></li>
+            <li>Confirm transaction shows success (green checkmark)</li>
+          </ul>
+          <p style="margin-top: 0.75rem; font-size: 0.8125rem;">
+            <strong>For technical verification:</strong> Run <code>scripts/decode_succinct-v102_calldata.sh</code> in the repo to decode the exact calldata.
+          </p>
+        </div>
+      </details>
     </div>
 
     <!-- Connection Status -->
@@ -303,7 +465,7 @@
         Approve hash for Council Safe to execute parent transaction.
       </div>
       <details>
-        <summary>View transaction details</summary>
+        <summary style="font-size: 0.8125rem; color: var(--text-secondary);">View transaction details</summary>
         <div class="detail-row">
           <span class="detail-label">Council Safe</span>
           <span class="detail-value">0xC03172263409584f7860C25B6eB4985f0f6F4636</span>
@@ -345,13 +507,13 @@
     </div>
 
     <footer>
-      <a href="https://github.com/celo-org/celo-superchain-ops" target="_blank">CeloSuperchainOps</a>
+      <a href="https://github.com/celo-org/celo-superchain-ops" target="_blank" rel="noopener">View on GitHub</a>
     </footer>
   </div>
 
   <script type="module">
     import { createWalletClient, custom } from 'https://esm.sh/viem@2.x'
-    import { mainnet, celo } from 'https://esm.sh/viem@2.x/chains'
+    import { mainnet } from 'https://esm.sh/viem@2.x/chains'
 
     // === CONSTANTS ===
     const CONFIG = {
@@ -392,7 +554,6 @@
     const elements = {
       errorMsg: document.getElementById('error-msg'),
       successMsg: document.getElementById('success-msg'),
-      ledgerInfo: document.getElementById('ledger-info'),
       statusDisconnected: document.getElementById('status-disconnected'),
       statusConnected: document.getElementById('status-connected'),
       connectedAddress: document.getElementById('connected-address'),
@@ -426,20 +587,6 @@
       return addr.slice(0, 8) + '...' + addr.slice(-6)
     }
 
-    function getSelectedDerivation() {
-      const selected = document.querySelector('input[name="derivation"]:checked')
-      return selected.value
-    }
-
-    function updateLedgerInfo() {
-      const derivation = getSelectedDerivation()
-      if (derivation === 'celo') {
-        elements.ledgerInfo.innerHTML = 'Open the <strong>Eth Recovery</strong> app on your Ledger device.'
-      } else {
-        elements.ledgerInfo.innerHTML = 'Open the <strong>Ethereum</strong> app on your Ledger device.'
-      }
-    }
-
     function updateConnectionUI() {
       if (connectedAddress) {
         elements.statusDisconnected.classList.add('hidden')
@@ -450,7 +597,7 @@
       } else {
         elements.statusDisconnected.classList.remove('hidden')
         elements.statusConnected.classList.add('hidden')
-        elements.btnConnect.textContent = 'Connect Wallet'
+        elements.btnConnect.textContent = 'Connect'
         elements.btnSign.disabled = true
       }
     }
@@ -460,7 +607,7 @@
       clearMessages()
 
       if (!window.ethereum) {
-        showError('Wallet not detected. Please install wallet.')
+        showError('MetaMask not detected. Please install MetaMask or open this page in the MetaMask mobile browser.')
         return
       }
 
@@ -485,18 +632,19 @@
           }
         } catch (switchError) {
           console.warn('Network switch failed:', switchError)
-          showError('Please switch to Ethereum Mainnet in your wallet')
+          showError('Please switch to Ethereum Mainnet in MetaMask.')
+          return
         }
 
         updateConnectionUI()
-        showSuccess('Connected successfully')
+        showSuccess('Wallet connected successfully!')
 
       } catch (error) {
         console.error('Connection error:', error)
         if (error.code === 4001) {
-          showError('Connection cancelled')
+          showError('Connection request was cancelled.')
         } else {
-          showError(error.message || 'Failed to connect')
+          showError('Failed to connect. Make sure MetaMask is unlocked.')
         }
       } finally {
         elements.btnConnect.disabled = false
@@ -516,7 +664,7 @@
       clearMessages()
 
       if (!connectedAddress || !walletClient) {
-        showError('Please connect your wallet first')
+        showError('Please connect your wallet first.')
         return
       }
 
@@ -565,16 +713,16 @@
         // Display result
         elements.outputJson.textContent = JSON.stringify(output, null, 2)
         elements.outputSection.classList.remove('hidden')
-        showSuccess('Transaction signed successfully!')
+        showSuccess('Transaction signed successfully! Download or copy the signature below.')
 
       } catch (error) {
         console.error('Signing error:', error)
         if (error.code === 4001) {
-          showError('Signing cancelled')
-        } else if (error.message?.includes('Ledger')) {
-          showError('Ledger error: Ensure device is unlocked and correct app is open')
+          showError('Signing was cancelled.')
+        } else if (error.message?.includes('Ledger') || error.message?.includes('device')) {
+          showError('Ledger error: Make sure your device is unlocked and the Ethereum app is open.')
         } else {
-          showError(error.message || 'Failed to sign')
+          showError('Failed to sign. Please try again.')
         }
       } finally {
         elements.btnSign.disabled = false
@@ -588,7 +736,7 @@
         elements.btnCopy.textContent = 'Copied!'
         setTimeout(() => { elements.btnCopy.textContent = 'Copy' }, 2000)
       }).catch(() => {
-        showError('Failed to copy')
+        showError('Failed to copy to clipboard.')
       })
     }
 
@@ -603,6 +751,26 @@
       URL.revokeObjectURL(url)
     }
 
+    // === TAB SWITCHING ===
+    function initTabs() {
+      const tabBtns = document.querySelectorAll('.tab-btn')
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const tabId = btn.dataset.tab
+
+          // Update button states
+          tabBtns.forEach(b => b.classList.remove('active'))
+          btn.classList.add('active')
+
+          // Update content visibility
+          document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active')
+          })
+          document.getElementById(`tab-${tabId}`).classList.add('active')
+        })
+      })
+    }
+
     // === EVENT LISTENERS ===
     elements.btnConnect.addEventListener('click', () => {
       if (connectedAddress) {
@@ -615,13 +783,6 @@
     elements.btnSign.addEventListener('click', sign)
     elements.btnCopy.addEventListener('click', copyToClipboard)
     elements.btnDownload.addEventListener('click', downloadJson)
-
-    // Derivation path radio change (informational only)
-    document.querySelectorAll('input[name="derivation"]').forEach(radio => {
-      radio.addEventListener('change', () => {
-        updateLedgerInfo()
-      })
-    })
 
     // Listen for account changes
     if (window.ethereum) {
@@ -641,7 +802,7 @@
     }
 
     // Initialize
-    updateLedgerInfo()
+    initTabs()
     updateConnectionUI()
   </script>
 </body>
