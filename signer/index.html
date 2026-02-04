@@ -238,8 +238,8 @@
     }
     .tab-btn {
       flex: 1;
-      padding: 0.625rem 1rem;
-      font-size: 0.875rem;
+      padding: 0.625rem 0.5rem;
+      font-size: 0.8125rem;
       font-weight: 500;
       border: none;
       border-radius: 8px;
@@ -346,6 +346,61 @@
       margin-top: 1rem;
       color: #0C4A6E;
     }
+
+    /* Radio options for signer type */
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      padding: 0.625rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.875rem;
+    }
+    .radio-option:hover {
+      border-color: var(--primary);
+    }
+    .radio-option.selected {
+      border-color: var(--primary);
+      background: rgba(53, 208, 127, 0.05);
+    }
+    .radio-option input[type="radio"] {
+      accent-color: var(--primary);
+      width: 16px;
+      height: 16px;
+      margin: 0;
+    }
+    .radio-option .label {
+      font-weight: 500;
+    }
+    .radio-option .hint {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-left: auto;
+    }
+
+    /* Mento section */
+    .mento-section {
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+    .mento-section.hidden {
+      display: none;
+    }
+    .mento-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
   </style>
 </head>
 <body>
@@ -357,6 +412,34 @@
 
     <div id="error-msg" class="error hidden"></div>
     <div id="success-msg" class="success hidden"></div>
+
+    <!-- Your Role Selection -->
+    <div class="card">
+      <div class="card-title">Your Role</div>
+      <div class="tab-container" id="team-tabs">
+        <button class="tab-btn active" data-team="council">Community Council</button>
+        <button class="tab-btn" data-team="clabs">cLabs Council</button>
+      </div>
+
+      <div id="mento-section" class="mento-section">
+        <div class="mento-label">Member type:</div>
+        <div class="radio-group">
+          <label class="radio-option selected" data-member="regular">
+            <input type="radio" name="member-type" value="regular" checked>
+            <span class="label">Regular member</span>
+          </label>
+          <label class="radio-option" data-member="mento">
+            <input type="radio" name="member-type" value="mento">
+            <span class="label">Mento member</span>
+            <span class="hint">nested multisig</span>
+          </label>
+        </div>
+      </div>
+
+      <div id="role-info" class="info-box">
+        Signing as <strong>Community Security Council</strong> member.
+      </div>
+    </div>
 
     <!-- Before You Sign Instructions -->
     <div class="card">
@@ -405,7 +488,7 @@
             <li>Reduce on-chain costs by up to 9x</li>
             <li>Fix potential proving failures for certain blocks</li>
           </ul>
-          <p style="margin-top: 0.75rem;">
+          <p id="signing-context" style="margin-top: 0.75rem;">
             Your signature will be collected along with other council members. The upgrade executes only after enough signatures are gathered.
           </p>
         </div>
@@ -461,30 +544,28 @@
     <!-- Transaction Details -->
     <div class="card">
       <div class="card-title">Transaction to Sign</div>
-      <div style="font-size: 0.875rem; margin-bottom: 0.5rem;">
+      <div id="tx-description" style="font-size: 0.875rem; margin-bottom: 0.5rem;">
         Approve hash for Council Safe to execute parent transaction.
       </div>
       <details>
         <summary style="font-size: 0.8125rem; color: var(--text-secondary);">View transaction details</summary>
-        <div class="detail-row">
-          <span class="detail-label">Council Safe</span>
-          <span class="detail-value">0xC03172263409584f7860C25B6eB4985f0f6F4636</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-label">Parent Safe</span>
-          <span class="detail-value">0x4092A77bAF58fef0309452cEaCb09221e556E112</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-label">Council Nonce</span>
-          <span class="detail-value">24</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-label">Parent TX Hash</span>
-          <span class="detail-value">0xa17db5fb2aa052b03a49ed701483f37fa9e795b7ccbbe6f19905af99e358a54f</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-label">Child TX Hash (signing)</span>
-          <span class="detail-value">0xb249f86c808e56add978b80a312200ab5895ae770bef40267bb98e624c6e568e</span>
+        <div id="tx-details-content">
+          <div class="detail-row">
+            <span class="detail-label">Signing Safe</span>
+            <span id="detail-signing-safe" class="detail-value">0xC03172263409584f7860C25B6eB4985f0f6F4636</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Target Safe</span>
+            <span id="detail-target-safe" class="detail-value">0x4092A77bAF58fef0309452cEaCb09221e556E112</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Nonce</span>
+            <span id="detail-nonce" class="detail-value">24</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Approving Hash</span>
+            <span id="detail-approving-hash" class="detail-value">0xa17db5fb2aa052b03a49ed701483f37fa9e795b7ccbbe6f19905af99e358a54f</span>
+          </div>
         </div>
       </details>
     </div>
@@ -512,18 +593,27 @@
   </div>
 
   <script type="module">
-    import { createWalletClient, custom } from 'https://esm.sh/viem@2.x'
+    import { createWalletClient, custom, hashTypedData, encodePacked, keccak256 } from 'https://esm.sh/viem@2.x'
     import { mainnet } from 'https://esm.sh/viem@2.x/chains'
 
     // === CONSTANTS ===
     const CONFIG = {
       version: 'succinct-v102',
-      councilSafe: '0xC03172263409584f7860C25B6eB4985f0f6F4636',
+      // Safe addresses
       parentSafe: '0x4092A77bAF58fef0309452cEaCb09221e556E112',
-      councilNonce: 24n,
+      councilSafe: '0xC03172263409584f7860C25B6eB4985f0f6F4636',
+      clabsSafe: '0x9Eb44Da23433b5cAA1c87e35594D15FcEb08D34d',
+      mentoSafe: '0xD1C635987B6Aa287361d08C6461491Fa9df087f2',
+      // Nonces for each signer type
+      nonces: {
+        council: 24n,
+        clabs: 22n,
+        mento: 6n
+      },
+      // Transaction hashes
       parentTxHash: '0xa17db5fb2aa052b03a49ed701483f37fa9e795b7ccbbe6f19905af99e358a54f',
       childTxHash: '0xb249f86c808e56add978b80a312200ab5895ae770bef40267bb98e624c6e568e',
-      childTxData: '0x1901006bcc13a9a6b3224caf34092bd0db63b90656971bfec6731c9c61f278a239ad4b66909b1322535195b6fd334364a7b5fe1833cd4ceba233e2c9f5767758d2bb',
+      // Common Safe tx params
       refundReceiver: '0x95ffac468e37ddeef407ffef18f0cc9e86d8f13b',
       gasToken: '0x0000000000000000000000000000000000000000'
     }
@@ -543,12 +633,11 @@
       ]
     }
 
-    // approveHash(bytes32) selector = 0xd4d9bdcd
-    const childCalldata = '0xd4d9bdcd' + CONFIG.parentTxHash.slice(2)
-
     // === STATE ===
     let walletClient = null
     let connectedAddress = null
+    let selectedTeam = 'council'  // 'council' or 'clabs'
+    let selectedMemberType = 'regular'  // 'regular' or 'mento'
 
     // === DOM ELEMENTS ===
     const elements = {
@@ -562,7 +651,15 @@
       outputSection: document.getElementById('output-section'),
       outputJson: document.getElementById('output-json'),
       btnCopy: document.getElementById('btn-copy'),
-      btnDownload: document.getElementById('btn-download')
+      btnDownload: document.getElementById('btn-download'),
+      mentoSection: document.getElementById('mento-section'),
+      roleInfo: document.getElementById('role-info'),
+      txDescription: document.getElementById('tx-description'),
+      signingContext: document.getElementById('signing-context'),
+      detailSigningSafe: document.getElementById('detail-signing-safe'),
+      detailTargetSafe: document.getElementById('detail-target-safe'),
+      detailNonce: document.getElementById('detail-nonce'),
+      detailApprovingHash: document.getElementById('detail-approving-hash')
     }
 
     // === HELPERS ===
@@ -585,6 +682,105 @@
 
     function truncateAddress(addr) {
       return addr.slice(0, 8) + '...' + addr.slice(-6)
+    }
+
+    // Get the effective signer type based on selections
+    function getSignerType() {
+      if (selectedTeam === 'clabs') return 'clabs'
+      if (selectedMemberType === 'mento') return 'mento'
+      return 'council'
+    }
+
+    // Get signing parameters based on signer type
+    function getSigningParams() {
+      const signerType = getSignerType()
+      
+      // approveHash(bytes32) selector = 0xd4d9bdcd
+      const parentApproveData = '0xd4d9bdcd' + CONFIG.parentTxHash.slice(2)
+      const childApproveData = '0xd4d9bdcd' + CONFIG.childTxHash.slice(2)
+
+      switch (signerType) {
+        case 'council':
+          return {
+            verifyingContract: CONFIG.councilSafe,
+            to: CONFIG.parentSafe,
+            data: parentApproveData,
+            nonce: CONFIG.nonces.council,
+            approvingHash: CONFIG.parentTxHash,
+            description: 'Approve hash for Council Safe to execute parent transaction.',
+            context: 'Your signature will be collected along with other Community Council members.'
+          }
+        case 'clabs':
+          return {
+            verifyingContract: CONFIG.clabsSafe,
+            to: CONFIG.parentSafe,
+            data: parentApproveData,
+            nonce: CONFIG.nonces.clabs,
+            approvingHash: CONFIG.parentTxHash,
+            description: 'Approve hash for cLabs Safe to execute parent transaction.',
+            context: 'Your signature will be collected along with other cLabs Council members.'
+          }
+        case 'mento':
+          return {
+            verifyingContract: CONFIG.mentoSafe,
+            to: CONFIG.councilSafe,
+            data: childApproveData,
+            nonce: CONFIG.nonces.mento,
+            approvingHash: CONFIG.childTxHash,
+            description: 'Approve hash for Mento multisig to execute Council transaction.',
+            context: 'As a Mento member, your signature approves the Council\'s child transaction. Other Mento members must also sign.'
+          }
+      }
+    }
+
+    // Update UI based on selected role
+    function updateRoleUI() {
+      const signerType = getSignerType()
+      const params = getSigningParams()
+
+      // Update role info box
+      let roleText = ''
+      switch (signerType) {
+        case 'council':
+          roleText = 'Signing as <strong>Community Security Council</strong> member.'
+          break
+        case 'clabs':
+          roleText = 'Signing as <strong>cLabs Security Council</strong> member.'
+          break
+        case 'mento':
+          roleText = 'Signing as <strong>Mento</strong> member (nested multisig within Community Council).'
+          break
+      }
+      elements.roleInfo.innerHTML = roleText
+
+      // Update transaction description
+      elements.txDescription.textContent = params.description
+      elements.signingContext.textContent = params.context
+
+      // Update transaction details
+      elements.detailSigningSafe.textContent = params.verifyingContract
+      elements.detailTargetSafe.textContent = params.to
+      elements.detailNonce.textContent = params.nonce.toString()
+      elements.detailApprovingHash.textContent = params.approvingHash
+
+      // Show/hide Mento section based on team selection
+      if (selectedTeam === 'council') {
+        elements.mentoSection.classList.remove('hidden')
+      } else {
+        elements.mentoSection.classList.add('hidden')
+        // Reset to regular when switching to cLabs
+        selectedMemberType = 'regular'
+        document.querySelectorAll('.radio-option').forEach(opt => {
+          opt.classList.remove('selected')
+          if (opt.dataset.member === 'regular') {
+            opt.classList.add('selected')
+            opt.querySelector('input').checked = true
+          }
+        })
+      }
+
+      // Hide output when role changes
+      elements.outputSection.classList.add('hidden')
     }
 
     function updateConnectionUI() {
@@ -615,7 +811,6 @@
         elements.btnConnect.disabled = true
         elements.btnConnect.innerHTML = '<span class="spinner"></span>Connecting...'
 
-        // Always use Ethereum Mainnet (Council Safe is on Ethereum)
         walletClient = createWalletClient({
           chain: mainnet,
           transport: custom(window.ethereum)
@@ -672,24 +867,26 @@
         elements.btnSign.disabled = true
         elements.btnSign.innerHTML = '<span class="spinner"></span>Signing...'
 
-        // EIP-712 domain - always chainId 1 because Council Safe is on Ethereum
+        const params = getSigningParams()
+
+        // EIP-712 domain
         const domain = {
           chainId: 1,
-          verifyingContract: CONFIG.councilSafe
+          verifyingContract: params.verifyingContract
         }
 
         // SafeTx message
         const message = {
-          to: CONFIG.parentSafe,
+          to: params.to,
           value: 0n,
-          data: childCalldata,
+          data: params.data,
           operation: 0, // CALL
           safeTxGas: 0n,
           baseGas: 0n,
           gasPrice: 0n,
           gasToken: CONFIG.gasToken,
           refundReceiver: CONFIG.refundReceiver,
-          nonce: CONFIG.councilNonce
+          nonce: params.nonce
         }
 
         // Sign the typed data
@@ -701,12 +898,54 @@
           message
         })
 
-        // Format output to match justfile
+        // Compute the transaction hash (EIP-712 typed data hash)
+        const txHash = hashTypedData({
+          domain,
+          types: SAFE_TX_TYPES,
+          primaryType: 'SafeTx',
+          message
+        })
+
+        // Compute encoded transaction data for verification
+        // This matches Safe's encodeTransactionData format: 0x19 0x01 domainSeparator safeTxHash
+        const txData = encodePacked(
+          ['bytes1', 'bytes1', 'bytes32', 'bytes32'],
+          [
+            '0x19',
+            '0x01',
+            keccak256(encodePacked(
+              ['bytes32', 'uint256', 'address'],
+              [
+                '0x47e79534a245952e8b16893a336b85a3d9ea9fa8c573f3d803afb92a79469218', // DOMAIN_SEPARATOR_TYPEHASH
+                1n, // chainId
+                params.verifyingContract
+              ]
+            )),
+            keccak256(encodePacked(
+              ['bytes32', 'address', 'uint256', 'bytes32', 'uint8', 'uint256', 'uint256', 'uint256', 'address', 'address', 'uint256'],
+              [
+                '0xbb8310d486368db6bd6f849402fdd73ad53d316b5a4b2644ad6efe0f941286d8', // SAFE_TX_TYPEHASH
+                params.to,
+                0n,
+                keccak256(params.data),
+                0,
+                0n,
+                0n,
+                0n,
+                CONFIG.gasToken,
+                CONFIG.refundReceiver,
+                params.nonce
+              ]
+            ))
+          ]
+        )
+
+        // Format output
         const output = {
           version: CONFIG.version,
-          hash: CONFIG.childTxHash,
-          data: CONFIG.childTxData,
-          sig: signature.slice(2), // Remove 0x prefix
+          hash: txHash,
+          data: txData,
+          sig: signature.slice(2),
           account: connectedAddress
         }
 
@@ -714,6 +953,11 @@
         elements.outputJson.textContent = JSON.stringify(output, null, 2)
         elements.outputSection.classList.remove('hidden')
         showSuccess('Transaction signed successfully! Download or copy the signature below.')
+
+        // Scroll to output section so mobile users see the result
+        setTimeout(() => {
+          elements.outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }, 100)
 
       } catch (error) {
         console.error('Signing error:', error)
@@ -753,20 +997,52 @@
 
     // === TAB SWITCHING ===
     function initTabs() {
-      const tabBtns = document.querySelectorAll('.tab-btn')
-      tabBtns.forEach(btn => {
+      // Platform tabs (Mobile/PC)
+      document.querySelectorAll('.tab-container:not(#team-tabs) .tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const tabId = btn.dataset.tab
+          if (!tabId) return
 
-          // Update button states
-          tabBtns.forEach(b => b.classList.remove('active'))
+          const container = btn.closest('.tab-container')
+          container.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
           btn.classList.add('active')
 
-          // Update content visibility
           document.querySelectorAll('.tab-content').forEach(content => {
             content.classList.remove('active')
           })
           document.getElementById(`tab-${tabId}`).classList.add('active')
+        })
+      })
+
+      // Team tabs (Council/cLabs)
+      document.querySelectorAll('#team-tabs .tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const team = btn.dataset.team
+          if (!team) return
+
+          document.querySelectorAll('#team-tabs .tab-btn').forEach(b => b.classList.remove('active'))
+          btn.classList.add('active')
+
+          selectedTeam = team
+          updateRoleUI()
+        })
+      })
+    }
+
+    function initMemberTypeSelection() {
+      document.querySelectorAll('.radio-option').forEach(option => {
+        option.addEventListener('click', () => {
+          const memberType = option.dataset.member
+          if (!memberType) return
+
+          document.querySelectorAll('.radio-option').forEach(opt => {
+            opt.classList.remove('selected')
+          })
+          option.classList.add('selected')
+          option.querySelector('input').checked = true
+
+          selectedMemberType = memberType
+          updateRoleUI()
         })
       })
     }
@@ -796,13 +1072,14 @@
       })
 
       window.ethereum.on('chainChanged', () => {
-        // Reload on chain change to ensure consistent state
         window.location.reload()
       })
     }
 
     // Initialize
     initTabs()
+    initMemberTypeSelection()
+    updateRoleUI()
     updateConnectionUI()
   </script>
 </body>
