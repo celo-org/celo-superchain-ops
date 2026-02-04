@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Celo Superchain Ops - Council Signer</title>
+  <style>
+    :root {
+      --primary: #35D07F;
+      --primary-dark: #2BB56A;
+      --bg: #FAFAFA;
+      --card: #FFFFFF;
+      --text: #1A1A1A;
+      --text-secondary: #666666;
+      --border: #E5E5E5;
+      --error: #DC3545;
+      --success: #28A745;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 1rem;
+    }
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    header {
+      text-align: center;
+      padding: 1.5rem 0;
+    }
+    header h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    header .version {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .card-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .radio-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .radio-option:hover {
+      border-color: var(--primary);
+    }
+    .radio-option input[type="radio"] {
+      margin-top: 2px;
+      accent-color: var(--primary);
+    }
+    .radio-option .label {
+      font-weight: 500;
+      font-size: 0.9375rem;
+    }
+    .radio-option .hint {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+    }
+    .status.disconnected {
+      background: #FEF3F2;
+      color: #B42318;
+    }
+    .status.connected {
+      background: #ECFDF3;
+      color: #027A48;
+    }
+    .status .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .address {
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 0.8125rem;
+      word-break: break-all;
+    }
+    details {
+      margin-top: 1rem;
+    }
+    summary {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 0.5rem 0;
+    }
+    .detail-row {
+      display: flex;
+      flex-direction: column;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+    .detail-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.25rem;
+    }
+    .detail-value {
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 0.75rem;
+      word-break: break-all;
+    }
+    button {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    button.primary {
+      background: var(--primary);
+      color: white;
+    }
+    button.primary:hover {
+      background: var(--primary-dark);
+    }
+    button.primary:disabled {
+      background: #CCC;
+      cursor: not-allowed;
+    }
+    button.secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    button.secondary:hover {
+      background: var(--bg);
+    }
+    .btn-group {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .btn-group button {
+      flex: 1;
+    }
+    .output-box {
+      background: #1A1A1A;
+      color: #E5E5E5;
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 0.75rem;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .error {
+      background: #FEF3F2;
+      color: #B42318;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+    .success {
+      background: #ECFDF3;
+      color: #027A48;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+    .hidden { display: none !important; }
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 0.5rem;
+    }
+    .spinner-dark {
+      border: 2px solid rgba(0,0,0,0.1);
+      border-top-color: var(--text);
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+    }
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>WebUI for Celo Superchain Ops</h1>
+      <div class="version">Council Signer - succinct-v102</div>
+    </header>
+
+    <div id="error-msg" class="error hidden"></div>
+    <div id="success-msg" class="success hidden"></div>
+
+    <!-- Derivation Path Selection -->
+    <div class="card">
+      <div class="card-title">Derivation Path</div>
+      <div class="radio-group">
+        <label class="radio-option">
+          <input type="radio" name="derivation" value="eth" checked>
+          <div>
+            <div class="label">ETH (m/44'/60'/...)</div>
+            <div class="hint">Use Ethereum app on Ledger</div>
+          </div>
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="derivation" value="celo">
+          <div>
+            <div class="label">Celo (m/44'/52752'/...)</div>
+            <div class="hint">Use Eth Recovery app on Ledger</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Ledger App Info -->
+    <div class="card">
+      <div class="card-title">Ledger App</div>
+      <div id="ledger-info" style="font-size: 0.875rem; line-height: 1.5;">
+        Open the <strong>Ethereum</strong> app on your Ledger device.
+      </div>
+    </div>
+
+    <!-- Connection Status -->
+    <div class="card">
+      <div class="card-title">Wallet</div>
+      <div id="status-disconnected" class="status disconnected">
+        <span class="dot"></span>
+        <span>Not connected</span>
+      </div>
+      <div id="status-connected" class="status connected hidden">
+        <span class="dot"></span>
+        <div>
+          <div>Connected</div>
+          <div id="connected-address" class="address"></div>
+        </div>
+      </div>
+      <button id="btn-connect" class="primary" style="margin-top: 1rem;">
+        Connect
+      </button>
+    </div>
+
+    <!-- Transaction Details -->
+    <div class="card">
+      <div class="card-title">Transaction to Sign</div>
+      <div style="font-size: 0.875rem; margin-bottom: 0.5rem;">
+        Approve hash for Council Safe to execute parent transaction.
+      </div>
+      <details>
+        <summary>View transaction details</summary>
+        <div class="detail-row">
+          <span class="detail-label">Council Safe</span>
+          <span class="detail-value">0xC03172263409584f7860C25B6eB4985f0f6F4636</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Parent Safe</span>
+          <span class="detail-value">0x4092A77bAF58fef0309452cEaCb09221e556E112</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Council Nonce</span>
+          <span class="detail-value">24</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Parent TX Hash</span>
+          <span class="detail-value">0xa17db5fb2aa052b03a49ed701483f37fa9e795b7ccbbe6f19905af99e358a54f</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Child TX Hash (signing)</span>
+          <span class="detail-value">0xb249f86c808e56add978b80a312200ab5895ae770bef40267bb98e624c6e568e</span>
+        </div>
+      </details>
+    </div>
+
+    <!-- Sign Button -->
+    <div class="card">
+      <button id="btn-sign" class="primary" disabled>
+        Sign Transaction
+      </button>
+    </div>
+
+    <!-- Output Section -->
+    <div id="output-section" class="card hidden">
+      <div class="card-title">Signature Result</div>
+      <div id="output-json" class="output-box"></div>
+      <div class="btn-group">
+        <button id="btn-copy" class="secondary">Copy</button>
+        <button id="btn-download" class="secondary">Download</button>
+      </div>
+    </div>
+
+    <footer>
+      <a href="https://github.com/celo-org/celo-superchain-ops" target="_blank">CeloSuperchainOps</a>
+    </footer>
+  </div>
+
+  <script type="module">
+    import { createWalletClient, custom } from 'https://esm.sh/viem@2.x'
+    import { mainnet, celo } from 'https://esm.sh/viem@2.x/chains'
+
+    // === CONSTANTS ===
+    const CONFIG = {
+      version: 'succinct-v102',
+      councilSafe: '0xC03172263409584f7860C25B6eB4985f0f6F4636',
+      parentSafe: '0x4092A77bAF58fef0309452cEaCb09221e556E112',
+      councilNonce: 24n,
+      parentTxHash: '0xa17db5fb2aa052b03a49ed701483f37fa9e795b7ccbbe6f19905af99e358a54f',
+      childTxHash: '0xb249f86c808e56add978b80a312200ab5895ae770bef40267bb98e624c6e568e',
+      childTxData: '0x1901006bcc13a9a6b3224caf34092bd0db63b90656971bfec6731c9c61f278a239ad4b66909b1322535195b6fd334364a7b5fe1833cd4ceba233e2c9f5767758d2bb',
+      refundReceiver: '0x95ffac468e37ddeef407ffef18f0cc9e86d8f13b',
+      gasToken: '0x0000000000000000000000000000000000000000'
+    }
+
+    const SAFE_TX_TYPES = {
+      SafeTx: [
+        { name: 'to', type: 'address' },
+        { name: 'value', type: 'uint256' },
+        { name: 'data', type: 'bytes' },
+        { name: 'operation', type: 'uint8' },
+        { name: 'safeTxGas', type: 'uint256' },
+        { name: 'baseGas', type: 'uint256' },
+        { name: 'gasPrice', type: 'uint256' },
+        { name: 'gasToken', type: 'address' },
+        { name: 'refundReceiver', type: 'address' },
+        { name: 'nonce', type: 'uint256' }
+      ]
+    }
+
+    // approveHash(bytes32) selector = 0xd4d9bdcd
+    const childCalldata = '0xd4d9bdcd' + CONFIG.parentTxHash.slice(2)
+
+    // === STATE ===
+    let walletClient = null
+    let connectedAddress = null
+
+    // === DOM ELEMENTS ===
+    const elements = {
+      errorMsg: document.getElementById('error-msg'),
+      successMsg: document.getElementById('success-msg'),
+      ledgerInfo: document.getElementById('ledger-info'),
+      statusDisconnected: document.getElementById('status-disconnected'),
+      statusConnected: document.getElementById('status-connected'),
+      connectedAddress: document.getElementById('connected-address'),
+      btnConnect: document.getElementById('btn-connect'),
+      btnSign: document.getElementById('btn-sign'),
+      outputSection: document.getElementById('output-section'),
+      outputJson: document.getElementById('output-json'),
+      btnCopy: document.getElementById('btn-copy'),
+      btnDownload: document.getElementById('btn-download')
+    }
+
+    // === HELPERS ===
+    function showError(msg) {
+      elements.errorMsg.textContent = msg
+      elements.errorMsg.classList.remove('hidden')
+      elements.successMsg.classList.add('hidden')
+    }
+
+    function showSuccess(msg) {
+      elements.successMsg.textContent = msg
+      elements.successMsg.classList.remove('hidden')
+      elements.errorMsg.classList.add('hidden')
+    }
+
+    function clearMessages() {
+      elements.errorMsg.classList.add('hidden')
+      elements.successMsg.classList.add('hidden')
+    }
+
+    function truncateAddress(addr) {
+      return addr.slice(0, 8) + '...' + addr.slice(-6)
+    }
+
+    function getSelectedDerivation() {
+      const selected = document.querySelector('input[name="derivation"]:checked')
+      return selected.value
+    }
+
+    function updateLedgerInfo() {
+      const derivation = getSelectedDerivation()
+      if (derivation === 'celo') {
+        elements.ledgerInfo.innerHTML = 'Open the <strong>Eth Recovery</strong> app on your Ledger device.'
+      } else {
+        elements.ledgerInfo.innerHTML = 'Open the <strong>Ethereum</strong> app on your Ledger device.'
+      }
+    }
+
+    function updateConnectionUI() {
+      if (connectedAddress) {
+        elements.statusDisconnected.classList.add('hidden')
+        elements.statusConnected.classList.remove('hidden')
+        elements.connectedAddress.textContent = truncateAddress(connectedAddress)
+        elements.btnConnect.textContent = 'Disconnect'
+        elements.btnSign.disabled = false
+      } else {
+        elements.statusDisconnected.classList.remove('hidden')
+        elements.statusConnected.classList.add('hidden')
+        elements.btnConnect.textContent = 'Connect MetaMask'
+        elements.btnSign.disabled = true
+      }
+    }
+
+    // === WALLET FUNCTIONS ===
+    async function connect() {
+      clearMessages()
+
+      if (!window.ethereum) {
+        showError('MetaMask not detected. Please install MetaMask.')
+        return
+      }
+
+      try {
+        elements.btnConnect.disabled = true
+        elements.btnConnect.innerHTML = '<span class="spinner"></span>Connecting...'
+
+        // Always use Ethereum Mainnet (Council Safe is on Ethereum)
+        walletClient = createWalletClient({
+          chain: mainnet,
+          transport: custom(window.ethereum)
+        })
+
+        const [address] = await walletClient.requestAddresses()
+        connectedAddress = address
+
+        // Ensure we're on Ethereum Mainnet
+        try {
+          const currentChainId = await walletClient.getChainId()
+          if (currentChainId !== mainnet.id) {
+            await walletClient.switchChain({ id: mainnet.id })
+          }
+        } catch (switchError) {
+          console.warn('Network switch failed:', switchError)
+          showError('Please switch to Ethereum Mainnet in MetaMask')
+        }
+
+        updateConnectionUI()
+        showSuccess('Connected successfully')
+
+      } catch (error) {
+        console.error('Connection error:', error)
+        if (error.code === 4001) {
+          showError('Connection cancelled')
+        } else {
+          showError(error.message || 'Failed to connect')
+        }
+      } finally {
+        elements.btnConnect.disabled = false
+        updateConnectionUI()
+      }
+    }
+
+    function disconnect() {
+      walletClient = null
+      connectedAddress = null
+      updateConnectionUI()
+      elements.outputSection.classList.add('hidden')
+      clearMessages()
+    }
+
+    async function sign() {
+      clearMessages()
+
+      if (!connectedAddress || !walletClient) {
+        showError('Please connect your wallet first')
+        return
+      }
+
+      try {
+        elements.btnSign.disabled = true
+        elements.btnSign.innerHTML = '<span class="spinner"></span>Signing...'
+
+        // EIP-712 domain - always chainId 1 because Council Safe is on Ethereum
+        const domain = {
+          chainId: 1,
+          verifyingContract: CONFIG.councilSafe
+        }
+
+        // SafeTx message
+        const message = {
+          to: CONFIG.parentSafe,
+          value: 0n,
+          data: childCalldata,
+          operation: 0, // CALL
+          safeTxGas: 0n,
+          baseGas: 0n,
+          gasPrice: 0n,
+          gasToken: CONFIG.gasToken,
+          refundReceiver: CONFIG.refundReceiver,
+          nonce: CONFIG.councilNonce
+        }
+
+        // Sign the typed data
+        const signature = await walletClient.signTypedData({
+          account: connectedAddress,
+          domain,
+          types: SAFE_TX_TYPES,
+          primaryType: 'SafeTx',
+          message
+        })
+
+        // Format output to match justfile
+        const output = {
+          version: CONFIG.version,
+          hash: CONFIG.childTxHash,
+          data: CONFIG.childTxData,
+          sig: signature.slice(2), // Remove 0x prefix
+          account: connectedAddress
+        }
+
+        // Display result
+        elements.outputJson.textContent = JSON.stringify(output, null, 2)
+        elements.outputSection.classList.remove('hidden')
+        showSuccess('Transaction signed successfully!')
+
+      } catch (error) {
+        console.error('Signing error:', error)
+        if (error.code === 4001) {
+          showError('Signing cancelled')
+        } else if (error.message?.includes('Ledger')) {
+          showError('Ledger error: Ensure device is unlocked and correct app is open')
+        } else {
+          showError(error.message || 'Failed to sign')
+        }
+      } finally {
+        elements.btnSign.disabled = false
+        elements.btnSign.textContent = 'Sign Transaction'
+      }
+    }
+
+    function copyToClipboard() {
+      const text = elements.outputJson.textContent
+      navigator.clipboard.writeText(text).then(() => {
+        elements.btnCopy.textContent = 'Copied!'
+        setTimeout(() => { elements.btnCopy.textContent = 'Copy' }, 2000)
+      }).catch(() => {
+        showError('Failed to copy')
+      })
+    }
+
+    function downloadJson() {
+      const text = elements.outputJson.textContent
+      const blob = new Blob([text], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'out.json'
+      a.click()
+      URL.revokeObjectURL(url)
+    }
+
+    // === EVENT LISTENERS ===
+    elements.btnConnect.addEventListener('click', () => {
+      if (connectedAddress) {
+        disconnect()
+      } else {
+        connect()
+      }
+    })
+
+    elements.btnSign.addEventListener('click', sign)
+    elements.btnCopy.addEventListener('click', copyToClipboard)
+    elements.btnDownload.addEventListener('click', downloadJson)
+
+    // Derivation path radio change (informational only)
+    document.querySelectorAll('input[name="derivation"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        updateLedgerInfo()
+      })
+    })
+
+    // Listen for account changes
+    if (window.ethereum) {
+      window.ethereum.on('accountsChanged', (accounts) => {
+        if (accounts.length === 0) {
+          disconnect()
+        } else {
+          connectedAddress = accounts[0]
+          updateConnectionUI()
+        }
+      })
+
+      window.ethereum.on('chainChanged', () => {
+        // Reload on chain change to ensure consistent state
+        window.location.reload()
+      })
+    }
+
+    // Initialize
+    updateLedgerInfo()
+    updateConnectionUI()
+  </script>
+</body>
+</html>
