@@ -450,7 +450,7 @@
       } else {
         elements.statusDisconnected.classList.remove('hidden')
         elements.statusConnected.classList.add('hidden')
-        elements.btnConnect.textContent = 'Connect MetaMask'
+        elements.btnConnect.textContent = 'Connect Wallet'
         elements.btnSign.disabled = true
       }
     }
@@ -460,7 +460,7 @@
       clearMessages()
 
       if (!window.ethereum) {
-        showError('MetaMask not detected. Please install MetaMask.')
+        showError('Wallet not detected. Please install wallet.')
         return
       }
 
@@ -485,7 +485,7 @@
           }
         } catch (switchError) {
           console.warn('Network switch failed:', switchError)
-          showError('Please switch to Ethereum Mainnet in MetaMask')
+          showError('Please switch to Ethereum Mainnet in your wallet')
         }
 
         updateConnectionUI()
