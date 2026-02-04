@@ -186,21 +186,84 @@
       max-height: 200px;
       overflow-y: auto;
     }
-    .error {
-      background: #FEF3F2;
-      color: #B42318;
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
+    /* Popup overlay for messages */
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+    .popup-overlay.hidden {
+      display: none !important;
+    }
+    .popup {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      max-width: 360px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      animation: popupIn 0.2s ease-out;
+    }
+    @keyframes popupIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .popup-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 1.5rem;
+    }
+    .popup-icon.error {
+      background: #FEE2E2;
+      color: #DC2626;
+    }
+    .popup-icon.success {
+      background: #D1FAE5;
+      color: #059669;
+    }
+    .popup-title {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .popup-message {
       font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
       margin-bottom: 1rem;
     }
-    .success {
-      background: #ECFDF3;
-      color: #027A48;
-      padding: 0.75rem 1rem;
+    .popup-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 2rem;
       border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
       font-size: 0.875rem;
-      margin-bottom: 1rem;
+    }
+    .popup-btn:hover {
+      background: var(--primary-dark);
+    }
+    .popup-btn.error {
+      background: #DC2626;
+    }
+    .popup-btn.error:hover {
+      background: #B91C1C;
     }
     .hidden { display: none !important; }
     .spinner {
@@ -410,8 +473,15 @@
       <div class="version">Council Signer — succinct-v102</div>
     </header>
 
-    <div id="error-msg" class="error hidden"></div>
-    <div id="success-msg" class="success hidden"></div>
+    <!-- Popup for messages -->
+    <div id="popup-overlay" class="popup-overlay hidden">
+      <div class="popup">
+        <div id="popup-icon" class="popup-icon error">✕</div>
+        <div id="popup-title" class="popup-title">Error</div>
+        <div id="popup-message" class="popup-message"></div>
+        <button id="popup-btn" class="popup-btn" onclick="closePopup()">OK</button>
+      </div>
+    </div>
 
     <!-- Your Role Selection -->
     <div class="card">
@@ -441,12 +511,44 @@
       </div>
     </div>
 
+    <!-- Derivation Path Selection -->
+    <div class="card">
+      <div class="card-title">Derivation Path</div>
+      <div class="radio-group" style="margin-top: 0;">
+        <label class="radio-option selected" id="path-eth-option" data-path="eth">
+          <input type="radio" name="derivation-path" value="eth" checked>
+          <span class="label">ETH (m/44'/60'/...)</span>
+          <span class="hint">MetaMask</span>
+        </label>
+        <label class="radio-option" id="path-celo-option" data-path="celo">
+          <input type="radio" name="derivation-path" value="celo">
+          <span class="label">Celo (m/44'/52752'/...)</span>
+          <span class="hint">USB only</span>
+        </label>
+      </div>
+
+      <!-- Celo Path Options (shown when Celo is selected) -->
+      <div id="celo-options" class="mento-section hidden">
+        <div class="mento-label">Account index:</div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <input type="number" id="account-index" value="0" min="0" max="100" 
+            style="width: 80px; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.875rem;">
+          <code id="path-preview">m/44'/52752'/0'/0/0</code>
+        </div>
+      </div>
+
+      <div id="path-info" class="info-box">
+        Using ETH derivation path via MetaMask. Works on mobile and desktop.
+      </div>
+    </div>
+
     <!-- Before You Sign Instructions -->
     <div class="card">
       <div class="card-title">Before You Sign</div>
-      <div class="tab-container">
+      <div class="tab-container" id="instructions-tabs">
         <button class="tab-btn active" data-tab="mobile">Mobile</button>
         <button class="tab-btn" data-tab="pc">PC</button>
+        <button class="tab-btn hidden" data-tab="celo-usb">PC via USB</button>
       </div>
 
       <div id="tab-mobile" class="tab-content active">
@@ -462,7 +564,7 @@
 
       <div id="tab-pc" class="tab-content">
         <ol class="steps-list">
-          <li>Connect <strong>Ledger Nano X</strong> via Bluetooth (preferred) or USB</li>
+          <li>Connect <strong>Ledger Nano X or S</strong> to your computer via USB cable</li>
           <li>Unlock Ledger and open the <strong>Ethereum</strong> app</li>
           <li>Open <strong>MetaMask</strong> browser extension</li>
           <li>Ensure your Ledger account is selected</li>
@@ -470,8 +572,18 @@
         </ol>
       </div>
 
-      <div class="info-box">
-        Bluetooth is the recommended connection method for Ledger Nano X.
+      <div id="tab-celo-usb" class="tab-content">
+        <ol class="steps-list">
+          <li>Connect <strong>Ledger Nano X or S</strong> to your computer via USB cable</li>
+          <li>Unlock Ledger and open the <strong>Eth Recovery</strong> app</li>
+          <li>Set your account index above (default: 0)</li>
+          <li>Click <strong>Connect Ledger</strong> below</li>
+          <li>Select your Ledger device when browser prompts</li>
+        </ol>
+        <div class="info-box" style="margin-top: 0.75rem; background: #FEF3C7; border-left-color: #F59E0B; color: #92400E;">
+          <strong>Celo path is desktop-only</strong><br>
+          Mobile is not supported because MetaMask only uses ETH derivation path, and WalletConnect + Ledger Live doesn't support Celo network.
+        </div>
       </div>
     </div>
 
@@ -593,8 +705,37 @@
   </div>
 
   <script type="module">
-    import { createWalletClient, custom, hashTypedData, encodePacked, keccak256 } from 'https://esm.sh/viem@2.x'
+    import { createWalletClient, custom, hashTypedData, encodePacked, keccak256, encodeAbiParameters, parseAbiParameters, toHex } from 'https://esm.sh/viem@2.x'
     import { mainnet } from 'https://esm.sh/viem@2.x/chains'
+
+    // === LEDGER LIBRARIES (loaded lazily) ===
+    let TransportWebHID = null
+    let LedgerEth = null
+
+    async function loadLedgerUSB() {
+      if (TransportWebHID && LedgerEth) return { success: true }
+      
+      try {
+        console.log('Loading Ledger USB libraries...')
+        
+        // WebHID transport - works on Skypack
+        const hidModule = await import('https://cdn.skypack.dev/@ledgerhq/hw-transport-webhid@6.28.6')
+        console.log('WebHID transport loaded')
+        TransportWebHID = hidModule.default
+        
+        // Use older hw-app-eth version with fewer dependencies
+        // Try esm.sh with bundle flag which handles deps better
+        console.log('Loading Eth app...')
+        const ethModule = await import('https://esm.sh/@ledgerhq/hw-app-eth@6.29.0?bundle')
+        console.log('Ledger Eth app loaded')
+        LedgerEth = ethModule.default
+        
+        return { success: true }
+      } catch (error) {
+        console.error('Failed to load Ledger libraries:', error)
+        return { success: false, error: error.message }
+      }
+    }
 
     // === CONSTANTS ===
     const CONFIG = {
@@ -638,11 +779,17 @@
     let connectedAddress = null
     let selectedTeam = 'council'  // 'council' or 'clabs'
     let selectedMemberType = 'regular'  // 'regular' or 'mento'
+    let selectedDerivationPath = 'eth'  // 'eth' or 'celo'
+    let ledgerTransport = null
+    let ledgerEthApp = null
 
     // === DOM ELEMENTS ===
     const elements = {
-      errorMsg: document.getElementById('error-msg'),
-      successMsg: document.getElementById('success-msg'),
+      popupOverlay: document.getElementById('popup-overlay'),
+      popupIcon: document.getElementById('popup-icon'),
+      popupTitle: document.getElementById('popup-title'),
+      popupMessage: document.getElementById('popup-message'),
+      popupBtn: document.getElementById('popup-btn'),
       statusDisconnected: document.getElementById('status-disconnected'),
       statusConnected: document.getElementById('status-connected'),
       connectedAddress: document.getElementById('connected-address'),
@@ -659,29 +806,121 @@
       detailSigningSafe: document.getElementById('detail-signing-safe'),
       detailTargetSafe: document.getElementById('detail-target-safe'),
       detailNonce: document.getElementById('detail-nonce'),
-      detailApprovingHash: document.getElementById('detail-approving-hash')
+      detailApprovingHash: document.getElementById('detail-approving-hash'),
+      // Derivation path elements
+      pathEthOption: document.getElementById('path-eth-option'),
+      pathCeloOption: document.getElementById('path-celo-option'),
+      celoOptions: document.getElementById('celo-options'),
+      accountIndex: document.getElementById('account-index'),
+      pathPreview: document.getElementById('path-preview'),
+      pathInfo: document.getElementById('path-info'),
+      instructionsTabs: document.getElementById('instructions-tabs'),
+      tabMobile: document.getElementById('tab-mobile'),
+      tabPC: document.getElementById('tab-pc'),
+      tabCeloUsb: document.getElementById('tab-celo-usb')
     }
 
     // === HELPERS ===
     function showError(msg) {
-      elements.errorMsg.textContent = msg
-      elements.errorMsg.classList.remove('hidden')
-      elements.successMsg.classList.add('hidden')
+      elements.popupIcon.className = 'popup-icon error'
+      elements.popupIcon.textContent = '✕'
+      elements.popupTitle.textContent = 'Error'
+      elements.popupMessage.textContent = msg
+      elements.popupBtn.className = 'popup-btn error'
+      elements.popupOverlay.classList.remove('hidden')
     }
 
     function showSuccess(msg) {
-      elements.successMsg.textContent = msg
-      elements.successMsg.classList.remove('hidden')
-      elements.errorMsg.classList.add('hidden')
+      elements.popupIcon.className = 'popup-icon success'
+      elements.popupIcon.textContent = '✓'
+      elements.popupTitle.textContent = 'Success'
+      elements.popupMessage.textContent = msg
+      elements.popupBtn.className = 'popup-btn'
+      elements.popupOverlay.classList.remove('hidden')
     }
 
     function clearMessages() {
-      elements.errorMsg.classList.add('hidden')
-      elements.successMsg.classList.add('hidden')
+      elements.popupOverlay.classList.add('hidden')
+    }
+
+    // Global function for popup button
+    window.closePopup = function() {
+      elements.popupOverlay.classList.add('hidden')
     }
 
     function truncateAddress(addr) {
       return addr.slice(0, 8) + '...' + addr.slice(-6)
+    }
+
+    function getAccountIndex() {
+      return parseInt(elements.accountIndex?.value) || 0
+    }
+
+    function getCeloPath() {
+      const index = getAccountIndex()
+      return `m/44'/52752'/${index}'/0/0`
+    }
+
+    // Update UI based on derivation path selection
+    function updateDerivationPathUI() {
+      const isCelo = selectedDerivationPath === 'celo'
+      
+      // Update radio option styling
+      elements.pathEthOption.classList.toggle('selected', !isCelo)
+      elements.pathCeloOption.classList.toggle('selected', isCelo)
+      
+      // Show/hide Celo options
+      elements.celoOptions.classList.toggle('hidden', !isCelo)
+      
+      // Update path preview
+      if (elements.pathPreview) {
+        elements.pathPreview.textContent = getCeloPath()
+      }
+      
+      // Update path info text
+      if (isCelo) {
+        elements.pathInfo.innerHTML = `Using Celo derivation path <code>${getCeloPath()}</code>. Desktop only (Chrome/Edge + USB).`
+      } else {
+        elements.pathInfo.innerHTML = 'Using ETH derivation path via MetaMask. Works on mobile and desktop.'
+      }
+      
+      // Update instructions tabs visibility
+      const celoUsbTab = elements.instructionsTabs.querySelector('[data-tab="celo-usb"]')
+      const mobileTab = elements.instructionsTabs.querySelector('[data-tab="mobile"]')
+      const pcTab = elements.instructionsTabs.querySelector('[data-tab="pc"]')
+      
+      if (isCelo) {
+        // Show Celo USB tab, hide others
+        celoUsbTab.classList.remove('hidden')
+        mobileTab.classList.add('hidden')
+        pcTab.classList.add('hidden')
+        
+        // Activate Celo USB tab
+        elements.instructionsTabs.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
+        celoUsbTab.classList.add('active')
+        
+        elements.tabMobile.classList.remove('active')
+        elements.tabPC.classList.remove('active')
+        elements.tabCeloUsb.classList.add('active')
+      } else {
+        // Show Mobile/PC tabs, hide Celo USB
+        celoUsbTab.classList.add('hidden')
+        mobileTab.classList.remove('hidden')
+        pcTab.classList.remove('hidden')
+        
+        // Activate Mobile tab by default
+        elements.instructionsTabs.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
+        mobileTab.classList.add('active')
+        
+        elements.tabMobile.classList.add('active')
+        elements.tabPC.classList.remove('active')
+        elements.tabCeloUsb.classList.remove('active')
+      }
+      
+      // Update connect button text
+      if (!connectedAddress) {
+        elements.btnConnect.textContent = isCelo ? 'Connect Ledger' : 'Connect'
+      }
     }
 
     // Get the effective signer type based on selections
@@ -793,7 +1032,7 @@
       } else {
         elements.statusDisconnected.classList.remove('hidden')
         elements.statusConnected.classList.add('hidden')
-        elements.btnConnect.textContent = 'Connect'
+        elements.btnConnect.textContent = selectedDerivationPath === 'celo' ? 'Connect Ledger' : 'Connect'
         elements.btnSign.disabled = true
       }
     }
@@ -801,6 +1040,12 @@
     // === WALLET FUNCTIONS ===
     async function connect() {
       clearMessages()
+
+      // Use Ledger USB for Celo path
+      if (selectedDerivationPath === 'celo') {
+        await connectLedgerUSB()
+        return
+      }
 
       if (!window.ethereum) {
         showError('MetaMask not detected. Please install MetaMask or open this page in the MetaMask mobile browser.')
@@ -847,20 +1092,167 @@
       }
     }
 
+    // === LEDGER USB CONNECTION (for Celo path) ===
+    async function connectLedgerUSB() {
+      try {
+        elements.btnConnect.disabled = true
+        elements.btnConnect.innerHTML = '<span class="spinner"></span>Loading...'
+
+        // Check browser support first
+        if (!navigator.hid) {
+          throw new Error('WebHID not supported. Please use Chrome or Edge on desktop.')
+        }
+
+        // Load Ledger libraries lazily
+        const loadResult = await loadLedgerUSB()
+        if (!loadResult.success) {
+          throw new Error(`Failed to load Ledger libraries: ${loadResult.error}`)
+        }
+
+        elements.btnConnect.innerHTML = '<span class="spinner"></span>Connecting USB...'
+
+        // Close existing transport if any
+        if (ledgerTransport) {
+          try { await ledgerTransport.close() } catch (e) {}
+          ledgerTransport = null
+          ledgerEthApp = null
+        }
+
+        // Create USB transport
+        ledgerTransport = await TransportWebHID.create()
+        ledgerEthApp = new LedgerEth(ledgerTransport)
+
+        // Get address using Celo derivation path
+        const path = getCeloPath()
+        elements.btnConnect.innerHTML = '<span class="spinner"></span>Getting address...'
+        const result = await ledgerEthApp.getAddress(path, false)
+        
+        // Format address properly
+        connectedAddress = result.address.startsWith('0x') 
+          ? result.address.toLowerCase() 
+          : '0x' + result.address.toLowerCase()
+
+        updateConnectionUI()
+        updateDerivationPathUI()
+        showSuccess(`Connected via Ledger USB at ${getCeloPath()}`)
+
+      } catch (error) {
+        console.error('Ledger USB connection error:', error)
+        
+        if (error.message?.includes('No device selected') || error.name === 'NotFoundError') {
+          showError('No Ledger device selected. Please try again and select your device.')
+        } else if (error.message?.includes('not supported')) {
+          showError(error.message)
+        } else if (error.statusCode === 27904 || error.message?.includes('locked')) {
+          showError('Ledger is locked. Please unlock it and open the Eth Recovery app.')
+        } else if (error.statusCode === 25873 || error.statusCode === 27906) {
+          showError('Please open the Eth Recovery app on your Ledger.')
+        } else if (error.statusCode === 27013) {
+          showError('Action rejected on Ledger device.')
+        } else {
+          showError(error.message || 'Failed to connect Ledger. Ensure it is unlocked with Eth Recovery app open.')
+        }
+        
+        // Clean up on error
+        if (ledgerTransport) {
+          try { await ledgerTransport.close() } catch (e) {}
+          ledgerTransport = null
+          ledgerEthApp = null
+        }
+      } finally {
+        elements.btnConnect.disabled = false
+        updateConnectionUI()
+      }
+    }
+
     function disconnect() {
+      // Close Ledger transport if active
+      if (ledgerTransport) {
+        try { ledgerTransport.close() } catch (e) {}
+        ledgerTransport = null
+        ledgerEthApp = null
+      }
+      
       walletClient = null
       connectedAddress = null
       updateConnectionUI()
+      updateDerivationPathUI()
       elements.outputSection.classList.add('hidden')
       clearMessages()
+    }
+
+    // Sign with Ledger using EIP-712 hashed message
+    async function signWithLedger(domain, message) {
+      // EIP-712 Domain type hash for Safe
+      const DOMAIN_TYPEHASH = keccak256(toHex('EIP712Domain(uint256 chainId,address verifyingContract)'))
+      
+      // Compute domain separator
+      const domainSeparator = keccak256(
+        encodeAbiParameters(
+          parseAbiParameters('bytes32, uint256, address'),
+          [DOMAIN_TYPEHASH, BigInt(domain.chainId), domain.verifyingContract]
+        )
+      )
+      
+      // SafeTx type hash
+      const SAFE_TX_TYPEHASH = keccak256(
+        toHex('SafeTx(address to,uint256 value,bytes data,uint8 operation,uint256 safeTxGas,uint256 baseGas,uint256 gasPrice,address gasToken,address refundReceiver,uint256 nonce)')
+      )
+      
+      // Compute struct hash
+      const structHash = keccak256(
+        encodeAbiParameters(
+          parseAbiParameters('bytes32, address, uint256, bytes32, uint8, uint256, uint256, uint256, address, address, uint256'),
+          [
+            SAFE_TX_TYPEHASH,
+            message.to,
+            message.value,
+            keccak256(message.data),
+            message.operation,
+            message.safeTxGas,
+            message.baseGas,
+            message.gasPrice,
+            message.gasToken,
+            message.refundReceiver,
+            message.nonce
+          ]
+        )
+      )
+      
+      // Sign with Ledger using signEIP712HashedMessage
+      const path = getCeloPath()
+      console.log('Signing with Ledger at path:', path)
+      console.log('Domain separator:', domainSeparator)
+      console.log('Struct hash:', structHash)
+      
+      const result = await ledgerEthApp.signEIP712HashedMessage(
+        path,
+        domainSeparator.slice(2), // Remove 0x prefix
+        structHash.slice(2)       // Remove 0x prefix
+      )
+      
+      // Construct signature from r, s, v
+      const r = result.r.padStart(64, '0')
+      const s = result.s.padStart(64, '0')
+      const v = parseInt(result.v).toString(16).padStart(2, '0')
+      
+      return '0x' + r + s + v
     }
 
     async function sign() {
       clearMessages()
 
-      if (!connectedAddress || !walletClient) {
-        showError('Please connect your wallet first.')
-        return
+      // Check connection based on derivation path
+      if (selectedDerivationPath === 'celo') {
+        if (!connectedAddress || !ledgerEthApp) {
+          showError('Please connect your Ledger first.')
+          return
+        }
+      } else {
+        if (!connectedAddress || !walletClient) {
+          showError('Please connect your wallet first.')
+          return
+        }
       }
 
       try {
@@ -890,13 +1282,18 @@
         }
 
         // Sign the typed data
-        const signature = await walletClient.signTypedData({
-          account: connectedAddress,
-          domain,
-          types: SAFE_TX_TYPES,
-          primaryType: 'SafeTx',
-          message
-        })
+        let signature
+        if (selectedDerivationPath === 'celo') {
+          signature = await signWithLedger(domain, message)
+        } else {
+          signature = await walletClient.signTypedData({
+            account: connectedAddress,
+            domain,
+            types: SAFE_TX_TYPES,
+            primaryType: 'SafeTx',
+            message
+          })
+        }
 
         // Compute the transaction hash (EIP-712 typed data hash)
         const txHash = hashTypedData({
@@ -952,17 +1349,20 @@
         // Display result
         elements.outputJson.textContent = JSON.stringify(output, null, 2)
         elements.outputSection.classList.remove('hidden')
-        showSuccess('Transaction signed successfully! Download or copy the signature below.')
 
-        // Scroll to output section so mobile users see the result
+        // Scroll to output section (no popup for success)
         setTimeout(() => {
           elements.outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
         }, 100)
 
       } catch (error) {
         console.error('Signing error:', error)
-        if (error.code === 4001) {
+        if (error.code === 4001 || error.statusCode === 27013) {
           showError('Signing was cancelled.')
+        } else if (error.statusCode === 27904) {
+          showError('Ledger is locked. Please unlock it and open the Eth Recovery app.')
+        } else if (error.statusCode === 25873 || error.statusCode === 27906) {
+          showError('Please open the Eth Recovery app on your Ledger.')
         } else if (error.message?.includes('Ledger') || error.message?.includes('device')) {
           showError('Ledger error: Make sure your device is unlocked and the Ethereum app is open.')
         } else {
@@ -1030,12 +1430,13 @@
     }
 
     function initMemberTypeSelection() {
-      document.querySelectorAll('.radio-option').forEach(option => {
+      // Only target member-type radio options (not derivation path)
+      document.querySelectorAll('[data-member]').forEach(option => {
         option.addEventListener('click', () => {
           const memberType = option.dataset.member
           if (!memberType) return
 
-          document.querySelectorAll('.radio-option').forEach(opt => {
+          document.querySelectorAll('[data-member]').forEach(opt => {
             opt.classList.remove('selected')
           })
           option.classList.add('selected')
@@ -1044,6 +1445,41 @@
           selectedMemberType = memberType
           updateRoleUI()
         })
+      })
+    }
+
+    function initDerivationPathSelection() {
+      // Derivation path radio options
+      document.querySelectorAll('[data-path]').forEach(option => {
+        option.addEventListener('click', () => {
+          const path = option.dataset.path
+          if (!path) return
+
+          // Disconnect when switching derivation path
+          if (connectedAddress) {
+            disconnect()
+          }
+
+          document.querySelectorAll('[data-path]').forEach(opt => {
+            opt.classList.remove('selected')
+          })
+          option.classList.add('selected')
+          option.querySelector('input').checked = true
+
+          selectedDerivationPath = path
+          updateDerivationPathUI()
+        })
+      })
+
+      // Account index change
+      elements.accountIndex?.addEventListener('input', () => {
+        elements.pathPreview.textContent = getCeloPath()
+        elements.pathInfo.innerHTML = `Using Celo derivation path <code>${getCeloPath()}</code>. Desktop only (Chrome/Edge + USB).`
+        
+        // Disconnect when changing account index
+        if (connectedAddress && selectedDerivationPath === 'celo') {
+          disconnect()
+        }
       })
     }
 
@@ -1079,7 +1515,9 @@
     // Initialize
     initTabs()
     initMemberTypeSelection()
+    initDerivationPathSelection()
     updateRoleUI()
+    updateDerivationPathUI()
     updateConnectionUI()
   </script>
 </body>
