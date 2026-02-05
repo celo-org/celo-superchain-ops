@@ -464,6 +464,72 @@
       color: var(--text-secondary);
       margin-bottom: 0.5rem;
     }
+
+    /* WalletConnect Signing Modal */
+    #wc-signing-modal .popup {
+      max-width: 340px;
+    }
+    .signing-spinner-container {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 1rem;
+    }
+    .signing-spinner {
+      width: 100%;
+      height: 100%;
+      border: 4px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    /* QR Code Modal */
+    #wc-qr-modal .popup {
+      max-width: 340px;
+    }
+    #wc-qr-modal canvas {
+      display: block;
+      margin: 1rem auto;
+      border-radius: 8px;
+    }
+    #wc-qr-modal .steps-list {
+      text-align: left;
+      margin: 1rem 0;
+    }
+    #wc-qr-modal .steps-list li {
+      font-size: 0.8125rem;
+    }
+    .wc-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .wc-buttons a {
+      text-decoration: none;
+      text-align: center;
+    }
+    .btn-secondary-popup {
+      background: var(--text-secondary);
+      color: white;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .btn-secondary-popup:hover {
+      background: #555;
+    }
+
+    /* Connection method hints */
+    .method-description {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+      padding-left: 1.625rem;
+    }
   </style>
 </head>
 <body>
@@ -480,6 +546,50 @@
         <div id="popup-title" class="popup-title">Error</div>
         <div id="popup-message" class="popup-message"></div>
         <button id="popup-btn" class="popup-btn" onclick="closePopup()">OK</button>
+      </div>
+    </div>
+
+    <!-- WalletConnect QR Modal -->
+    <div id="wc-qr-modal" class="popup-overlay hidden">
+      <div class="popup">
+        <div class="popup-title" style="margin-bottom: 0.5rem;">Connect with Ledger Live</div>
+        <p style="font-size: 0.8125rem; color: var(--text-secondary); margin-bottom: 1rem;">
+          Scan this QR code with Ledger Live mobile app
+        </p>
+        <canvas id="wc-qr-canvas" width="260" height="260"></canvas>
+        <ol class="steps-list" style="text-align: left; margin: 1rem 0;">
+          <li>Open <strong>Ledger Live</strong> on your phone</li>
+          <li>Connect your Ledger device (USB or Bluetooth)</li>
+          <li>Open the <strong>Ethereum</strong> app on Ledger</li>
+          <li>Tap the scan/QR icon and scan this code</li>
+        </ol>
+        <div class="wc-buttons">
+          <a id="wc-ledger-link" href="#" class="popup-btn">
+            Open Ledger Live App
+          </a>
+          <button id="wc-cancel-btn" class="btn-secondary-popup">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- WalletConnect Signing Modal -->
+    <div id="wc-signing-modal" class="popup-overlay hidden">
+      <div class="popup">
+        <div class="signing-spinner-container">
+          <div class="signing-spinner"></div>
+        </div>
+        <div class="popup-title">Waiting for Approval</div>
+        <p class="popup-message">Check your connected wallet app to sign the transaction.</p>
+        <ol class="steps-list" style="text-align: left; margin: 1rem 0;">
+          <li>Open your wallet app (e.g., Ledger Live)</li>
+          <li>Review the transaction details</li>
+          <li>Approve on your Ledger device</li>
+        </ol>
+        <button id="wc-signing-cancel" class="btn-secondary-popup">
+          Cancel
+        </button>
       </div>
     </div>
 
@@ -518,7 +628,7 @@
         <label class="radio-option selected" id="path-eth-option" data-path="eth">
           <input type="radio" name="derivation-path" value="eth" checked>
           <span class="label">ETH (m/44'/60'/...)</span>
-          <span class="hint">MetaMask</span>
+          <span class="hint">Standard wallets</span>
         </label>
         <label class="radio-option" id="path-celo-option" data-path="celo">
           <input type="radio" name="derivation-path" value="celo">
@@ -538,52 +648,35 @@
       </div>
 
       <div id="path-info" class="info-box">
-        Using ETH derivation path via MetaMask. Works on mobile and desktop.
+        Using ETH derivation path. Works on mobile and desktop with any compatible wallet.
+      </div>
+    </div>
+
+    <!-- Platform Selection (hidden for Celo path) -->
+    <div id="platform-card" class="card">
+      <div class="card-title">Where Are You Signing?</div>
+      <div class="tab-container" id="platform-tabs">
+        <button class="tab-btn active" data-platform="mobile">Mobile</button>
+        <button class="tab-btn" data-platform="pc">PC</button>
+      </div>
+      <div id="platform-info" class="info-box">
+        Signing from your mobile device.
+      </div>
+    </div>
+
+    <!-- Connection Method Selection -->
+    <div id="connection-method-card" class="card">
+      <div class="card-title">Connection Method</div>
+      <div class="radio-group" id="connection-methods" style="margin-top: 0;">
+        <!-- Dynamically populated based on platform + derivation path -->
       </div>
     </div>
 
     <!-- Before You Sign Instructions -->
     <div class="card">
-      <div class="card-title">Before You Sign</div>
-      <div class="tab-container" id="instructions-tabs">
-        <button class="tab-btn active" data-tab="mobile">Mobile</button>
-        <button class="tab-btn" data-tab="pc">PC</button>
-        <button class="tab-btn hidden" data-tab="celo-usb">PC via USB</button>
-      </div>
-
-      <div id="tab-mobile" class="tab-content active">
-        <ol class="steps-list">
-          <li>Pair <strong>Ledger Nano X</strong> with your phone via Bluetooth</li>
-          <li>Unlock Ledger and open the <strong>Ethereum</strong> app</li>
-          <li>Open <strong>MetaMask</strong> mobile app</li>
-          <li>Ensure your Ledger account is connected in MetaMask</li>
-          <li>Open this page in MetaMask's built-in browser</li>
-          <li>Tap <strong>Connect</strong> below and approve in MetaMask</li>
-        </ol>
-      </div>
-
-      <div id="tab-pc" class="tab-content">
-        <ol class="steps-list">
-          <li>Connect <strong>Ledger Nano X or S</strong> to your computer via USB cable</li>
-          <li>Unlock Ledger and open the <strong>Ethereum</strong> app</li>
-          <li>Open <strong>MetaMask</strong> browser extension</li>
-          <li>Ensure your Ledger account is selected</li>
-          <li>Click <strong>Connect</strong> below and approve in MetaMask</li>
-        </ol>
-      </div>
-
-      <div id="tab-celo-usb" class="tab-content">
-        <ol class="steps-list">
-          <li>Connect <strong>Ledger Nano X or S</strong> to your computer via USB cable</li>
-          <li>Unlock Ledger and open the <strong>Eth Recovery</strong> app</li>
-          <li>Set your account index above (default: 0)</li>
-          <li>Click <strong>Connect Ledger</strong> below</li>
-          <li>Select your Ledger device when browser prompts</li>
-        </ol>
-        <div class="info-box" style="margin-top: 0.75rem; background: #FEF3C7; border-left-color: #F59E0B; color: #92400E;">
-          <strong>Celo path is desktop-only</strong><br>
-          Mobile is not supported because MetaMask only uses ETH derivation path, and WalletConnect + Ledger Live doesn't support Celo network.
-        </div>
+      <div class="card-title">Setup Instructions</div>
+      <div id="instructions-content">
+        <!-- Dynamically populated based on connection method selection -->
       </div>
     </div>
 
@@ -707,6 +800,29 @@
   <script type="module">
     import { createWalletClient, custom, hashTypedData, encodePacked, keccak256, encodeAbiParameters, parseAbiParameters, toHex } from 'https://esm.sh/viem@2.x'
     import { mainnet } from 'https://esm.sh/viem@2.x/chains'
+    
+    // WalletConnect imports (loaded lazily to avoid blocking initial render)
+    let EthereumProvider = null
+    let QRCode = null
+    
+    async function loadWalletConnectLibs() {
+      if (EthereumProvider && QRCode) return { success: true }
+      
+      try {
+        console.log('Loading WalletConnect libraries...')
+        const [wcModule, qrModule] = await Promise.all([
+          import('https://esm.sh/@walletconnect/ethereum-provider@2.17.0'),
+          import('https://esm.sh/qrcode@1.5.4')
+        ])
+        EthereumProvider = wcModule.default
+        QRCode = qrModule.default
+        console.log('WalletConnect libraries loaded')
+        return { success: true }
+      } catch (error) {
+        console.error('Failed to load WalletConnect libraries:', error)
+        return { success: false, error: error.message }
+      }
+    }
 
     // === LEDGER LIBRARIES (loaded lazily) ===
     let TransportWebHID = null
@@ -738,6 +854,8 @@
     }
 
     // === CONSTANTS ===
+    const WALLETCONNECT_PROJECT_ID = '855eb261fad42347d0a8baf068679887'
+    
     const CONFIG = {
       version: 'succinct-v102',
       // Safe addresses
@@ -780,8 +898,11 @@
     let selectedTeam = 'council'  // 'council' or 'clabs'
     let selectedMemberType = 'regular'  // 'regular' or 'mento'
     let selectedDerivationPath = 'eth'  // 'eth' or 'celo'
+    let selectedPlatform = 'mobile'  // 'mobile' or 'pc'
+    let selectedConnectionMethod = 'metamask'  // 'metamask', 'walletconnect', 'ledger-usb'
     let ledgerTransport = null
     let ledgerEthApp = null
+    let wcProvider = null
 
     // === DOM ELEMENTS ===
     const elements = {
@@ -814,10 +935,23 @@
       accountIndex: document.getElementById('account-index'),
       pathPreview: document.getElementById('path-preview'),
       pathInfo: document.getElementById('path-info'),
-      instructionsTabs: document.getElementById('instructions-tabs'),
-      tabMobile: document.getElementById('tab-mobile'),
-      tabPC: document.getElementById('tab-pc'),
-      tabCeloUsb: document.getElementById('tab-celo-usb')
+      // Platform selection elements
+      platformCard: document.getElementById('platform-card'),
+      platformTabs: document.getElementById('platform-tabs'),
+      platformInfo: document.getElementById('platform-info'),
+      // Connection method elements
+      connectionMethodCard: document.getElementById('connection-method-card'),
+      connectionMethods: document.getElementById('connection-methods'),
+      // Instructions
+      instructionsContent: document.getElementById('instructions-content'),
+      // WalletConnect QR modal
+      wcQrModal: document.getElementById('wc-qr-modal'),
+      wcQrCanvas: document.getElementById('wc-qr-canvas'),
+      wcLedgerLink: document.getElementById('wc-ledger-link'),
+      wcCancelBtn: document.getElementById('wc-cancel-btn'),
+      // WalletConnect signing modal
+      wcSigningModal: document.getElementById('wc-signing-modal'),
+      wcSigningCancel: document.getElementById('wc-signing-cancel')
     }
 
     // === HELPERS ===
@@ -881,46 +1015,21 @@
       if (isCelo) {
         elements.pathInfo.innerHTML = `Using Celo derivation path <code>${getCeloPath()}</code>. Desktop only (Chrome/Edge + USB).`
       } else {
-        elements.pathInfo.innerHTML = 'Using ETH derivation path via MetaMask. Works on mobile and desktop.'
+        elements.pathInfo.innerHTML = 'Using ETH derivation path. Works on mobile and desktop with any compatible wallet.'
       }
       
-      // Update instructions tabs visibility
-      const celoUsbTab = elements.instructionsTabs.querySelector('[data-tab="celo-usb"]')
-      const mobileTab = elements.instructionsTabs.querySelector('[data-tab="mobile"]')
-      const pcTab = elements.instructionsTabs.querySelector('[data-tab="pc"]')
-      
+      // Show/hide platform card based on derivation path
+      // Celo path is desktop-only, so hide platform selection
       if (isCelo) {
-        // Show Celo USB tab, hide others
-        celoUsbTab.classList.remove('hidden')
-        mobileTab.classList.add('hidden')
-        pcTab.classList.add('hidden')
-        
-        // Activate Celo USB tab
-        elements.instructionsTabs.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
-        celoUsbTab.classList.add('active')
-        
-        elements.tabMobile.classList.remove('active')
-        elements.tabPC.classList.remove('active')
-        elements.tabCeloUsb.classList.add('active')
+        elements.platformCard.classList.add('hidden')
+        selectedPlatform = 'pc'  // Force PC for Celo path
+        selectedConnectionMethod = 'ledger-usb'  // Force Ledger USB for Celo path
       } else {
-        // Show Mobile/PC tabs, hide Celo USB
-        celoUsbTab.classList.add('hidden')
-        mobileTab.classList.remove('hidden')
-        pcTab.classList.remove('hidden')
-        
-        // Activate Mobile tab by default
-        elements.instructionsTabs.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
-        mobileTab.classList.add('active')
-        
-        elements.tabMobile.classList.add('active')
-        elements.tabPC.classList.remove('active')
-        elements.tabCeloUsb.classList.remove('active')
+        elements.platformCard.classList.remove('hidden')
       }
       
-      // Update connect button text
-      if (!connectedAddress) {
-        elements.btnConnect.textContent = isCelo ? 'Connect Ledger' : 'Connect'
-      }
+      // Re-render connection methods
+      renderConnectionMethods()
     }
 
     // Get the effective signer type based on selections
@@ -1032,8 +1141,346 @@
       } else {
         elements.statusDisconnected.classList.remove('hidden')
         elements.statusConnected.classList.add('hidden')
-        elements.btnConnect.textContent = selectedDerivationPath === 'celo' ? 'Connect Ledger' : 'Connect'
+        // Update button text based on connection method
+        if (selectedDerivationPath === 'celo') {
+          elements.btnConnect.textContent = 'Connect Ledger'
+        } else if (selectedConnectionMethod === 'walletconnect') {
+          elements.btnConnect.textContent = 'Connect via WalletConnect'
+        } else {
+          elements.btnConnect.textContent = 'Connect Wallet'
+        }
         elements.btnSign.disabled = true
+      }
+    }
+
+    // === PLATFORM & CONNECTION METHOD FUNCTIONS ===
+    
+    function getAvailableConnectionMethods() {
+      // Celo path: only Direct USB on PC
+      if (selectedDerivationPath === 'celo') {
+        return [{
+          id: 'ledger-usb',
+          label: 'Direct USB (Ledger)',
+          hint: 'Chrome/Edge desktop only',
+          description: 'Connect Ledger directly via USB using WebHID. Requires Eth Recovery app.'
+        }]
+      }
+      
+      // ETH path
+      const methods = []
+      
+      if (selectedPlatform === 'mobile') {
+        methods.push({
+          id: 'metamask',
+          label: 'Mobile Wallet',
+          hint: 'Recommended',
+          description: 'Use a mobile wallet app (MetaMask, Rabby, Rainbow...) with Ledger Nano X via Bluetooth.'
+        })
+        methods.push({
+          id: 'walletconnect',
+          label: 'WalletConnect',
+          hint: 'Nano S via USB, Nano X via Bluetooth',
+          description: 'Connect via WalletConnect to Ledger Live or other wallet apps.'
+        })
+      } else {
+        // PC
+        methods.push({
+          id: 'metamask',
+          label: 'Browser Wallet',
+          hint: 'Recommended',
+          description: 'Use a browser wallet (MetaMask, Rabby, Frame...) with Ledger connected via USB.'
+        })
+        methods.push({
+          id: 'walletconnect',
+          label: 'WalletConnect',
+          hint: 'Connect to mobile wallet',
+          description: 'Scan QR code with Ledger Live mobile or other WalletConnect wallet.'
+        })
+      }
+      
+      return methods
+    }
+    
+    function renderConnectionMethods() {
+      const methods = getAvailableConnectionMethods()
+      
+      // Preserve existing selection if still valid
+      const currentMethodValid = methods.some(m => m.id === selectedConnectionMethod)
+      const effectiveMethod = currentMethodValid ? selectedConnectionMethod : methods[0].id
+      
+      elements.connectionMethods.innerHTML = methods.map((method) => `
+        <label class="radio-option ${method.id === effectiveMethod ? 'selected' : ''}" data-connection="${method.id}">
+          <input type="radio" name="connection-method" value="${method.id}" ${method.id === effectiveMethod ? 'checked' : ''}>
+          <span class="label">${method.label}</span>
+          <span class="hint">${method.hint}</span>
+        </label>
+        <div class="method-description">${method.description}</div>
+      `).join('')
+      
+      // Only update selectedConnectionMethod if current is invalid
+      if (!currentMethodValid) {
+        selectedConnectionMethod = methods[0].id
+      }
+      
+      // Update instructions
+      updateInstructions()
+      
+      // Update connect button text
+      updateConnectionUI()
+      
+      // Add event listeners to new radio options
+      initConnectionMethodSelection()
+    }
+    
+    function updateInstructions() {
+      let html = ''
+      
+      if (selectedDerivationPath === 'celo') {
+        // Celo path: Direct USB only
+        html = `
+          <ol class="steps-list">
+            <li>Connect <strong>Ledger Nano S or X</strong> to your computer via USB cable</li>
+            <li>Unlock your Ledger device</li>
+            <li>Open the <strong>Eth Recovery</strong> app on Ledger</li>
+            <li>Set your account index above (default: 0)</li>
+            <li>Click <strong>Connect Ledger</strong> below</li>
+            <li>Select your Ledger device in the browser popup</li>
+          </ol>
+          <div class="info-box" style="margin-top: 0.75rem; background: #FEF3C7; border-left-color: #F59E0B; color: #92400E;">
+            <strong>Note:</strong> Celo derivation path requires the <strong>Eth Recovery</strong> app (not Celo app) for EIP-712 support. 
+            Install it via Ledger Live with Developer Mode enabled.
+          </div>
+        `
+      } else if (selectedConnectionMethod === 'metamask') {
+        if (selectedPlatform === 'mobile') {
+          html = `
+            <ol class="steps-list">
+              <li>Pair <strong>Ledger Nano X</strong> with your phone via Bluetooth</li>
+              <li>Unlock Ledger and open the <strong>Ethereum</strong> app</li>
+              <li>Open your mobile wallet app <em>(MetaMask, Rabby, Rainbow...)</em></li>
+              <li>Ensure your Ledger account is connected in wallet settings</li>
+              <li>Open this page in your wallet's built-in browser</li>
+              <li>Tap <strong>Connect Wallet</strong> below and approve</li>
+            </ol>
+          `
+        } else {
+          html = `
+            <ol class="steps-list">
+              <li>Connect <strong>Ledger Nano S or X</strong> to your computer via USB cable</li>
+              <li>Unlock Ledger and open the <strong>Ethereum</strong> app</li>
+              <li>Open your browser wallet <em>(MetaMask, Rabby, Frame...)</em></li>
+              <li>Ensure your Ledger account is selected</li>
+              <li>Click <strong>Connect Wallet</strong> below and approve</li>
+            </ol>
+          `
+        }
+      } else if (selectedConnectionMethod === 'walletconnect') {
+        if (selectedPlatform === 'mobile') {
+          html = `
+            <ol class="steps-list">
+              <li>Connect your Ledger to your phone:
+                <ul style="margin-top: 0.5rem; margin-left: 1rem; list-style: disc;">
+                  <li><strong>Nano X:</strong> Pair via Bluetooth</li>
+                  <li><strong>Nano S/S+:</strong> Connect via USB OTG cable</li>
+                </ul>
+              </li>
+              <li>Open your wallet app <em>(Ledger Live, etc.)</em></li>
+              <li>Unlock Ledger and open the <strong>Ethereum</strong> app</li>
+              <li>Tap <strong>Connect via WalletConnect</strong> below to show QR code</li>
+              <li>In your wallet app, scan the QR code</li>
+              <li>Approve the connection request</li>
+            </ol>
+          `
+        } else {
+          html = `
+            <ol class="steps-list">
+              <li>Click <strong>Connect via WalletConnect</strong> below to show QR code</li>
+              <li>Open your wallet app on mobile <em>(Ledger Live, etc.)</em></li>
+              <li>Connect your Ledger device to your phone</li>
+              <li>Open the <strong>Ethereum</strong> app on Ledger</li>
+              <li>In your wallet app, scan the QR code</li>
+              <li>Approve the connection request</li>
+            </ol>
+          `
+        }
+      }
+      
+      elements.instructionsContent.innerHTML = html
+    }
+    
+    function updatePlatformUI() {
+      // Update platform tabs
+      elements.platformTabs.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.platform === selectedPlatform)
+      })
+      
+      // Update platform info
+      if (selectedPlatform === 'mobile') {
+        elements.platformInfo.innerHTML = 'Signing from your <strong>mobile device</strong>.'
+      } else {
+        elements.platformInfo.innerHTML = 'Signing from your <strong>PC/desktop</strong>.'
+      }
+      
+      // Re-render connection methods for new platform
+      renderConnectionMethods()
+    }
+    
+    function initConnectionMethodSelection() {
+      document.querySelectorAll('[data-connection]').forEach(option => {
+        option.addEventListener('click', () => {
+          const method = option.dataset.connection
+          if (!method) return
+          
+          // Disconnect when switching connection method
+          if (connectedAddress) {
+            disconnect()
+          }
+          
+          // Update selection UI
+          document.querySelectorAll('[data-connection]').forEach(opt => {
+            opt.classList.remove('selected')
+          })
+          option.classList.add('selected')
+          option.querySelector('input').checked = true
+          
+          selectedConnectionMethod = method
+          
+          // Update instructions
+          updateInstructions()
+          
+          // Update connect button
+          updateConnectionUI()
+        })
+      })
+    }
+
+    // === WALLETCONNECT FUNCTIONS ===
+    
+    async function showWalletConnectQR(uri) {
+      try {
+        // Generate QR code
+        await QRCode.toCanvas(elements.wcQrCanvas, uri, {
+          width: 260,
+          margin: 2,
+          color: { dark: '#1A1A1A', light: '#FFFFFF' }
+        })
+        
+        // Set up Ledger Live deep link
+        const ledgerLiveLink = `ledgerlive://wc?uri=${encodeURIComponent(uri)}`
+        elements.wcLedgerLink.href = ledgerLiveLink
+        
+        // Show modal
+        elements.wcQrModal.classList.remove('hidden')
+      } catch (error) {
+        console.error('Failed to generate QR code:', error)
+        showError('Failed to generate QR code')
+      }
+    }
+    
+    function hideWalletConnectQR() {
+      elements.wcQrModal.classList.add('hidden')
+    }
+    
+    // WalletConnect signing modal functions
+    function showWcSigningModal() {
+      elements.wcSigningModal.classList.remove('hidden')
+    }
+    
+    function hideWcSigningModal() {
+      elements.wcSigningModal.classList.add('hidden')
+    }
+    
+    async function connectWalletConnect() {
+      try {
+        elements.btnConnect.disabled = true
+        elements.btnConnect.innerHTML = '<span class="spinner"></span>Loading...'
+        
+        // Load WalletConnect libraries
+        const loadResult = await loadWalletConnectLibs()
+        if (!loadResult.success) {
+          throw new Error(`Failed to load WalletConnect: ${loadResult.error}`)
+        }
+        
+        elements.btnConnect.innerHTML = '<span class="spinner"></span>Initializing...'
+        
+        // Initialize WalletConnect provider
+        wcProvider = await EthereumProvider.init({
+          projectId: WALLETCONNECT_PROJECT_ID,
+          metadata: {
+            name: 'Celo Superchain Ops',
+            description: 'Council Signer for Celo upgrades',
+            url: window.location.origin,
+            icons: []
+          },
+          optionalChains: [1], // Ethereum mainnet
+          optionalMethods: [
+            'eth_signTypedData',
+            'eth_signTypedData_v4',
+            'personal_sign'
+          ],
+          optionalEvents: ['chainChanged', 'accountsChanged'],
+          showQrModal: false // We'll handle QR display ourselves
+        })
+        
+        // Handle URI for QR code display
+        wcProvider.on('display_uri', async (uri) => {
+          console.log('WalletConnect URI:', uri)
+          elements.btnConnect.innerHTML = '<span class="spinner"></span>Scan QR...'
+          await showWalletConnectQR(uri)
+        })
+        
+        // Handle session events
+        wcProvider.on('connect', () => {
+          console.log('WalletConnect session established')
+        })
+        
+        wcProvider.on('disconnect', () => {
+          console.log('WalletConnect session disconnected')
+          disconnect()
+        })
+        
+        wcProvider.on('accountsChanged', (accounts) => {
+          console.log('WalletConnect accounts changed:', accounts)
+          if (accounts.length > 0) {
+            connectedAddress = accounts[0]
+            updateConnectionUI()
+          } else {
+            disconnect()
+          }
+        })
+        
+        // Connect - this triggers display_uri event
+        await wcProvider.connect()
+        
+        // Hide QR modal
+        hideWalletConnectQR()
+        
+        // Create viem wallet client with WalletConnect provider
+        walletClient = createWalletClient({
+          chain: mainnet,
+          transport: custom(wcProvider)
+        })
+        
+        const [address] = await walletClient.getAddresses()
+        connectedAddress = address
+        
+        updateConnectionUI()
+        showSuccess('Connected via WalletConnect!')
+        
+      } catch (error) {
+        console.error('WalletConnect connection error:', error)
+        hideWalletConnectQR()
+        
+        if (error.message?.includes('rejected') || error.message?.includes('User rejected')) {
+          showError('Connection was rejected.')
+        } else if (error.message?.includes('timeout')) {
+          showError('Connection timed out. Please try again.')
+        } else {
+          showError(`WalletConnect error: ${error.message || 'Unknown error'}`)
+        }
+      } finally {
+        elements.btnConnect.disabled = false
+        updateConnectionUI()
       }
     }
 
@@ -1041,14 +1488,20 @@
     async function connect() {
       clearMessages()
 
-      // Use Ledger USB for Celo path
-      if (selectedDerivationPath === 'celo') {
+      // Route to appropriate connection method
+      if (selectedDerivationPath === 'celo' || selectedConnectionMethod === 'ledger-usb') {
         await connectLedgerUSB()
         return
       }
+      
+      if (selectedConnectionMethod === 'walletconnect') {
+        await connectWalletConnect()
+        return
+      }
 
+      // Browser/Mobile wallet connection
       if (!window.ethereum) {
-        showError('MetaMask not detected. Please install MetaMask or open this page in the MetaMask mobile browser.')
+        showError('No wallet detected. Please install a browser wallet (MetaMask, Rabby, etc.) or open this page in your mobile wallet\'s browser.')
         return
       }
 
@@ -1072,7 +1525,7 @@
           }
         } catch (switchError) {
           console.warn('Network switch failed:', switchError)
-          showError('Please switch to Ethereum Mainnet in MetaMask.')
+          showError('Please switch to Ethereum Mainnet in your wallet.')
           return
         }
 
@@ -1084,7 +1537,7 @@
         if (error.code === 4001) {
           showError('Connection request was cancelled.')
         } else {
-          showError('Failed to connect. Make sure MetaMask is unlocked.')
+          showError('Failed to connect. Make sure your wallet is unlocked.')
         }
       } finally {
         elements.btnConnect.disabled = false
@@ -1166,6 +1619,12 @@
     }
 
     function disconnect() {
+      // Disconnect WalletConnect if active
+      if (wcProvider) {
+        try { wcProvider.disconnect() } catch (e) {}
+        wcProvider = null
+      }
+      
       // Close Ledger transport if active
       if (ledgerTransport) {
         try { ledgerTransport.close() } catch (e) {}
@@ -1285,6 +1744,20 @@
         let signature
         if (selectedDerivationPath === 'celo') {
           signature = await signWithLedger(domain, message)
+        } else if (selectedConnectionMethod === 'walletconnect') {
+          // Show signing modal for WalletConnect
+          showWcSigningModal()
+          try {
+            signature = await walletClient.signTypedData({
+              account: connectedAddress,
+              domain,
+              types: SAFE_TX_TYPES,
+              primaryType: 'SafeTx',
+              message
+            })
+          } finally {
+            hideWcSigningModal()
+          }
         } else {
           signature = await walletClient.signTypedData({
             account: connectedAddress,
@@ -1397,23 +1870,6 @@
 
     // === TAB SWITCHING ===
     function initTabs() {
-      // Platform tabs (Mobile/PC)
-      document.querySelectorAll('.tab-container:not(#team-tabs) .tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const tabId = btn.dataset.tab
-          if (!tabId) return
-
-          const container = btn.closest('.tab-container')
-          container.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
-          btn.classList.add('active')
-
-          document.querySelectorAll('.tab-content').forEach(content => {
-            content.classList.remove('active')
-          })
-          document.getElementById(`tab-${tabId}`).classList.add('active')
-        })
-      })
-
       // Team tabs (Council/cLabs)
       document.querySelectorAll('#team-tabs .tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -1425,6 +1881,22 @@
 
           selectedTeam = team
           updateRoleUI()
+        })
+      })
+      
+      // Platform tabs (Mobile/PC)
+      document.querySelectorAll('#platform-tabs .tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const platform = btn.dataset.platform
+          if (!platform) return
+          
+          // Disconnect when switching platform
+          if (connectedAddress) {
+            disconnect()
+          }
+          
+          selectedPlatform = platform
+          updatePlatformUI()
         })
       })
     }
@@ -1495,13 +1967,30 @@
     elements.btnSign.addEventListener('click', sign)
     elements.btnCopy.addEventListener('click', copyToClipboard)
     elements.btnDownload.addEventListener('click', downloadJson)
+    
+    // WalletConnect modal cancel button
+    elements.wcCancelBtn.addEventListener('click', () => {
+      hideWalletConnectQR()
+      // Also try to abort any pending connection
+      if (wcProvider) {
+        try { wcProvider.disconnect() } catch (e) {}
+        wcProvider = null
+      }
+      updateConnectionUI()
+    })
+    
+    // WalletConnect signing modal cancel button
+    elements.wcSigningCancel.addEventListener('click', () => {
+      hideWcSigningModal()
+      showError('Please reject the signing request in your wallet app to cancel.')
+    })
 
     // Listen for account changes
     if (window.ethereum) {
       window.ethereum.on('accountsChanged', (accounts) => {
         if (accounts.length === 0) {
           disconnect()
-        } else {
+        } else if (selectedConnectionMethod === 'metamask') {
           connectedAddress = accounts[0]
           updateConnectionUI()
         }
@@ -1517,7 +2006,7 @@
     initMemberTypeSelection()
     initDerivationPathSelection()
     updateRoleUI()
-    updateDerivationPathUI()
+    updateDerivationPathUI()  // This now calls renderConnectionMethods()
     updateConnectionUI()
   </script>
 </body>
