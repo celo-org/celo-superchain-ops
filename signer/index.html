@@ -1,0 +1,2345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Celo — Council Signer</title>
+  <!-- Celo Mondo Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* === CELO MONDO DESIGN SYSTEM === */
+    :root {
+      /* Primary Colors */
+      --celo-yellow: #FCFF52;
+      --celo-yellow-hover: #E8EB4A;
+      --celo-cream: #FCF6F1;
+      --celo-cream-dark: #F5EDE5;
+      
+      /* Neutral Colors */
+      --celo-white: #FFFFFF;
+      --celo-text: #1A1A1A;
+      --celo-text-secondary: #6B6B6B;
+      --celo-border: #E7E3D4;
+      --celo-border-light: #D3D3D3;
+      
+      /* Semantic Colors */
+      --celo-error: #DC2626;
+      --celo-error-bg: #FEF2F2;
+      --celo-success: #059669;
+      --celo-success-bg: #ECFDF5;
+      --celo-info: #3B82F6;
+      --celo-info-bg: #EFF6FF;
+      --celo-warning: #D97706;
+      --celo-warning-bg: #FFFBEB;
+      
+      /* Legacy aliases for compatibility */
+      --primary: var(--celo-yellow);
+      --primary-dark: var(--celo-yellow-hover);
+      --bg: var(--celo-cream);
+      --card: var(--celo-white);
+      --text: var(--celo-text);
+      --text-secondary: var(--celo-text-secondary);
+      --border: var(--celo-border);
+      --error: var(--celo-error);
+      --success: var(--celo-success);
+      
+      /* Typography */
+      --font-serif: 'Inria Serif', Georgia, 'Times New Roman', serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+      
+      /* Spacing */
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: var(--font-sans);
+      background: var(--celo-cream);
+      color: var(--celo-text);
+      min-height: 100vh;
+      padding: 0;
+      font-size: 15px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* === HEADER / NAVIGATION (Mondo Style) === */
+    .site-header {
+      background: var(--celo-cream);
+      border-bottom: 1px solid var(--celo-border);
+      padding: 0.875rem 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .site-header-inner {
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .site-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--celo-text);
+    }
+    .site-logo-icon {
+      width: 28px;
+      height: 28px;
+    }
+    .site-logo-text {
+      font-family: var(--font-serif);
+      font-size: 1.125rem;
+      font-weight: 400;
+    }
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .site-nav-link {
+      font-size: 0.875rem;
+      color: var(--celo-text);
+      text-decoration: none;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-full);
+      transition: background 0.15s;
+    }
+    .site-nav-link:hover {
+      background: var(--celo-cream-dark);
+    }
+    .site-nav-link.active {
+      background: var(--celo-white);
+      border: 1px solid var(--celo-border);
+    }
+    
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 2rem;
+    }
+    
+    /* === PAGE HEADER === */
+    .page-header {
+      text-align: center;
+      padding: 1rem 0 1.5rem;
+    }
+    .page-header h1 {
+      font-family: var(--font-serif);
+      font-size: 1.75rem;
+      font-weight: 400;
+      margin-bottom: 0.25rem;
+      color: var(--celo-text);
+    }
+    .page-header .version {
+      font-size: 0.875rem;
+      color: var(--celo-text-secondary);
+    }
+    
+    /* Legacy header support */
+    header {
+      text-align: center;
+      padding: 1rem 0 1.5rem;
+    }
+    header h1 {
+      font-family: var(--font-serif);
+      font-size: 1.75rem;
+      font-weight: 400;
+      margin-bottom: 0.25rem;
+      color: var(--celo-text);
+    }
+    header .version {
+      font-size: 0.875rem;
+      color: var(--celo-text-secondary);
+    }
+    
+    /* === CARDS (Mondo Style) === */
+    .card {
+      background: var(--celo-white);
+      border: 1px solid var(--celo-border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      box-shadow: none;
+    }
+    .card-title {
+      font-family: var(--font-serif);
+      font-size: 0.9375rem;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--celo-text);
+      margin-bottom: 1rem;
+    }
+    /* === DETAILS / SUMMARY (Celo Style) === */
+    details {
+      margin-top: 0;
+    }
+    details.card-details {
+      margin-top: 0;
+    }
+    summary {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      color: var(--celo-text);
+      cursor: pointer;
+      padding: 0.75rem 0;
+      font-weight: 400;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    summary::-webkit-details-marker {
+      display: none;
+    }
+    summary::before {
+      content: '▶';
+      font-size: 0.625rem;
+      transition: transform 0.15s ease;
+      color: var(--celo-text-secondary);
+    }
+    details[open] summary::before {
+      transform: rotate(90deg);
+    }
+    .details-content {
+      padding: 0.75rem 0;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      color: var(--celo-text);
+    }
+    .detail-row {
+      display: flex;
+      flex-direction: column;
+      padding: 0.625rem 0;
+      border-bottom: 1px solid var(--celo-border);
+    }
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+    .detail-label {
+      font-size: 0.75rem;
+      color: var(--celo-text-secondary);
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .detail-value {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      word-break: break-all;
+      color: var(--celo-text);
+    }
+    /* === BUTTONS (Celo Mondo Pill Style) === */
+    button {
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      font-family: var(--font-sans);
+      border: 1px solid var(--celo-border);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    button.primary {
+      background: var(--celo-yellow);
+      color: var(--celo-text);
+      border-color: var(--celo-border);
+    }
+    button.primary:hover {
+      background: var(--celo-yellow-hover);
+    }
+    button.primary:active {
+      transform: scale(0.98);
+    }
+    button.primary:disabled {
+      background: var(--celo-border);
+      color: var(--celo-text-secondary);
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    button.secondary {
+      background: var(--celo-white);
+      border: 1px solid var(--celo-border);
+      color: var(--celo-text);
+    }
+    button.secondary:hover {
+      background: var(--celo-cream);
+    }
+    button.secondary:active {
+      transform: scale(0.98);
+    }
+    .btn-group {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .btn-group button {
+      flex: 1;
+    }
+    
+    /* === POPUP OVERLAY === */
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+    .popup-overlay.hidden {
+      display: none !important;
+    }
+    @keyframes popupIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .hidden { display: none !important; }
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(26, 26, 26, 0.2);
+      border-top-color: var(--celo-text);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 0.5rem;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    /* === FOOTER (Celo Mondo Style) === */
+    footer {
+      text-align: center;
+      padding: 2rem 0 1rem;
+      color: var(--celo-text-secondary);
+      font-size: 0.8125rem;
+      border-top: 1px solid var(--celo-border);
+      margin-top: 1rem;
+    }
+    footer a {
+      color: var(--celo-info);
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* === TABS (Celo Mondo Pill Style) === */
+    .tab-container {
+      display: flex;
+      gap: 0.375rem;
+      margin-bottom: 1rem;
+      background: transparent;
+      padding: 0;
+      border-radius: 0;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      font-family: var(--font-sans);
+      border: 1px solid var(--celo-border);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      background: var(--celo-white);
+      color: var(--celo-text-secondary);
+      transition: all 0.15s ease;
+      width: auto;
+    }
+    .tab-btn.active {
+      background: var(--celo-yellow);
+      color: var(--celo-text);
+      border-color: var(--celo-border);
+      box-shadow: none;
+    }
+    .tab-btn:hover:not(.active) {
+      background: var(--celo-cream);
+      color: var(--celo-text);
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+
+    /* === STEPS LIST (Celo Style) === */
+    .steps-list {
+      list-style: none;
+      counter-reset: step;
+    }
+    .steps-list li {
+      position: relative;
+      padding-left: 2rem;
+      margin-bottom: 0.875rem;
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+    .steps-list li::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0.125rem;
+      width: 1.375rem;
+      height: 1.375rem;
+      background: var(--celo-yellow);
+      color: var(--celo-text);
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--celo-border);
+    }
+    .steps-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    /* === CHECKLIST === */
+    .checklist {
+      list-style: none;
+      margin: 0.75rem 0;
+    }
+    .checklist li {
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+    .checklist li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--celo-success);
+      font-weight: 600;
+    }
+
+    /* === LINKS === */
+    .link {
+      color: var(--celo-info);
+      text-decoration: none;
+      word-break: break-all;
+    }
+    .link:hover {
+      text-decoration: underline;
+    }
+
+    /* === CODE === */
+    code {
+      background: var(--celo-cream);
+      padding: 0.125rem 0.5rem;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      border: 1px solid var(--celo-border);
+    }
+
+    /* === INFO BOX (Celo Mondo Style) === */
+    .info-box {
+      background: var(--celo-cream);
+      border: 1px solid var(--celo-border);
+      border-radius: var(--radius-md);
+      padding: 0.75rem 1rem;
+      font-size: 0.8125rem;
+      margin-top: 1rem;
+      color: var(--celo-text-secondary);
+    }
+    .info-box strong {
+      color: var(--celo-text);
+    }
+
+    /* === RADIO OPTIONS (Celo Mondo Pill Style) === */
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--celo-border);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-size: 0.875rem;
+      background: var(--celo-white);
+    }
+    .radio-option:hover {
+      border-color: var(--celo-text-secondary);
+      background: var(--celo-cream);
+    }
+    .radio-option.selected {
+      border-color: var(--celo-text);
+      background: var(--celo-yellow);
+    }
+    .radio-option input[type="radio"] {
+      accent-color: var(--celo-text);
+      width: 16px;
+      height: 16px;
+      margin: 0;
+    }
+    .radio-option .label {
+      font-weight: 500;
+      color: var(--celo-text);
+    }
+    .radio-option .hint {
+      font-size: 0.75rem;
+      color: var(--celo-text-secondary);
+      margin-left: auto;
+    }
+    .radio-option.selected .hint {
+      color: var(--celo-text);
+      opacity: 0.7;
+    }
+
+    /* === MENTO SECTION === */
+    .mento-section {
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--celo-border);
+    }
+    .mento-section.hidden {
+      display: none;
+    }
+    .mento-label {
+      font-size: 0.8125rem;
+      color: var(--celo-text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    /* === WALLET CONNECT MODALS === */
+    #wc-signing-modal .popup {
+      max-width: 360px;
+    }
+    .signing-spinner-container {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 1rem;
+    }
+    .signing-spinner {
+      width: 100%;
+      height: 100%;
+      border: 4px solid var(--celo-border);
+      border-top-color: var(--celo-yellow);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    #wc-qr-modal .popup {
+      max-width: 360px;
+    }
+    #wc-qr-modal canvas {
+      display: block;
+      margin: 1rem auto;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--celo-border);
+    }
+    #wc-qr-modal .steps-list {
+      text-align: left;
+      margin: 1rem 0;
+    }
+    #wc-qr-modal .steps-list li {
+      font-size: 0.875rem;
+    }
+    .wc-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .wc-buttons a {
+      text-decoration: none;
+      text-align: center;
+    }
+    .btn-secondary-popup {
+      background: var(--celo-white);
+      border: 1px solid var(--celo-border);
+      color: var(--celo-text);
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-full);
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-family: var(--font-sans);
+      transition: all 0.15s ease;
+    }
+    .btn-secondary-popup:hover {
+      background: var(--celo-cream);
+    }
+
+    /* === CONNECTION METHOD === */
+    .method-description {
+      font-size: 0.8125rem;
+      color: var(--celo-text-secondary);
+      margin-top: 0.25rem;
+      padding-left: 2.5rem;
+      line-height: 1.5;
+    }
+
+    /* === DETAIL VALUE ROW (for copy button alignment) === */
+    .detail-value-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    /* === COPY BUTTON (Celo Pill Style) === */
+    .copy-btn {
+      width: auto;
+      height: auto;
+      padding: 0.375rem 0.75rem;
+      border: 1px solid var(--celo-border);
+      border-radius: var(--radius-full);
+      background: var(--celo-white);
+      color: var(--celo-text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 500;
+      font-family: var(--font-sans);
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .copy-btn:hover {
+      border-color: var(--celo-text);
+      color: var(--celo-text);
+      background: var(--celo-cream);
+    }
+    .copy-btn.copied {
+      background: var(--celo-yellow);
+      border-color: var(--celo-border);
+      color: var(--celo-text);
+    }
+
+    /* === LINK BUTTONS (Celo Pill Style) === */
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.25rem;
+      background: var(--celo-yellow);
+      color: var(--celo-text);
+      text-decoration: none;
+      border-radius: var(--radius-full);
+      font-size: 0.875rem;
+      font-weight: 500;
+      font-family: var(--font-sans);
+      transition: all 0.15s ease;
+      border: 1px solid var(--celo-border);
+    }
+    .link-btn:hover {
+      background: var(--celo-yellow-hover);
+      text-decoration: none;
+    }
+    .link-btn-secondary {
+      background: var(--celo-white);
+      border: 1px solid var(--celo-border);
+      color: var(--celo-text);
+    }
+    .link-btn-secondary:hover {
+      background: var(--celo-cream);
+    }
+
+    /* === CALLOUTS (Celo Style) === */
+    .callout {
+      padding: 0.875rem 1rem;
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      line-height: 1.6;
+      border: 1px solid;
+    }
+    .callout.tip {
+      background: var(--celo-success-bg);
+      border-color: #A7F3D0;
+      color: #065F46;
+    }
+    .callout.note {
+      background: var(--celo-info-bg);
+      border-color: #BFDBFE;
+      color: #1E40AF;
+    }
+    .callout.warning {
+      background: var(--celo-warning-bg);
+      border-color: #FDE68A;
+      color: #92400E;
+    }
+    .callout strong {
+      font-weight: 600;
+    }
+
+    /* === DIVIDER === */
+    .section-divider {
+      height: 1px;
+      background: var(--celo-border);
+      margin: 1rem 0;
+    }
+    
+    /* === OUTPUT BOX (Celo Style) === */
+    .output-box {
+      background: var(--celo-text);
+      color: #E5E5E5;
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid var(--celo-border);
+    }
+    
+    /* === STATUS INDICATORS (Celo Style) === */
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-full);
+      font-size: 0.875rem;
+      border: 1px solid;
+    }
+    .status.disconnected {
+      background: var(--celo-error-bg);
+      border-color: #FECACA;
+      color: var(--celo-error);
+    }
+    .status.connected {
+      background: var(--celo-success-bg);
+      border-color: #A7F3D0;
+      color: var(--celo-success);
+    }
+    .status .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    
+    /* === ADDRESS DISPLAY === */
+    .address {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      word-break: break-all;
+    }
+    
+    /* === POPUP MODALS (Celo Style) === */
+    .popup {
+      background: var(--celo-white);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      max-width: 360px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--celo-border);
+      animation: popupIn 0.2s ease-out;
+    }
+    .popup-title {
+      font-family: var(--font-serif);
+      font-size: 1.125rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+    .popup-message {
+      font-size: 0.875rem;
+      color: var(--celo-text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.25rem;
+    }
+    .popup-btn {
+      background: var(--celo-yellow);
+      color: var(--celo-text);
+      border: 1px solid var(--celo-border);
+      padding: 0.75rem 2rem;
+      border-radius: var(--radius-full);
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-family: var(--font-sans);
+      transition: all 0.15s ease;
+    }
+    .popup-btn:hover {
+      background: var(--celo-yellow-hover);
+    }
+    .popup-btn.error {
+      background: var(--celo-error);
+      border-color: var(--celo-error);
+      color: white;
+    }
+    .popup-btn.error:hover {
+      background: #B91C1C;
+    }
+    .popup-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 1.5rem;
+      border: 1px solid;
+    }
+    .popup-icon.error {
+      background: var(--celo-error-bg);
+      border-color: #FECACA;
+      color: var(--celo-error);
+    }
+    .popup-icon.success {
+      background: var(--celo-success-bg);
+      border-color: #A7F3D0;
+      color: var(--celo-success);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Council Signer</h1>
+      <div class="version">Signing tool for Succinct v1.0.2 upgrade</div>
+    </header>
+
+    <!-- Popup for messages -->
+    <div id="popup-overlay" class="popup-overlay hidden">
+      <div class="popup">
+        <div id="popup-icon" class="popup-icon error">✕</div>
+        <div id="popup-title" class="popup-title">Error</div>
+        <div id="popup-message" class="popup-message"></div>
+        <button id="popup-btn" class="popup-btn" onclick="closePopup()">OK</button>
+      </div>
+    </div>
+
+    <!-- WalletConnect QR Modal -->
+    <div id="wc-qr-modal" class="popup-overlay hidden">
+      <div class="popup">
+        <div class="popup-title" style="margin-bottom: 0.5rem;">Connect with Ledger Live</div>
+        <p style="font-size: 0.8125rem; color: var(--text-secondary); margin-bottom: 1rem;">
+          Scan this QR code with Ledger Live mobile app
+        </p>
+        <canvas id="wc-qr-canvas" width="260" height="260"></canvas>
+        <ol class="steps-list" style="text-align: left; margin: 1rem 0;">
+          <li>Open <strong>Ledger Live</strong> on your phone</li>
+          <li>Connect your Ledger device (USB or Bluetooth)</li>
+          <li>Open the <strong>Ethereum</strong> app on Ledger</li>
+          <li>Tap the scan/QR icon and scan this code</li>
+        </ol>
+        <div class="wc-buttons">
+          <a id="wc-ledger-link" href="#" class="popup-btn">
+            Open Ledger Live App
+          </a>
+          <button id="wc-cancel-btn" class="btn-secondary-popup">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- WalletConnect Signing Modal -->
+    <div id="wc-signing-modal" class="popup-overlay hidden">
+      <div class="popup">
+        <div class="signing-spinner-container">
+          <div class="signing-spinner"></div>
+        </div>
+        <div class="popup-title">Waiting for Approval</div>
+        <p class="popup-message">Check your connected wallet app to sign the transaction.</p>
+        <ol class="steps-list" style="text-align: left; margin: 1rem 0;">
+          <li>Open your wallet app (e.g., Ledger Live)</li>
+          <li>Review the transaction details</li>
+          <li>Approve on your Ledger device</li>
+        </ol>
+        <button id="wc-signing-cancel" class="btn-secondary-popup">
+          Cancel
+        </button>
+      </div>
+    </div>
+
+    <!-- Your Role Selection -->
+    <div class="card">
+      <div class="card-title">Your Role</div>
+      <div class="tab-container" id="team-tabs">
+        <button class="tab-btn active" data-team="council">Community Council</button>
+        <button class="tab-btn" data-team="clabs">cLabs Council</button>
+      </div>
+
+      <div id="mento-section" class="mento-section">
+        <div class="mento-label">Member type:</div>
+        <div class="radio-group">
+          <label class="radio-option selected" data-member="regular">
+            <input type="radio" name="member-type" value="regular" checked>
+            <span class="label">Regular member</span>
+          </label>
+          <label class="radio-option" data-member="mento">
+            <input type="radio" name="member-type" value="mento">
+            <span class="label">Mento member</span>
+            <span class="hint">nested multisig</span>
+          </label>
+        </div>
+      </div>
+
+      <div id="role-info" class="info-box">
+        Signing as <strong>Community Security Council</strong> member.
+      </div>
+    </div>
+
+    <!-- Derivation Path Selection -->
+    <div class="card">
+      <div class="card-title">Derivation Path</div>
+      <div class="radio-group" style="margin-top: 0;">
+        <label class="radio-option selected" id="path-eth-option" data-path="eth">
+          <input type="radio" name="derivation-path" value="eth" checked>
+          <span class="label">ETH (m/44'/60'/...)</span>
+          <span class="hint">Standard wallets</span>
+        </label>
+        <label class="radio-option" id="path-celo-option" data-path="celo">
+          <input type="radio" name="derivation-path" value="celo">
+          <span class="label">Celo (m/44'/52752'/...)</span>
+          <span class="hint">USB only</span>
+        </label>
+      </div>
+
+      <!-- Celo Path Options (shown when Celo is selected) -->
+      <div id="celo-options" class="mento-section hidden">
+        <div class="mento-label">Account index:</div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <input type="number" id="account-index" value="0" min="0" max="100" 
+            style="width: 80px; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.875rem;">
+          <code id="path-preview">m/44'/52752'/0'/0/0</code>
+        </div>
+      </div>
+
+      <div id="path-info" class="info-box">
+        Using ETH derivation path. Works on mobile and desktop with any compatible wallet.
+      </div>
+    </div>
+
+    <!-- Platform Selection (hidden for Celo path) -->
+    <div id="platform-card" class="card">
+      <div class="card-title">Where Are You Signing?</div>
+      <div class="tab-container" id="platform-tabs">
+        <button class="tab-btn active" data-platform="mobile">Mobile</button>
+        <button class="tab-btn" data-platform="pc">PC</button>
+      </div>
+      <div id="platform-info" class="info-box">
+        Signing from your mobile device.
+      </div>
+    </div>
+
+    <!-- Connection Method Selection -->
+    <div id="connection-method-card" class="card">
+      <div class="card-title">Connection Method</div>
+      <div class="radio-group" id="connection-methods" style="margin-top: 0;">
+        <!-- Dynamically populated based on platform + derivation path -->
+      </div>
+    </div>
+
+    <!-- Before You Sign Instructions -->
+    <div class="card">
+      <div class="card-title">Setup Instructions</div>
+      <div id="instructions-content">
+        <!-- Dynamically populated based on connection method selection -->
+      </div>
+    </div>
+
+    <!-- What Am I Signing? -->
+    <div class="card">
+      <details class="card-details">
+        <summary>What am I signing?</summary>
+        <div class="details-content">
+          <p style="margin-bottom: 0.75rem;">
+            You are approving an upgrade to <strong>Celo's fault proof system</strong>. This governance action updates the dispute game implementation used for L2 → L1 withdrawals.
+          </p>
+          
+          <p style="margin-bottom: 0.5rem;"><strong>What this upgrade does:</strong></p>
+          <ul class="checklist">
+            <li>Updates OPSuccinctFaultDisputeGame to v1.0.2 with improved ZK-proof verification</li>
+            <li>Reduces on-chain costs by up to 9x through concurrent range splitting</li>
+            <li>Fixes proving failures for blocks with large excess blob gas</li>
+          </ul>
+          
+          <p id="signing-context" style="margin-top: 0.75rem;">
+            Your signature will be collected along with other council members. The upgrade executes only after enough signatures are gathered. No funds are moved.
+          </p>
+        </div>
+      </details>
+    </div>
+
+    <!-- Verify in Tenderly -->
+    <div class="card">
+      <details class="card-details">
+        <summary>Verify in Tenderly</summary>
+        <div class="details-content">
+          <p style="margin-bottom: 0.75rem;">
+            Review the simulated transaction before signing:
+          </p>
+          <p style="margin-bottom: 0.75rem;">
+            <a class="link" href="https://dashboard.tenderly.co/explorer/vnet/39498d1a-4638-47d3-8bbc-010de8f718ce/tx/0x27f7a467c7d7faa3aa9934ffc2810a4d910e2404783aed427a5fa1f732f7e12d" target="_blank" rel="noopener">
+              Open Tenderly Simulation →
+            </a>
+          </p>
+          <p style="margin-bottom: 0.5rem;"><strong>What to check:</strong></p>
+          <ol class="steps-list">
+            <li>Enable <strong>Dev Mode</strong> (toggle in top right corner)</li>
+            <li>Check transaction shows <strong>green checkmark</strong> (success)</li>
+            <li>Navigate to <strong>State Changes</strong> tab</li>
+            <li>Verify <code>gameImpls[42]</code> updates to <code>0xc5bd...de37</code></li>
+          </ol>
+          <p style="margin-top: 0.75rem;">
+            <strong>Technical verification:</strong> Run <code>./scripts/decode_succinct-v102_calldata.sh</code> to decode the calldata.
+          </p>
+        </div>
+      </details>
+    </div>
+
+    <!-- Connection Status -->
+    <div class="card">
+      <div class="card-title">Wallet</div>
+      <div id="status-disconnected" class="status disconnected">
+        <span class="dot"></span>
+        <span>Not connected</span>
+      </div>
+      <div id="status-connected" class="status connected hidden">
+        <span class="dot"></span>
+        <div>
+          <div>Connected</div>
+          <div id="connected-address" class="address"></div>
+        </div>
+      </div>
+      <button id="btn-connect" class="primary" style="margin-top: 1rem;">
+        Connect
+      </button>
+    </div>
+
+    <!-- Transaction Details -->
+    <div class="card">
+      <details class="card-details">
+        <summary>Transaction to sign</summary>
+        <div class="details-content">
+          <div id="tx-description" style="margin-bottom: 0.75rem;">
+            Approve hash for Council Safe to execute parent transaction.
+          </div>
+          <div id="tx-details-content">
+            <div class="detail-row">
+              <span class="detail-label">Approving Hash</span>
+              <div class="detail-value-row">
+                <span id="detail-approving-hash" class="detail-value">0xa17db5fb2aa052b03a49ed701483f37fa9e795b7ccbbe6f19905af99e358a54f</span>
+                <button class="copy-btn" onclick="copyDataValue(this, 'detail-approving-hash')">Copy</button>
+              </div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Signing Safe</span>
+              <div class="detail-value-row">
+                <span id="detail-signing-safe" class="detail-value">0xC03172263409584f7860C25B6eB4985f0f6F4636</span>
+                <button class="copy-btn" onclick="copyDataValue(this, 'detail-signing-safe')">Copy</button>
+              </div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Target Safe</span>
+              <div class="detail-value-row">
+                <span id="detail-target-safe" class="detail-value">0x4092A77bAF58fef0309452cEaCb09221e556E112</span>
+                <button class="copy-btn" onclick="copyDataValue(this, 'detail-target-safe')">Copy</button>
+              </div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Nonce</span>
+              <span id="detail-nonce" class="detail-value">24</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Method</span>
+              <span class="detail-value">approveHash(bytes32)</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Raw Calldata</span>
+              <span id="detail-calldata" class="detail-value">0xd4d9bdcda17db5fb2aa052b03a49ed701483f37fa9e795b7ccbbe6f19905af99e358a54f</span>
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <!-- Sign Button -->
+    <div class="card">
+      <button id="btn-sign" class="primary" disabled>
+        Sign Transaction
+      </button>
+    </div>
+
+    <!-- Output Section -->
+    <div id="output-section" class="card hidden">
+      <div class="card-title">Signature Result</div>
+      <div id="output-json" class="output-box"></div>
+      <div class="btn-group">
+        <button id="btn-copy" class="secondary">Copy</button>
+        <button id="btn-download" class="secondary">Download</button>
+      </div>
+    </div>
+
+    <footer>
+      <a href="https://github.com/celo-org/celo-superchain-ops" target="_blank" rel="noopener">View on GitHub</a>
+    </footer>
+  </div>
+
+  <script type="module">
+    import { createWalletClient, custom, hashTypedData, encodePacked, keccak256, encodeAbiParameters, parseAbiParameters, toHex } from 'https://esm.sh/viem@2.x'
+    import { mainnet } from 'https://esm.sh/viem@2.x/chains'
+    
+    // WalletConnect imports (loaded lazily to avoid blocking initial render)
+    let EthereumProvider = null
+    let QRCode = null
+    
+    async function loadWalletConnectLibs() {
+      if (EthereumProvider && QRCode) return { success: true }
+      
+      try {
+        console.log('Loading WalletConnect libraries...')
+        const [wcModule, qrModule] = await Promise.all([
+          import('https://esm.sh/@walletconnect/ethereum-provider@2.17.0'),
+          import('https://esm.sh/qrcode@1.5.4')
+        ])
+        EthereumProvider = wcModule.default
+        QRCode = qrModule.default
+        console.log('WalletConnect libraries loaded')
+        return { success: true }
+      } catch (error) {
+        console.error('Failed to load WalletConnect libraries:', error)
+        return { success: false, error: error.message }
+      }
+    }
+
+    // === LEDGER LIBRARIES (loaded lazily) ===
+    let TransportWebHID = null
+    let LedgerEth = null
+
+    async function loadLedgerUSB() {
+      if (TransportWebHID && LedgerEth) return { success: true }
+      
+      try {
+        console.log('Loading Ledger USB libraries...')
+        
+        // WebHID transport - works on Skypack
+        const hidModule = await import('https://cdn.skypack.dev/@ledgerhq/hw-transport-webhid@6.28.6')
+        console.log('WebHID transport loaded')
+        TransportWebHID = hidModule.default
+        
+        // Use older hw-app-eth version with fewer dependencies
+        // Try esm.sh with bundle flag which handles deps better
+        console.log('Loading Eth app...')
+        const ethModule = await import('https://esm.sh/@ledgerhq/hw-app-eth@6.29.0?bundle')
+        console.log('Ledger Eth app loaded')
+        LedgerEth = ethModule.default
+        
+        return { success: true }
+      } catch (error) {
+        console.error('Failed to load Ledger libraries:', error)
+        return { success: false, error: error.message }
+      }
+    }
+
+    // === CONSTANTS ===
+    const WALLETCONNECT_PROJECT_ID = '855eb261fad42347d0a8baf068679887'
+    
+    const CONFIG = {
+      version: 'succinct-v102',
+      // Safe addresses
+      parentSafe: '0x4092A77bAF58fef0309452cEaCb09221e556E112',
+      councilSafe: '0xC03172263409584f7860C25B6eB4985f0f6F4636',
+      clabsSafe: '0x9Eb44Da23433b5cAA1c87e35594D15FcEb08D34d',
+      mentoSafe: '0xD1C635987B6Aa287361d08C6461491Fa9df087f2',
+      // Nonces for each signer type
+      nonces: {
+        council: 24n,
+        clabs: 22n,
+        mento: 6n
+      },
+      // Transaction hashes
+      parentTxHash: '0xa17db5fb2aa052b03a49ed701483f37fa9e795b7ccbbe6f19905af99e358a54f',
+      childTxHash: '0xb249f86c808e56add978b80a312200ab5895ae770bef40267bb98e624c6e568e',
+      // Common Safe tx params
+      refundReceiver: '0x95ffac468e37ddeef407ffef18f0cc9e86d8f13b',
+      gasToken: '0x0000000000000000000000000000000000000000'
+    }
+
+    const SAFE_TX_TYPES = {
+      SafeTx: [
+        { name: 'to', type: 'address' },
+        { name: 'value', type: 'uint256' },
+        { name: 'data', type: 'bytes' },
+        { name: 'operation', type: 'uint8' },
+        { name: 'safeTxGas', type: 'uint256' },
+        { name: 'baseGas', type: 'uint256' },
+        { name: 'gasPrice', type: 'uint256' },
+        { name: 'gasToken', type: 'address' },
+        { name: 'refundReceiver', type: 'address' },
+        { name: 'nonce', type: 'uint256' }
+      ]
+    }
+
+    // === STATE ===
+    let walletClient = null
+    let connectedAddress = null
+    let selectedTeam = 'council'  // 'council' or 'clabs'
+    let selectedMemberType = 'regular'  // 'regular' or 'mento'
+    let selectedDerivationPath = 'eth'  // 'eth' or 'celo'
+    let selectedPlatform = 'mobile'  // 'mobile' or 'pc'
+    let selectedConnectionMethod = 'metamask'  // 'metamask', 'walletconnect', 'ledger-usb'
+    let ledgerTransport = null
+    let ledgerEthApp = null
+    let wcProvider = null
+
+    // === DOM ELEMENTS ===
+    const elements = {
+      popupOverlay: document.getElementById('popup-overlay'),
+      popupIcon: document.getElementById('popup-icon'),
+      popupTitle: document.getElementById('popup-title'),
+      popupMessage: document.getElementById('popup-message'),
+      popupBtn: document.getElementById('popup-btn'),
+      statusDisconnected: document.getElementById('status-disconnected'),
+      statusConnected: document.getElementById('status-connected'),
+      connectedAddress: document.getElementById('connected-address'),
+      btnConnect: document.getElementById('btn-connect'),
+      btnSign: document.getElementById('btn-sign'),
+      outputSection: document.getElementById('output-section'),
+      outputJson: document.getElementById('output-json'),
+      btnCopy: document.getElementById('btn-copy'),
+      btnDownload: document.getElementById('btn-download'),
+      mentoSection: document.getElementById('mento-section'),
+      roleInfo: document.getElementById('role-info'),
+      txDescription: document.getElementById('tx-description'),
+      signingContext: document.getElementById('signing-context'),
+      detailSigningSafe: document.getElementById('detail-signing-safe'),
+      detailTargetSafe: document.getElementById('detail-target-safe'),
+      detailNonce: document.getElementById('detail-nonce'),
+      detailApprovingHash: document.getElementById('detail-approving-hash'),
+      detailCalldata: document.getElementById('detail-calldata'),
+      // Derivation path elements
+      pathEthOption: document.getElementById('path-eth-option'),
+      pathCeloOption: document.getElementById('path-celo-option'),
+      celoOptions: document.getElementById('celo-options'),
+      accountIndex: document.getElementById('account-index'),
+      pathPreview: document.getElementById('path-preview'),
+      pathInfo: document.getElementById('path-info'),
+      // Platform selection elements
+      platformCard: document.getElementById('platform-card'),
+      platformTabs: document.getElementById('platform-tabs'),
+      platformInfo: document.getElementById('platform-info'),
+      // Connection method elements
+      connectionMethodCard: document.getElementById('connection-method-card'),
+      connectionMethods: document.getElementById('connection-methods'),
+      // Instructions
+      instructionsContent: document.getElementById('instructions-content'),
+      // WalletConnect QR modal
+      wcQrModal: document.getElementById('wc-qr-modal'),
+      wcQrCanvas: document.getElementById('wc-qr-canvas'),
+      wcLedgerLink: document.getElementById('wc-ledger-link'),
+      wcCancelBtn: document.getElementById('wc-cancel-btn'),
+      // WalletConnect signing modal
+      wcSigningModal: document.getElementById('wc-signing-modal'),
+      wcSigningCancel: document.getElementById('wc-signing-cancel')
+    }
+
+    // === HELPERS ===
+    function showError(msg) {
+      elements.popupIcon.className = 'popup-icon error'
+      elements.popupIcon.textContent = '✕'
+      elements.popupTitle.textContent = 'Error'
+      elements.popupMessage.textContent = msg
+      elements.popupBtn.className = 'popup-btn error'
+      elements.popupOverlay.classList.remove('hidden')
+    }
+
+    function showSuccess(msg) {
+      elements.popupIcon.className = 'popup-icon success'
+      elements.popupIcon.textContent = '✓'
+      elements.popupTitle.textContent = 'Success'
+      elements.popupMessage.textContent = msg
+      elements.popupBtn.className = 'popup-btn'
+      elements.popupOverlay.classList.remove('hidden')
+    }
+
+    function clearMessages() {
+      elements.popupOverlay.classList.add('hidden')
+    }
+
+    // Global function for popup button
+    window.closePopup = function() {
+      elements.popupOverlay.classList.add('hidden')
+    }
+
+    // Global function for copy buttons in transaction details
+    window.copyDataValue = function(btn, elementId) {
+      const text = document.getElementById(elementId)?.textContent || ''
+      navigator.clipboard.writeText(text).then(() => {
+        btn.classList.add('copied')
+        btn.textContent = 'Copied'
+        setTimeout(() => {
+          btn.classList.remove('copied')
+          btn.textContent = 'Copy'
+        }, 1500)
+      }).catch(() => {
+        showError('Failed to copy to clipboard.')
+      })
+    }
+
+    function truncateAddress(addr) {
+      return addr.slice(0, 8) + '...' + addr.slice(-6)
+    }
+
+    function getAccountIndex() {
+      return parseInt(elements.accountIndex?.value) || 0
+    }
+
+    function getCeloPath() {
+      const index = getAccountIndex()
+      return `m/44'/52752'/${index}'/0/0`
+    }
+
+    // Update UI based on derivation path selection
+    function updateDerivationPathUI() {
+      const isCelo = selectedDerivationPath === 'celo'
+      
+      // Update radio option styling
+      elements.pathEthOption.classList.toggle('selected', !isCelo)
+      elements.pathCeloOption.classList.toggle('selected', isCelo)
+      
+      // Show/hide Celo options
+      elements.celoOptions.classList.toggle('hidden', !isCelo)
+      
+      // Update path preview
+      if (elements.pathPreview) {
+        elements.pathPreview.textContent = getCeloPath()
+      }
+      
+      // Update path info text
+      if (isCelo) {
+        elements.pathInfo.innerHTML = `Using Celo derivation path <code>${getCeloPath()}</code>. Desktop only (Chrome/Edge + USB).`
+      } else {
+        elements.pathInfo.innerHTML = 'Using ETH derivation path. Works on mobile and desktop with any compatible wallet.'
+      }
+      
+      // Show/hide platform card based on derivation path
+      // Celo path is desktop-only, so hide platform selection
+      if (isCelo) {
+        elements.platformCard.classList.add('hidden')
+        selectedPlatform = 'pc'  // Force PC for Celo path
+        selectedConnectionMethod = 'ledger-usb'  // Force Ledger USB for Celo path
+      } else {
+        elements.platformCard.classList.remove('hidden')
+      }
+      
+      // Re-render connection methods
+      renderConnectionMethods()
+    }
+
+    // Get the effective signer type based on selections
+    function getSignerType() {
+      if (selectedTeam === 'clabs') return 'clabs'
+      if (selectedMemberType === 'mento') return 'mento'
+      return 'council'
+    }
+
+    // Get signing parameters based on signer type
+    function getSigningParams() {
+      const signerType = getSignerType()
+      
+      // approveHash(bytes32) selector = 0xd4d9bdcd
+      const parentApproveData = '0xd4d9bdcd' + CONFIG.parentTxHash.slice(2)
+      const childApproveData = '0xd4d9bdcd' + CONFIG.childTxHash.slice(2)
+
+      switch (signerType) {
+        case 'council':
+          return {
+            verifyingContract: CONFIG.councilSafe,
+            to: CONFIG.parentSafe,
+            data: parentApproveData,
+            nonce: CONFIG.nonces.council,
+            approvingHash: CONFIG.parentTxHash,
+            description: 'Approve hash for Council Safe to execute parent transaction.',
+            context: 'Your signature will be collected along with other Community Council members.'
+          }
+        case 'clabs':
+          return {
+            verifyingContract: CONFIG.clabsSafe,
+            to: CONFIG.parentSafe,
+            data: parentApproveData,
+            nonce: CONFIG.nonces.clabs,
+            approvingHash: CONFIG.parentTxHash,
+            description: 'Approve hash for cLabs Safe to execute parent transaction.',
+            context: 'Your signature will be collected along with other cLabs Council members.'
+          }
+        case 'mento':
+          return {
+            verifyingContract: CONFIG.mentoSafe,
+            to: CONFIG.councilSafe,
+            data: childApproveData,
+            nonce: CONFIG.nonces.mento,
+            approvingHash: CONFIG.childTxHash,
+            description: 'Approve hash for Mento multisig to execute Council transaction.',
+            context: 'As a Mento member, your signature approves the Council\'s child transaction. Other Mento members must also sign.'
+          }
+      }
+    }
+
+    // Update UI based on selected role
+    function updateRoleUI() {
+      const signerType = getSignerType()
+      const params = getSigningParams()
+
+      // Update role info box
+      let roleText = ''
+      switch (signerType) {
+        case 'council':
+          roleText = 'Signing as <strong>Community Security Council</strong> member.'
+          break
+        case 'clabs':
+          roleText = 'Signing as <strong>cLabs Security Council</strong> member.'
+          break
+        case 'mento':
+          roleText = 'Signing as <strong>Mento</strong> member (nested multisig within Community Council).'
+          break
+      }
+      elements.roleInfo.innerHTML = roleText
+
+      // Update transaction description
+      elements.txDescription.textContent = params.description
+      elements.signingContext.textContent = params.context
+
+      // Update transaction details
+      elements.detailSigningSafe.textContent = params.verifyingContract
+      elements.detailTargetSafe.textContent = params.to
+      elements.detailNonce.textContent = params.nonce.toString()
+      elements.detailApprovingHash.textContent = params.approvingHash
+      
+      // Update calldata display
+      if (elements.detailCalldata) {
+        elements.detailCalldata.textContent = params.data
+      }
+
+      // Show/hide Mento section based on team selection
+      if (selectedTeam === 'council') {
+        elements.mentoSection.classList.remove('hidden')
+      } else {
+        elements.mentoSection.classList.add('hidden')
+        // Reset to regular when switching to cLabs - only target member type options
+        selectedMemberType = 'regular'
+        document.querySelectorAll('[data-member]').forEach(opt => {
+          opt.classList.remove('selected')
+          if (opt.dataset.member === 'regular') {
+            opt.classList.add('selected')
+            opt.querySelector('input').checked = true
+          }
+        })
+      }
+
+      // Hide output when role changes
+      elements.outputSection.classList.add('hidden')
+    }
+
+    function updateConnectionUI() {
+      if (connectedAddress) {
+        elements.statusDisconnected.classList.add('hidden')
+        elements.statusConnected.classList.remove('hidden')
+        elements.connectedAddress.textContent = truncateAddress(connectedAddress)
+        elements.btnConnect.textContent = 'Disconnect'
+        elements.btnSign.disabled = false
+      } else {
+        elements.statusDisconnected.classList.remove('hidden')
+        elements.statusConnected.classList.add('hidden')
+        // Update button text based on connection method
+        if (selectedDerivationPath === 'celo') {
+          elements.btnConnect.textContent = 'Connect Ledger'
+        } else if (selectedConnectionMethod === 'walletconnect') {
+          elements.btnConnect.textContent = 'Connect via WalletConnect'
+        } else {
+          elements.btnConnect.textContent = 'Connect Wallet'
+        }
+        elements.btnSign.disabled = true
+      }
+    }
+
+    // === PLATFORM & CONNECTION METHOD FUNCTIONS ===
+    
+    function getAvailableConnectionMethods() {
+      // Celo path: only Direct USB on PC
+      if (selectedDerivationPath === 'celo') {
+        return [{
+          id: 'ledger-usb',
+          label: 'Direct USB (Ledger)',
+          hint: 'Chrome/Edge desktop only',
+          description: 'Connect Ledger directly via USB using WebHID. Requires Eth Recovery app.'
+        }]
+      }
+      
+      // ETH path
+      const methods = []
+      
+      if (selectedPlatform === 'mobile') {
+        methods.push({
+          id: 'metamask',
+          label: 'Mobile Wallet',
+          hint: 'Recommended',
+          description: 'Use a mobile wallet app (MetaMask, Rabby, Rainbow...) with Ledger Nano X via Bluetooth.'
+        })
+        methods.push({
+          id: 'walletconnect',
+          label: 'WalletConnect',
+          hint: 'Nano S via USB, Nano X via Bluetooth',
+          description: 'Connect via WalletConnect to Ledger Live or other wallet apps.'
+        })
+      } else {
+        // PC
+        methods.push({
+          id: 'metamask',
+          label: 'Browser Wallet',
+          hint: 'Recommended',
+          description: 'Use a browser wallet (MetaMask, Rabby, Frame...) with Ledger connected via USB.'
+        })
+        methods.push({
+          id: 'walletconnect',
+          label: 'WalletConnect',
+          hint: 'Connect to mobile wallet',
+          description: 'Scan QR code with Ledger Live mobile or other WalletConnect wallet.'
+        })
+      }
+      
+      return methods
+    }
+    
+    function renderConnectionMethods() {
+      const methods = getAvailableConnectionMethods()
+      
+      // Preserve existing selection if still valid
+      const currentMethodValid = methods.some(m => m.id === selectedConnectionMethod)
+      const effectiveMethod = currentMethodValid ? selectedConnectionMethod : methods[0].id
+      
+      elements.connectionMethods.innerHTML = methods.map((method) => `
+        <label class="radio-option ${method.id === effectiveMethod ? 'selected' : ''}" data-connection="${method.id}">
+          <input type="radio" name="connection-method" value="${method.id}" ${method.id === effectiveMethod ? 'checked' : ''}>
+          <span class="label">${method.label}</span>
+          <span class="hint">${method.hint}</span>
+        </label>
+        <div class="method-description">${method.description}</div>
+      `).join('')
+      
+      // Only update selectedConnectionMethod if current is invalid
+      if (!currentMethodValid) {
+        selectedConnectionMethod = methods[0].id
+      }
+      
+      // Update instructions
+      updateInstructions()
+      
+      // Update connect button text
+      updateConnectionUI()
+      
+      // Add event listeners to new radio options
+      initConnectionMethodSelection()
+    }
+    
+    function updateInstructions() {
+      let html = ''
+      
+      if (selectedDerivationPath === 'celo') {
+        // Celo path: Direct USB only
+        html = `
+          <ol class="steps-list">
+            <li>Connect <strong>Ledger Nano S or X</strong> to your computer via USB cable</li>
+            <li>Unlock your Ledger device</li>
+            <li>Open the <strong>Eth Recovery</strong> app on Ledger</li>
+            <li>Set your account index above (default: 0)</li>
+            <li>Click <strong>Connect Ledger</strong> below</li>
+            <li>Select your Ledger device in the browser popup</li>
+          </ol>
+          <div class="info-box" style="margin-top: 0.75rem; background: #FEF3C7; border-left-color: #F59E0B; color: #92400E;">
+            <strong>Note:</strong> Celo derivation path requires the <strong>Eth Recovery</strong> app (not Celo app) for EIP-712 support. 
+            Install it via Ledger Live with Developer Mode enabled.
+          </div>
+        `
+      } else if (selectedConnectionMethod === 'metamask') {
+        if (selectedPlatform === 'mobile') {
+          html = `
+            <ol class="steps-list">
+              <li>Pair <strong>Ledger Nano X</strong> with your phone via Bluetooth</li>
+              <li>Unlock Ledger and open the <strong>Ethereum</strong> app</li>
+              <li>Open your mobile wallet app <em>(MetaMask, Rabby, Rainbow...)</em></li>
+              <li>Ensure your Ledger account is connected in wallet settings</li>
+              <li>Open this page in your wallet's built-in browser</li>
+              <li>Tap <strong>Connect Wallet</strong> below and approve</li>
+            </ol>
+          `
+        } else {
+          html = `
+            <ol class="steps-list">
+              <li>Connect <strong>Ledger Nano S or X</strong> to your computer via USB cable</li>
+              <li>Unlock Ledger and open the <strong>Ethereum</strong> app</li>
+              <li>Open your browser wallet <em>(MetaMask, Rabby, Frame...)</em></li>
+              <li>Ensure your Ledger account is selected</li>
+              <li>Click <strong>Connect Wallet</strong> below and approve</li>
+            </ol>
+          `
+        }
+      } else if (selectedConnectionMethod === 'walletconnect') {
+        if (selectedPlatform === 'mobile') {
+          html = `
+            <ol class="steps-list">
+              <li>Connect your Ledger to your phone:
+                <ul style="margin-top: 0.5rem; margin-left: 1rem; list-style: disc;">
+                  <li><strong>Nano X:</strong> Pair via Bluetooth</li>
+                  <li><strong>Nano S/S+:</strong> Connect via USB OTG cable</li>
+                </ul>
+              </li>
+              <li>Open your wallet app <em>(Ledger Live, etc.)</em></li>
+              <li>Unlock Ledger and open the <strong>Ethereum</strong> app</li>
+              <li>Tap <strong>Connect via WalletConnect</strong> below to show QR code</li>
+              <li>In your wallet app, scan the QR code</li>
+              <li>Approve the connection request</li>
+            </ol>
+          `
+        } else {
+          html = `
+            <ol class="steps-list">
+              <li>Click <strong>Connect via WalletConnect</strong> below to show QR code</li>
+              <li>Open your wallet app on mobile <em>(Ledger Live, etc.)</em></li>
+              <li>Connect your Ledger device to your phone</li>
+              <li>Open the <strong>Ethereum</strong> app on Ledger</li>
+              <li>In your wallet app, scan the QR code</li>
+              <li>Approve the connection request</li>
+            </ol>
+          `
+        }
+      }
+      
+      elements.instructionsContent.innerHTML = html
+    }
+    
+    function updatePlatformUI() {
+      // Update platform tabs
+      elements.platformTabs.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.platform === selectedPlatform)
+      })
+      
+      // Update platform info
+      if (selectedPlatform === 'mobile') {
+        elements.platformInfo.innerHTML = 'Signing from your <strong>mobile device</strong>.'
+      } else {
+        elements.platformInfo.innerHTML = 'Signing from your <strong>PC/desktop</strong>.'
+      }
+      
+      // Re-render connection methods for new platform
+      renderConnectionMethods()
+    }
+    
+    function initConnectionMethodSelection() {
+      document.querySelectorAll('[data-connection]').forEach(option => {
+        option.addEventListener('click', () => {
+          const method = option.dataset.connection
+          if (!method) return
+          
+          // Disconnect when switching connection method
+          if (connectedAddress) {
+            disconnect()
+          }
+          
+          // Update selection UI
+          document.querySelectorAll('[data-connection]').forEach(opt => {
+            opt.classList.remove('selected')
+          })
+          option.classList.add('selected')
+          option.querySelector('input').checked = true
+          
+          selectedConnectionMethod = method
+          
+          // Update instructions
+          updateInstructions()
+          
+          // Update connect button
+          updateConnectionUI()
+        })
+      })
+    }
+
+    // === WALLETCONNECT FUNCTIONS ===
+    
+    async function showWalletConnectQR(uri) {
+      try {
+        // Generate QR code
+        await QRCode.toCanvas(elements.wcQrCanvas, uri, {
+          width: 260,
+          margin: 2,
+          color: { dark: '#1A1A1A', light: '#FFFFFF' }
+        })
+        
+        // Set up Ledger Live deep link
+        const ledgerLiveLink = `ledgerlive://wc?uri=${encodeURIComponent(uri)}`
+        elements.wcLedgerLink.href = ledgerLiveLink
+        
+        // Show modal
+        elements.wcQrModal.classList.remove('hidden')
+      } catch (error) {
+        console.error('Failed to generate QR code:', error)
+        showError('Failed to generate QR code')
+      }
+    }
+    
+    function hideWalletConnectQR() {
+      elements.wcQrModal.classList.add('hidden')
+    }
+    
+    // WalletConnect signing modal functions
+    function showWcSigningModal() {
+      elements.wcSigningModal.classList.remove('hidden')
+    }
+    
+    function hideWcSigningModal() {
+      elements.wcSigningModal.classList.add('hidden')
+    }
+    
+    async function connectWalletConnect() {
+      try {
+        elements.btnConnect.disabled = true
+        elements.btnConnect.innerHTML = '<span class="spinner"></span>Loading...'
+        
+        // Load WalletConnect libraries
+        const loadResult = await loadWalletConnectLibs()
+        if (!loadResult.success) {
+          throw new Error(`Failed to load WalletConnect: ${loadResult.error}`)
+        }
+        
+        elements.btnConnect.innerHTML = '<span class="spinner"></span>Initializing...'
+        
+        // Initialize WalletConnect provider
+        wcProvider = await EthereumProvider.init({
+          projectId: WALLETCONNECT_PROJECT_ID,
+          metadata: {
+            name: 'Celo Superchain Ops',
+            description: 'Council Signer for Celo upgrades',
+            url: window.location.origin,
+            icons: []
+          },
+          optionalChains: [1], // Ethereum mainnet
+          optionalMethods: [
+            'eth_signTypedData',
+            'eth_signTypedData_v4',
+            'personal_sign'
+          ],
+          optionalEvents: ['chainChanged', 'accountsChanged'],
+          showQrModal: false // We'll handle QR display ourselves
+        })
+        
+        // Handle URI for QR code display
+        wcProvider.on('display_uri', async (uri) => {
+          console.log('WalletConnect URI:', uri)
+          elements.btnConnect.innerHTML = '<span class="spinner"></span>Scan QR...'
+          await showWalletConnectQR(uri)
+        })
+        
+        // Handle session events
+        wcProvider.on('connect', () => {
+          console.log('WalletConnect session established')
+        })
+        
+        wcProvider.on('disconnect', () => {
+          console.log('WalletConnect session disconnected')
+          disconnect()
+        })
+        
+        wcProvider.on('accountsChanged', (accounts) => {
+          console.log('WalletConnect accounts changed:', accounts)
+          if (accounts.length > 0) {
+            connectedAddress = accounts[0]
+            updateConnectionUI()
+          } else {
+            disconnect()
+          }
+        })
+        
+        // Connect - this triggers display_uri event
+        await wcProvider.connect()
+        
+        // Hide QR modal
+        hideWalletConnectQR()
+        
+        // Create viem wallet client with WalletConnect provider
+        walletClient = createWalletClient({
+          chain: mainnet,
+          transport: custom(wcProvider)
+        })
+        
+        const [address] = await walletClient.getAddresses()
+        connectedAddress = address
+        
+        updateConnectionUI()
+        showSuccess('Connected via WalletConnect!')
+        
+      } catch (error) {
+        console.error('WalletConnect connection error:', error)
+        hideWalletConnectQR()
+        
+        if (error.message?.includes('rejected') || error.message?.includes('User rejected')) {
+          showError('Connection was rejected.')
+        } else if (error.message?.includes('timeout')) {
+          showError('Connection timed out. Please try again.')
+        } else {
+          showError(`WalletConnect error: ${error.message || 'Unknown error'}`)
+        }
+      } finally {
+        elements.btnConnect.disabled = false
+        updateConnectionUI()
+      }
+    }
+
+    // === WALLET FUNCTIONS ===
+    async function connect() {
+      clearMessages()
+
+      // Route to appropriate connection method
+      if (selectedDerivationPath === 'celo' || selectedConnectionMethod === 'ledger-usb') {
+        await connectLedgerUSB()
+        return
+      }
+      
+      if (selectedConnectionMethod === 'walletconnect') {
+        await connectWalletConnect()
+        return
+      }
+
+      // Browser/Mobile wallet connection
+      if (!window.ethereum) {
+        showError('No wallet detected. Please install a browser wallet (MetaMask, Rabby, etc.) or open this page in your mobile wallet\'s browser.')
+        return
+      }
+
+      try {
+        elements.btnConnect.disabled = true
+        elements.btnConnect.innerHTML = '<span class="spinner"></span>Connecting...'
+
+        walletClient = createWalletClient({
+          chain: mainnet,
+          transport: custom(window.ethereum)
+        })
+
+        const [address] = await walletClient.requestAddresses()
+        connectedAddress = address
+
+        // Ensure we're on Ethereum Mainnet
+        try {
+          const currentChainId = await walletClient.getChainId()
+          if (currentChainId !== mainnet.id) {
+            await walletClient.switchChain({ id: mainnet.id })
+          }
+        } catch (switchError) {
+          console.warn('Network switch failed:', switchError)
+          showError('Please switch to Ethereum Mainnet in your wallet.')
+          return
+        }
+
+        updateConnectionUI()
+        showSuccess('Wallet connected successfully!')
+
+      } catch (error) {
+        console.error('Connection error:', error)
+        if (error.code === 4001) {
+          showError('Connection request was cancelled.')
+        } else {
+          showError('Failed to connect. Make sure your wallet is unlocked.')
+        }
+      } finally {
+        elements.btnConnect.disabled = false
+        updateConnectionUI()
+      }
+    }
+
+    // === LEDGER USB CONNECTION (for Celo path) ===
+    async function connectLedgerUSB() {
+      try {
+        elements.btnConnect.disabled = true
+        elements.btnConnect.innerHTML = '<span class="spinner"></span>Loading...'
+
+        // Check browser support first
+        if (!navigator.hid) {
+          throw new Error('WebHID not supported. Please use Chrome or Edge on desktop.')
+        }
+
+        // Load Ledger libraries lazily
+        const loadResult = await loadLedgerUSB()
+        if (!loadResult.success) {
+          throw new Error(`Failed to load Ledger libraries: ${loadResult.error}`)
+        }
+
+        elements.btnConnect.innerHTML = '<span class="spinner"></span>Connecting USB...'
+
+        // Close existing transport if any
+        if (ledgerTransport) {
+          try { await ledgerTransport.close() } catch (e) {}
+          ledgerTransport = null
+          ledgerEthApp = null
+        }
+
+        // Create USB transport
+        ledgerTransport = await TransportWebHID.create()
+        ledgerEthApp = new LedgerEth(ledgerTransport)
+
+        // Get address using Celo derivation path
+        const path = getCeloPath()
+        elements.btnConnect.innerHTML = '<span class="spinner"></span>Getting address...'
+        const result = await ledgerEthApp.getAddress(path, false)
+        
+        // Format address properly
+        connectedAddress = result.address.startsWith('0x') 
+          ? result.address.toLowerCase() 
+          : '0x' + result.address.toLowerCase()
+
+        updateConnectionUI()
+        updateDerivationPathUI()
+        showSuccess(`Connected via Ledger USB at ${getCeloPath()}`)
+
+      } catch (error) {
+        console.error('Ledger USB connection error:', error)
+        
+        if (error.message?.includes('No device selected') || error.name === 'NotFoundError') {
+          showError('No Ledger device selected. Please try again and select your device.')
+        } else if (error.message?.includes('not supported')) {
+          showError(error.message)
+        } else if (error.statusCode === 27904 || error.message?.includes('locked')) {
+          showError('Ledger is locked. Please unlock it and open the Eth Recovery app.')
+        } else if (error.statusCode === 25873 || error.statusCode === 27906) {
+          showError('Please open the Eth Recovery app on your Ledger.')
+        } else if (error.statusCode === 27013) {
+          showError('Action rejected on Ledger device.')
+        } else {
+          showError(error.message || 'Failed to connect Ledger. Ensure it is unlocked with Eth Recovery app open.')
+        }
+        
+        // Clean up on error
+        if (ledgerTransport) {
+          try { await ledgerTransport.close() } catch (e) {}
+          ledgerTransport = null
+          ledgerEthApp = null
+        }
+      } finally {
+        elements.btnConnect.disabled = false
+        updateConnectionUI()
+      }
+    }
+
+    function disconnect() {
+      // Disconnect WalletConnect if active
+      if (wcProvider) {
+        try { wcProvider.disconnect() } catch (e) {}
+        wcProvider = null
+      }
+      
+      // Close Ledger transport if active
+      if (ledgerTransport) {
+        try { ledgerTransport.close() } catch (e) {}
+        ledgerTransport = null
+        ledgerEthApp = null
+      }
+      
+      walletClient = null
+      connectedAddress = null
+      updateConnectionUI()
+      updateDerivationPathUI()
+      elements.outputSection.classList.add('hidden')
+      clearMessages()
+    }
+
+    // Sign with Ledger using EIP-712 hashed message
+    async function signWithLedger(domain, message) {
+      // EIP-712 Domain type hash for Safe
+      const DOMAIN_TYPEHASH = keccak256(toHex('EIP712Domain(uint256 chainId,address verifyingContract)'))
+      
+      // Compute domain separator
+      const domainSeparator = keccak256(
+        encodeAbiParameters(
+          parseAbiParameters('bytes32, uint256, address'),
+          [DOMAIN_TYPEHASH, BigInt(domain.chainId), domain.verifyingContract]
+        )
+      )
+      
+      // SafeTx type hash
+      const SAFE_TX_TYPEHASH = keccak256(
+        toHex('SafeTx(address to,uint256 value,bytes data,uint8 operation,uint256 safeTxGas,uint256 baseGas,uint256 gasPrice,address gasToken,address refundReceiver,uint256 nonce)')
+      )
+      
+      // Compute struct hash
+      const structHash = keccak256(
+        encodeAbiParameters(
+          parseAbiParameters('bytes32, address, uint256, bytes32, uint8, uint256, uint256, uint256, address, address, uint256'),
+          [
+            SAFE_TX_TYPEHASH,
+            message.to,
+            message.value,
+            keccak256(message.data),
+            message.operation,
+            message.safeTxGas,
+            message.baseGas,
+            message.gasPrice,
+            message.gasToken,
+            message.refundReceiver,
+            message.nonce
+          ]
+        )
+      )
+      
+      // Sign with Ledger using signEIP712HashedMessage
+      const path = getCeloPath()
+      console.log('Signing with Ledger at path:', path)
+      console.log('Domain separator:', domainSeparator)
+      console.log('Struct hash:', structHash)
+      
+      const result = await ledgerEthApp.signEIP712HashedMessage(
+        path,
+        domainSeparator.slice(2), // Remove 0x prefix
+        structHash.slice(2)       // Remove 0x prefix
+      )
+      
+      // Construct signature from r, s, v
+      const r = result.r.padStart(64, '0')
+      const s = result.s.padStart(64, '0')
+      const v = parseInt(result.v).toString(16).padStart(2, '0')
+      
+      return '0x' + r + s + v
+    }
+
+    async function sign() {
+      clearMessages()
+
+      // Check connection based on derivation path
+      if (selectedDerivationPath === 'celo') {
+        if (!connectedAddress || !ledgerEthApp) {
+          showError('Please connect your Ledger first.')
+          return
+        }
+      } else {
+        if (!connectedAddress || !walletClient) {
+          showError('Please connect your wallet first.')
+          return
+        }
+      }
+
+      try {
+        elements.btnSign.disabled = true
+        elements.btnSign.innerHTML = '<span class="spinner"></span>Signing...'
+
+        const params = getSigningParams()
+
+        // EIP-712 domain
+        const domain = {
+          chainId: 1,
+          verifyingContract: params.verifyingContract
+        }
+
+        // SafeTx message
+        const message = {
+          to: params.to,
+          value: 0n,
+          data: params.data,
+          operation: 0, // CALL
+          safeTxGas: 0n,
+          baseGas: 0n,
+          gasPrice: 0n,
+          gasToken: CONFIG.gasToken,
+          refundReceiver: CONFIG.refundReceiver,
+          nonce: params.nonce
+        }
+
+        // Sign the typed data
+        let signature
+        if (selectedDerivationPath === 'celo') {
+          signature = await signWithLedger(domain, message)
+        } else if (selectedConnectionMethod === 'walletconnect') {
+          // Show signing modal for WalletConnect
+          showWcSigningModal()
+          try {
+            signature = await walletClient.signTypedData({
+              account: connectedAddress,
+              domain,
+              types: SAFE_TX_TYPES,
+              primaryType: 'SafeTx',
+              message
+            })
+          } finally {
+            hideWcSigningModal()
+          }
+        } else {
+          signature = await walletClient.signTypedData({
+            account: connectedAddress,
+            domain,
+            types: SAFE_TX_TYPES,
+            primaryType: 'SafeTx',
+            message
+          })
+        }
+
+        // Compute the transaction hash (EIP-712 typed data hash)
+        const txHash = hashTypedData({
+          domain,
+          types: SAFE_TX_TYPES,
+          primaryType: 'SafeTx',
+          message
+        })
+
+        // Compute encoded transaction data for verification
+        // This matches Safe's encodeTransactionData format: 0x19 0x01 domainSeparator safeTxHash
+        const txData = encodePacked(
+          ['bytes1', 'bytes1', 'bytes32', 'bytes32'],
+          [
+            '0x19',
+            '0x01',
+            keccak256(encodePacked(
+              ['bytes32', 'uint256', 'address'],
+              [
+                '0x47e79534a245952e8b16893a336b85a3d9ea9fa8c573f3d803afb92a79469218', // DOMAIN_SEPARATOR_TYPEHASH
+                1n, // chainId
+                params.verifyingContract
+              ]
+            )),
+            keccak256(encodePacked(
+              ['bytes32', 'address', 'uint256', 'bytes32', 'uint8', 'uint256', 'uint256', 'uint256', 'address', 'address', 'uint256'],
+              [
+                '0xbb8310d486368db6bd6f849402fdd73ad53d316b5a4b2644ad6efe0f941286d8', // SAFE_TX_TYPEHASH
+                params.to,
+                0n,
+                keccak256(params.data),
+                0,
+                0n,
+                0n,
+                0n,
+                CONFIG.gasToken,
+                CONFIG.refundReceiver,
+                params.nonce
+              ]
+            ))
+          ]
+        )
+
+        // Format output
+        const output = {
+          version: CONFIG.version,
+          hash: txHash,
+          data: txData,
+          sig: signature.slice(2),
+          account: connectedAddress
+        }
+
+        // Display result
+        elements.outputJson.textContent = JSON.stringify(output, null, 2)
+        elements.outputSection.classList.remove('hidden')
+
+        // Scroll to output section (no popup for success)
+        setTimeout(() => {
+          elements.outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }, 100)
+
+      } catch (error) {
+        console.error('Signing error:', error)
+        if (error.code === 4001 || error.statusCode === 27013) {
+          showError('Signing was cancelled.')
+        } else if (error.statusCode === 27904) {
+          showError('Ledger is locked. Please unlock it and open the Eth Recovery app.')
+        } else if (error.statusCode === 25873 || error.statusCode === 27906) {
+          showError('Please open the Eth Recovery app on your Ledger.')
+        } else if (error.message?.includes('Ledger') || error.message?.includes('device')) {
+          showError('Ledger error: Make sure your device is unlocked and the Ethereum app is open.')
+        } else {
+          showError('Failed to sign. Please try again.')
+        }
+      } finally {
+        elements.btnSign.disabled = false
+        elements.btnSign.textContent = 'Sign Transaction'
+      }
+    }
+
+    function copyToClipboard() {
+      const text = elements.outputJson.textContent
+      navigator.clipboard.writeText(text).then(() => {
+        elements.btnCopy.textContent = 'Copied!'
+        setTimeout(() => { elements.btnCopy.textContent = 'Copy' }, 2000)
+      }).catch(() => {
+        showError('Failed to copy to clipboard.')
+      })
+    }
+
+    function downloadJson() {
+      const text = elements.outputJson.textContent
+      const blob = new Blob([text], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'out.json'
+      a.click()
+      URL.revokeObjectURL(url)
+    }
+
+    // === TAB SWITCHING ===
+    function initTabs() {
+      // Team tabs (Council/cLabs)
+      document.querySelectorAll('#team-tabs .tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const team = btn.dataset.team
+          if (!team) return
+
+          document.querySelectorAll('#team-tabs .tab-btn').forEach(b => b.classList.remove('active'))
+          btn.classList.add('active')
+
+          selectedTeam = team
+          updateRoleUI()
+        })
+      })
+      
+      // Platform tabs (Mobile/PC)
+      document.querySelectorAll('#platform-tabs .tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const platform = btn.dataset.platform
+          if (!platform) return
+          
+          // Disconnect when switching platform
+          if (connectedAddress) {
+            disconnect()
+          }
+          
+          selectedPlatform = platform
+          updatePlatformUI()
+        })
+      })
+    }
+
+    function initMemberTypeSelection() {
+      // Only target member-type radio options (not derivation path)
+      document.querySelectorAll('[data-member]').forEach(option => {
+        option.addEventListener('click', () => {
+          const memberType = option.dataset.member
+          if (!memberType) return
+
+          document.querySelectorAll('[data-member]').forEach(opt => {
+            opt.classList.remove('selected')
+          })
+          option.classList.add('selected')
+          option.querySelector('input').checked = true
+
+          selectedMemberType = memberType
+          updateRoleUI()
+        })
+      })
+    }
+
+    function initDerivationPathSelection() {
+      // Derivation path radio options
+      document.querySelectorAll('[data-path]').forEach(option => {
+        option.addEventListener('click', () => {
+          const path = option.dataset.path
+          if (!path) return
+
+          // Disconnect when switching derivation path
+          if (connectedAddress) {
+            disconnect()
+          }
+
+          document.querySelectorAll('[data-path]').forEach(opt => {
+            opt.classList.remove('selected')
+          })
+          option.classList.add('selected')
+          option.querySelector('input').checked = true
+
+          selectedDerivationPath = path
+          updateDerivationPathUI()
+        })
+      })
+
+      // Account index change
+      elements.accountIndex?.addEventListener('input', () => {
+        elements.pathPreview.textContent = getCeloPath()
+        elements.pathInfo.innerHTML = `Using Celo derivation path <code>${getCeloPath()}</code>. Desktop only (Chrome/Edge + USB).`
+        
+        // Disconnect when changing account index
+        if (connectedAddress && selectedDerivationPath === 'celo') {
+          disconnect()
+        }
+      })
+    }
+
+    // === EVENT LISTENERS ===
+    elements.btnConnect.addEventListener('click', () => {
+      if (connectedAddress) {
+        disconnect()
+      } else {
+        connect()
+      }
+    })
+
+    elements.btnSign.addEventListener('click', sign)
+    elements.btnCopy.addEventListener('click', copyToClipboard)
+    elements.btnDownload.addEventListener('click', downloadJson)
+    
+    // WalletConnect modal cancel button
+    elements.wcCancelBtn.addEventListener('click', () => {
+      hideWalletConnectQR()
+      // Also try to abort any pending connection
+      if (wcProvider) {
+        try { wcProvider.disconnect() } catch (e) {}
+        wcProvider = null
+      }
+      updateConnectionUI()
+    })
+    
+    // WalletConnect signing modal cancel button
+    elements.wcSigningCancel.addEventListener('click', () => {
+      hideWcSigningModal()
+      showError('Please reject the signing request in your wallet app to cancel.')
+    })
+
+    // Listen for account changes
+    if (window.ethereum) {
+      window.ethereum.on('accountsChanged', (accounts) => {
+        if (accounts.length === 0) {
+          disconnect()
+        } else if (selectedConnectionMethod === 'metamask') {
+          connectedAddress = accounts[0]
+          updateConnectionUI()
+        }
+      })
+
+      window.ethereum.on('chainChanged', () => {
+        window.location.reload()
+      })
+    }
+
+    // Initialize
+    initTabs()
+    initMemberTypeSelection()
+    initDerivationPathSelection()
+    updateRoleUI()
+    updateDerivationPathUI()  // This now calls renderConnectionMethods()
+    updateConnectionUI()
+  </script>
+</body>
+</html>
