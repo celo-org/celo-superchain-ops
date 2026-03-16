@@ -1,0 +1,15 @@
+{
+  "DelayedWETHImpl": "TODO",
+  "OptimismPortal2Impl": "TODO",
+  "PreimageOracleSingleton": "TODO",
+  "MipsSingleton": "TODO",
+  "SystemConfigImpl": "TODO",
+  "L1CrossDomainMessengerImpl": "TODO",
+  "L1ERC721BridgeImpl": "TODO",
+  "L1StandardBridgeImpl": "TODO",
+  "OptimismMintableERC20FactoryImpl": "TODO",
+  "DisputeGameFactoryImpl": "TODO",
+  "AnchorStateRegistryImpl": "TODO",
+  "SuperchainConfigImpl": "TODO",
+  "ProtocolVersionsImpl": "TODO"
+}

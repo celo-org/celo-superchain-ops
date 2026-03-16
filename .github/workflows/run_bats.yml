@@ -30,4 +30,4 @@ jobs:
         run: just install-eip712sign
       - name: Run tests
         shell: bash
-        run: RPC_URL=https://ethereum-rpc.publicnode.com ./test.sh
+        run: NETWORK=mainnet RPC_URL=https://ethereum-rpc.publicnode.com ./test.sh

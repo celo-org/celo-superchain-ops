@@ -1,8 +1,7 @@
 set dotenv-load := true
 
-export PARENT_SAFE_ADDRESS := "0x4092A77bAF58fef0309452cEaCb09221e556E112"
-export CLABS_SAFE_ADDRESS := "0x9Eb44Da23433b5cAA1c87e35594D15FcEb08D34d"
-export COUNCIL_SAFE_ADDRESS := "0xC03172263409584f7860C25B6eB4985f0f6F4636"
+# Network selection (mainnet, sepolia)
+NETWORK := env_var_or_default("NETWORK", "mainnet")
 
 export VALUE := "0"
 export TX_CALL := "0"
@@ -22,13 +21,27 @@ install-eip712sign:
     REPO_ROOT=$(git rev-parse --show-toplevel)
     GOBIN="${REPO_ROOT}" go install github.com/base/eip712sign@v0.0.11
 
+check-network network:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    NETWORK={{network}}
+    case $NETWORK in
+    "mainnet"|"sepolia")
+        echo "Detected network: $NETWORK"
+        ;;
+    *)
+        echo "Invalid network: $NETWORK" && exit 1
+        ;;
+    esac
+
 check-version version:
     #!/usr/bin/env bash
     set -euo pipefail
 
     VERSION={{version}}
     case $VERSION in
-    "v2"|"v3"|"succinct"|"succinct-v102")
+    "v2"|"v3"|"v4"|"v5"|"succ-v1"|"succ-v102"|"succ-v2")
         echo "Detected version: $VERSION"
         ;;
     *)
@@ -57,18 +70,18 @@ simulate version:
     VERSION={{version}}
     just check-version $VERSION
 
-    case $VERSION in
-    "succinct-v102")
+    NETWORK={{NETWORK}}
+    just check-network $NETWORK
+
+    case "${NETWORK}/${VERSION}" in
+    "mainnet/succ-v102")
         URL="https://dashboard.tenderly.co/explorer/vnet/39498d1a-4638-47d3-8bbc-010de8f718ce/tx/0x27f7a467c7d7faa3aa9934ffc2810a4d910e2404783aed427a5fa1f732f7e12d"
         ;;
-    "succinct")
+    "mainnet/succ-v1")
         URL="https://dashboard.tenderly.co/explorer/vnet/053b540e-ae59-42c8-80a0-1250820dc894/tx/0x55742ec449b9659f3a5662c5b2f6d6a92d9d955a39eeaaeaf1df1726a3f2ff3f"
         ;;
-    "v2"|"v3")
-        echo "Simulation URL inactive" && exit 0
-        ;;
     *)
-        echo "Invalid version: $VERSION" && exit 1
+        echo "Simulation URL inactive" && exit 0
         ;;
     esac
 
@@ -77,6 +90,25 @@ simulate version:
 sign version team hd_path='' grand_child='':
     #!/usr/bin/env bash
     set -euo pipefail
+
+    NETWORK={{NETWORK}}
+    just check-network $NETWORK
+
+    case $NETWORK in
+    "mainnet")
+        PARENT_SAFE_ADDRESS="0x4092A77bAF58fef0309452cEaCb09221e556E112"
+        CLABS_SAFE_ADDRESS="0x9Eb44Da23433b5cAA1c87e35594D15FcEb08D34d"
+        COUNCIL_SAFE_ADDRESS="0xC03172263409584f7860C25B6eB4985f0f6F4636"
+        REFUND_RECEIVER="0x95ffac468e37ddeef407ffef18f0cc9e86d8f13b"
+        ;;
+    "sepolia")
+        PARENT_SAFE_ADDRESS="0x009A6Ac23EeBe98488ED28A52af69Bf46F1C18cb"
+        CLABS_SAFE_ADDRESS="0x769b480A8036873a2a5EB01FE39278e5Ab78Bb27"
+        COUNCIL_SAFE_ADDRESS="0x3b00043E8C82006fbE5f56b47F9889a04c20c5d6"
+        RPC_URL="${SEPOLIA_RPC_URL:?Set SEPOLIA_RPC_URL in .env}"
+        REFUND_RECEIVER="0x5e60d897Cd62588291656b54655e98ee73f0aabF"
+        ;;
+    esac
 
     VERSION={{version}}
     just check-version $VERSION
@@ -87,9 +119,12 @@ sign version team hd_path='' grand_child='':
     HD_PATH="{{hd_path}}"
     GRAND_CHILD="{{grand_child}}"
 
-    TARGET=$(cat upgrades/$VERSION.json | jq -r .target)
-    PARENT_CALLDATA=$(cat upgrades/$VERSION.json | jq -r .calldata)
-    PARENT_NONCE=$(cat upgrades/$VERSION.json | jq -r .nonce.parent)
+    UPGRADE_FILE=$(ls upgrades/${NETWORK}/[0-9][0-9]-${VERSION}.json 2>/dev/null)
+    if [ -z "$UPGRADE_FILE" ]; then echo "No upgrade file found for $VERSION" && exit 1; fi
+
+    TARGET=$(cat $UPGRADE_FILE | jq -r .target)
+    PARENT_CALLDATA=$(cat $UPGRADE_FILE | jq -r .calldata)
+    PARENT_NONCE=$(cat $UPGRADE_FILE | jq -r .nonce.parent)
     PARENT_TX_HASH=$(cast call $PARENT_SAFE_ADDRESS \
         "getTransactionHash(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
         $TARGET $VALUE $PARENT_CALLDATA $TX_DELEGATECALL $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $PARENT_NONCE \
@@ -101,11 +136,11 @@ sign version team hd_path='' grand_child='':
     case $TEAM in
     "clabs")
         CHILD_SAFE_ADDRESS=$CLABS_SAFE_ADDRESS
-        CHILD_NONCE=$(cat upgrades/$VERSION.json | jq -r .nonce.clabs)
+        CHILD_NONCE=$(cat $UPGRADE_FILE | jq -r .nonce.clabs)
         ;;
     "council")
         CHILD_SAFE_ADDRESS=$COUNCIL_SAFE_ADDRESS
-        CHILD_NONCE=$(cat upgrades/$VERSION.json | jq -r .nonce.council)
+        CHILD_NONCE=$(cat $UPGRADE_FILE | jq -r .nonce.council)
         ;;
     esac
     CHILD_TX_HASH=$(cast call $CHILD_SAFE_ADDRESS \
@@ -136,7 +171,7 @@ sign version team hd_path='' grand_child='':
     else
         echo "Attempting to generate payload for grand child at: $GRAND_CHILD"
         GRAND_CHILD_VERSION=$(cast call $GRAND_CHILD "VERSION()(string)" -r $RPC_URL)
-        GRAND_CHILD_NONCE=$(cat upgrades/$VERSION.json | jq -r .nonce.grand_child)
+        GRAND_CHILD_NONCE=$(cat $UPGRADE_FILE | jq -r .nonce.grand_child)
         echo "Detected grand child at version: $GRAND_CHILD_VERSION with nonce: $GRAND_CHILD_NONCE"
 
         GRAND_CHILD_CALLDATA=$(cast calldata 'approveHash(bytes32)' $CHILD_TX_HASH)
@@ -206,7 +241,7 @@ sign_ledger version team ledger_app account_index='0' grand_child='':
     just sign {{version}} {{team}} "$HD_PATH" {{grand_child}}
 
 create_json version hash data sig account:
-    echo "{\"version\": \"{{version}}\", \"hash\": \"{{hash}}\", \"data\": \"{{data}}\", \"sig\": \"{{sig}}\", \"account\": \"{{account}}\"}" > out.json
+    echo "{\"version\": \"{{version}}\", \"network\": \"{{NETWORK}}\", \"hash\": \"{{hash}}\", \"data\": \"{{data}}\", \"sig\": \"{{sig}}\", \"account\": \"{{account}}\"}" > out.json
 
 print_json grand_child='':
     #!/usr/bin/env bash
@@ -224,18 +259,4 @@ print_json grand_child='':
     fi
     cat out.json | jq
 
-exec safe to calldata op sig:
-    #!/usr/bin/env bash
-    set -euo pipefail
 
-    SAFE={{safe}}
-    TO={{to}}
-    CALLDATA={{calldata}}
-    OP={{op}}
-    SIG={{sig}}
-
-    cast send $SAFE \
-        "execTransaction(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,bytes)" \
-        $TO $VALUE $CALLDATA $OP $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $SIG \
-        --private-key $SENDER_PK \
-        -r $RPC_URL
