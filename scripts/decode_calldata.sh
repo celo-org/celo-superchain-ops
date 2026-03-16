@@ -104,6 +104,21 @@ if echo $CALLDATA | grep -q "14f6b1a3"; then
     echo ""
 fi
 
+if echo $CALLDATA | grep -q "f2fde38b"; then
+    FOUND_KNOWN_SELECTOR=true
+    echo "=== Transfer Ownership ==="
+    echo "--------------------------"
+    echo "Found: transferOwnership(address)"
+    echo "Selector: 0xf2fde38b"
+    echo ""
+
+    TRANSFER_ADDR_HEX=$(echo $CALLDATA | grep -o "f2fde38b.\{64\}" | head -1 | cut -c33-72)
+    TRANSFER_NEW_OWNER="0x$TRANSFER_ADDR_HEX"
+
+    echo "New Owner: $TRANSFER_NEW_OWNER"
+    echo ""
+fi
+
 if [ "$FOUND_KNOWN_SELECTOR" = false ]; then
     echo "Decoding full calldata..."
     echo "------------------------"
@@ -115,15 +130,28 @@ echo "=== Summary ==="
 echo "---------------"
 echo ""
 
-if [ -n "${GAME_TYPE:-}" ] && [ -n "${IMPL_GAME_TYPE:-}" ]; then
-    echo "The upgrade performs TWO operations on DisputeGameFactory:"
+OP_COUNT=0
+SUMMARY_LINES=""
+
+if [ -n "${GAME_TYPE:-}" ]; then
+    OP_COUNT=$((OP_COUNT + 1))
+    SUMMARY_LINES="${SUMMARY_LINES}${OP_COUNT}. setInitBond(gameType=$GAME_TYPE, bond=$BOND_ETH ETH)\n"
+fi
+
+if [ -n "${IMPL_GAME_TYPE:-}" ]; then
+    OP_COUNT=$((OP_COUNT + 1))
+    SUMMARY_LINES="${SUMMARY_LINES}${OP_COUNT}. setImplementation(gameType=$IMPL_GAME_TYPE, impl=$IMPL_ADDR)\n"
+fi
+
+if [ -n "${TRANSFER_NEW_OWNER:-}" ]; then
+    OP_COUNT=$((OP_COUNT + 1))
+    SUMMARY_LINES="${SUMMARY_LINES}${OP_COUNT}. transferOwnership(newOwner=$TRANSFER_NEW_OWNER)\n"
+fi
+
+if [ "$OP_COUNT" -gt 0 ]; then
+    echo "The upgrade performs $OP_COUNT operation(s):"
     echo ""
-    echo "1. setInitBond(gameType=$GAME_TYPE, bond=$BOND_ETH ETH)"
-    echo "2. setImplementation(gameType=$IMPL_GAME_TYPE, impl=$IMPL_ADDR)"
-elif [ -n "${IMPL_GAME_TYPE:-}" ]; then
-    echo "The upgrade performs ONE operation on DisputeGameFactory:"
-    echo ""
-    echo "setImplementation(gameType=$IMPL_GAME_TYPE, impl=$IMPL_ADDR)"
+    echo -e "$SUMMARY_LINES"
 else
     echo "Target: $TARGET"
     echo "Calldata: $CALLDATA"
