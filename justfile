@@ -219,6 +219,54 @@ sign version team hd_path='' grand_child='':
         just create_json $VERSION $GRAND_CHILD_TX_HASH $GRAND_CHILD_TX_DATA $SIG $ACCOUNT
     fi
 
+sign_all team hd_path='' grand_child='':
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    VERSIONS=("v4" "v5" "succ-v2")
+
+    for VERSION in "${VERSIONS[@]}"; do
+        echo ""
+        echo "========================================="
+        echo "  Signing: $VERSION"
+        echo "========================================="
+        echo ""
+        just sign $VERSION {{team}} "{{hd_path}}" "{{grand_child}}"
+        mv out.json out-${VERSION}.json
+        echo "Saved to out-${VERSION}.json"
+    done
+
+    echo ""
+    echo "========================================="
+    echo "  All signatures collected"
+    echo "========================================="
+    for VERSION in "${VERSIONS[@]}"; do
+        echo "  $VERSION -> out-${VERSION}.json"
+    done
+    echo ""
+    echo "Send all out-*.json files to the facilitator."
+
+sign_all_ledger team ledger_app account_index='0' grand_child='':
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    LEDGER_APP="{{ledger_app}}"
+    ACCOUNT_INDEX="{{account_index}}"
+
+    case $LEDGER_APP in
+    "celo")
+        HD_PATH="m/44'/52752'/$ACCOUNT_INDEX'/0/0"
+        ;;
+    "eth")
+        HD_PATH="m/44'/60'/$ACCOUNT_INDEX'/0/0"
+        ;;
+    *)
+        echo "Invalid ledger_app: $LEDGER_APP. Must be 'celo' or 'eth'." && exit 1
+        ;;
+    esac
+
+    just sign_all {{team}} "$HD_PATH" {{grand_child}}
+
 sign_ledger version team ledger_app account_index='0' grand_child='':
     #!/usr/bin/env bash
     set -euo pipefail
