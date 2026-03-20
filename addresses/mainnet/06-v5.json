@@ -1,0 +1,15 @@
+{
+  "DelayedWETHImpl": "0xb86a464cc743440fddaa43900e05318ef4818b29",
+  "OptimismPortal2Impl": "0x2c431080fc733e259654f3b91e39468d9a85ac9b",
+  "PreimageOracleSingleton": "0x1fb8cdfc6831fc866ed9c51af8817da5c287add3",
+  "MipsSingleton": "0x6463dee3828677f6270d83d45408044fc5edb908",
+  "SystemConfigImpl": "0xe5dc3c0a3489b81a6f3ae3bb49bf9ccbfb85a3db",
+  "L1CrossDomainMessengerImpl": "0xe45d2d835d0b2d3c7f4fee1eaa19a068d0ba8a88",
+  "L1ERC721BridgeImpl": "0x74f1ac50eb0be98853805d381c884f5f9abdecf9",
+  "L1StandardBridgeImpl": "0xfa707f45a23370d9154af4457401274e38fa2d8a",
+  "OptimismMintableERC20FactoryImpl": "0x149bd036f5f57d0ff4b5f102c9d46e3c0eb2c016",
+  "DisputeGameFactoryImpl": "0x74fac1d45b98bae058f8f566201c9a81b85c7d50",
+  "AnchorStateRegistryImpl": "0xeb69cc681e8d4a557b30dffbad85affd47a2cf2e",
+  "SuperchainConfigImpl": "0xb08cc720f511062537ca78bdb0ae691f04f5a957",
+  "ProtocolVersionsImpl": "0x1f734b89bb1b422b9910118fb8d44c06e33d4dda"
+}
