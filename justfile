@@ -74,9 +74,9 @@ simulate version='':
         case "${NETWORK}/$1" in
         "mainnet/succ-v1")  echo "https://dashboard.tenderly.co/explorer/vnet/053b540e-ae59-42c8-80a0-1250820dc894/tx/0x55742ec449b9659f3a5662c5b2f6d6a92d9d955a39eeaaeaf1df1726a3f2ff3f" ;;
         "mainnet/succ-v102") echo "https://dashboard.tenderly.co/explorer/vnet/39498d1a-4638-47d3-8bbc-010de8f718ce/tx/0x27f7a467c7d7faa3aa9934ffc2810a4d910e2404783aed427a5fa1f732f7e12d" ;;
-        "mainnet/v4")       echo "https://dashboard.tenderly.co/c-labs/project/testnet/9f9b9ed3-6527-4a30-958d-8942e6ebe434/tx/0x962ef321746bb075a44226bdd645b469e761fb7dbdeb42869902b6e7ebc3b7ef" ;;
-        "mainnet/v5")       echo "https://dashboard.tenderly.co/c-labs/project/testnet/9f9b9ed3-6527-4a30-958d-8942e6ebe434/tx/0x833bca6071ad1cf1c82acbb58fccefe75e06978454431c0597819cb743363bbb" ;;
-        "mainnet/succ-v2")  echo "https://dashboard.tenderly.co/c-labs/project/testnet/9f9b9ed3-6527-4a30-958d-8942e6ebe434/tx/0x74a2518b93017f39c888abd116ebf977425d788874a57ab52dd5d528c1977159" ;;
+        "mainnet/v4")       echo "https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0x962ef321746bb075a44226bdd645b469e761fb7dbdeb42869902b6e7ebc3b7ef" ;;
+        "mainnet/v5")       echo "https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0x833bca6071ad1cf1c82acbb58fccefe75e06978454431c0597819cb743363bbb" ;;
+        "mainnet/succ-v2")  echo "https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0xce7dc169f6885f8ca937135a562068e3444e6c7fc299ffb7e2341372ed006dda" ;;
         *) echo "" ;;
         esac
     }
