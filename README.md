@@ -59,7 +59,7 @@ Three governance proposals executed via the parent multisig:
 1. **v4** and **v5**: Proxy implementation upgrades via OPCM (`upgrade()`)
 2. **succ-v2**: Multicall3 batch that:
    - Calls `setImplementation(42, impl)` on DisputeGameFactory — registers the new `OPSuccinctFaultDisputeGame` at [`0xFf63D9D10EA299fb6629245C903062b1A97C6cd3`](https://etherscan.io/address/0xFf63D9D10EA299fb6629245C903062b1A97C6cd3)
-   - Calls `transferOwnership(newOwner)` on SystemConfig — transfers to cLabs Safe
+   - Calls `transferOwnership(newOwner)` on SystemConfig — transfers ownership to cLabs Safe
 
 See [addresses/mainnet/07-succ-v2.json](./addresses/mainnet/07-succ-v2.json) for deployed contract addresses.
 
@@ -118,10 +118,20 @@ just simulate v4
 ### Verification
 
 ```bash
-# Decode succ-v2 calldata
+# Decode v4 calldata (OPCM upgrade)
+cast calldata-decode "upgrade((address,address,bytes32)[],bool)" \
+  $(jq -r '.calldata' upgrades/mainnet/05-v4.json)
+
+# Decode v5 calldata (OPCM upgrade)
+cast calldata-decode "upgrade((address,address,bytes32)[],bool)" \
+  $(jq -r '.calldata' upgrades/mainnet/06-v5.json)
+
+# Decode succ-v2 calldata (Multicall3 aggregate3)
 cast calldata-decode "aggregate3((address,bool,bytes)[])" \
   $(jq -r '.calldata' upgrades/mainnet/07-succ-v2.json)
 ```
+
+All three upgrades have been executed and verified on **Sepolia** prior to mainnet signing.
 
 ### Ledger Workaround for Celo App Users
 
