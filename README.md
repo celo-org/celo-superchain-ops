@@ -58,7 +58,7 @@ Three governance proposals executed via the parent multisig:
 
 1. **v4** and **v5**: Proxy implementation upgrades via OPCM (`upgrade()`)
 2. **succ-v2**: Multicall3 batch that:
-   - Calls `setImplementation(42, impl)` on DisputeGameFactory — registers the new `OPSuccinctFaultDisputeGame` at [`0xFf63D9D10EA299fb6629245C903062b1A97C6cd3`](https://etherscan.io/address/0xFf63D9D10EA299fb6629245C903062b1A97C6cd3)
+   - Calls `setImplementation(42, impl)` on DisputeGameFactory — registers the new `OPSuccinctFaultDisputeGame` at [`0xE7bd695d6A17970A2D9dB55cfeF7F2024d630aE1`](https://etherscan.io/address/0xE7bd695d6A17970A2D9dB55cfeF7F2024d630aE1)
    - Calls `transferOwnership(newOwner)` on SystemConfig — transfers ownership to cLabs Safe
 
 See [addresses/mainnet/07-succ-v2.json](./addresses/mainnet/07-succ-v2.json) for deployed contract addresses.
@@ -111,9 +111,9 @@ just simulate v4
 
 | Version | Tenderly Simulation |
 |---------|---------------------|
-| v4 | [View on Tenderly](https://dashboard.tenderly.co/c-labs/project/testnet/9f9b9ed3-6527-4a30-958d-8942e6ebe434/tx/0x962ef321746bb075a44226bdd645b469e761fb7dbdeb42869902b6e7ebc3b7ef) |
-| v5 | [View on Tenderly](https://dashboard.tenderly.co/c-labs/project/testnet/9f9b9ed3-6527-4a30-958d-8942e6ebe434/tx/0x833bca6071ad1cf1c82acbb58fccefe75e06978454431c0597819cb743363bbb) |
-| succ-v2 | [View on Tenderly](https://dashboard.tenderly.co/c-labs/project/testnet/9f9b9ed3-6527-4a30-958d-8942e6ebe434/tx/0x74a2518b93017f39c888abd116ebf977425d788874a57ab52dd5d528c1977159) |
+| v4 | [View on Tenderly](https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0x962ef321746bb075a44226bdd645b469e761fb7dbdeb42869902b6e7ebc3b7ef) |
+| v5 | [View on Tenderly](https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0x833bca6071ad1cf1c82acbb58fccefe75e06978454431c0597819cb743363bbb) |
+| succ-v2 | [View on Tenderly](https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0xce7dc169f6885f8ca937135a562068e3444e6c7fc299ffb7e2341372ed006dda) |
 
 ### Verification
 
