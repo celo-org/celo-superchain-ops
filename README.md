@@ -40,196 +40,123 @@ Follow these instructions for your shell, then restart your terminal or run `sou
 
 </details>
 
-## Current Release: OpSuccinct v1.0.2 Upgrade
+## Current Release: Jovian Upgrade (v4 + v5 + succ-v2)
 
-This section outlines the process for signing the Celo Mainnet OpSuccinct v1.0.2 upgrade. As a signer, you are approving the transaction that will execute this upgrade on-chain.
+This upgrade bundles three transactions that must be signed together:
 
-**Previous upgrades:** The v2, v3 (Isthmus), and succinct (v1.0.0) upgrades have been successfully executed. This repository now supports individual upgrades on a per-release basis.
+| TX | Version | Description |
+|----|---------|-------------|
+| 1 | **v4** | Proxy implementation upgrade |
+| 2 | **v5** | Proxy implementation upgrade |
+| 3 | **succ-v2** | Register new OPSuccinctFaultDisputeGame + transfer SystemConfig ownership |
 
-### What is the OpSuccinct v1.0.2 Upgrade?
+**Previous upgrades:** v2, v3 (Isthmus), succ-v1 (OpSuccinct v1.0.0), and succ-v102 (OpSuccinct v1.0.2) have been executed.
 
-The OpSuccinct v1.0.2 upgrade updates Celo Mainnet's fault proof system with the latest **OP Succinct v1.0.2** implementation. This upgrade:
+### What You're Signing
 
-1. **Fixes potential proving failures** for blocks that reference L1 blocks with large excess blob gas
-2. **Reduces on-chain costs by 9x** through concurrent range splitting proof generation in the succinct-proposer
-3. **Registers newly deployed contracts** that were deployed using deterministic CREATE3:
-   - `AccessManager` at `0xF59a19c5578291cB7fd22618D16281aDf76f2816`: Manages permissions for the OP Succinct system
-   - `OPSuccinctFaultDisputeGame` at `0xc5bd131ceaeb72f15c66418bc2668332ab99de37`: Implements ZK-proof based dispute resolution (v1.0.2)
+Three governance proposals executed via the parent multisig:
 
-The contracts were deployed using CREATE3 deterministic deployment. The governance proposal you're signing registers these upgraded contracts with the DisputeGameFactory.
+1. **v4** and **v5**: Proxy implementation upgrades via OPCM (`upgrade()`)
+2. **succ-v2**: Multicall3 batch that:
+   - Calls `setImplementation(42, impl)` on DisputeGameFactory — registers the new `OPSuccinctFaultDisputeGame` at [`0xFf63D9D10EA299fb6629245C903062b1A97C6cd3`](https://etherscan.io/address/0xFf63D9D10EA299fb6629245C903062b1A97C6cd3)
+   - Calls `transferOwnership(newOwner)` on SystemConfig — transfers to cLabs Safe
 
-### Upgrade Workflow Status
+See [addresses/mainnet/07-succ-v2.json](./addresses/mainnet/07-succ-v2.json) for deployed contract addresses.
 
-This signing phase is part of a larger upgrade process:
+### Signing Process
 
-- ✅ **Pre-calculate deployment addresses** using CREATE3 deterministic deployment
-- ✅ **Deploy OpSuccinct v1.0.2 contracts** to pre-calculated addresses with finalized parameters
-  - AccessManager: `0xF59a19c5578291cB7fd22618D16281aDf76f2816`
-  - OPSuccinctFaultDisputeGame: `0xc5bd131ceaeb72f15c66418bc2668332ab99de37`
-- ✅ **Generate upgrade calldata** with initBond set to 0.01 ETH
-- ✅ **Simulate upgrade** locally, on forked network, and in Tenderly vnet
-- ✅ **Prepare signing infrastructure** and test with this repository
-- 🔄 **Gather signatures from multisig signers** ← **You are here**
-- ⏳ **Execute governance proposal** to register OP Succinct v1.0.2 games in DisputeGameFactory
-- ⏳ **Switch to OP Succinct v1.0.2 proposer** for improved proof generation
-
-### Summary for Signers
-
-#### What You're Signing
-
-A governance proposal to register pre-deployed OpSuccinct v1.0.2 contracts with DisputeGameFactory:
-
-**Update implementation:** OPSuccinctFaultDisputeGame at `0xc5bd131ceaeb72f15c66418bc2668332ab99de37`
-
-#### Pre-Deployed Contracts (Already on Mainnet)
-
-- **AccessManager:** [`0xF59a19c5578291cB7fd22618D16281aDf76f2816`](https://etherscan.io/address/0xF59a19c5578291cB7fd22618D16281aDf76f2816)
-- **OPSuccinctFaultDisputeGame:** [`0xc5bd131ceAEb72F15C66418bc2668332AB99DE37`](https://etherscan.io/address/0xc5bd131ceAEb72F15C66418bc2668332AB99DE37)
-
-See [addresses/succinct-v102.json](./addresses/succinct-v102.json) for details.
-
-#### How to Verify
+Use `sign_all_ledger` to sign all three transactions in one flow:
 
 ```bash
-# Decode calldata to see exact operations
-./scripts/decode_succinct-v102_calldata.sh
-
-# Simulate in Tenderly
-just simulate succinct-v102
-
-# Verify bytecode (see section below for full instructions)
-./scripts/compare_succinct-v102.sh /path/to/op-succinct/contracts/out
+just sign_all_ledger <team> <ledger_app> [account_index] [grand_child]
 ```
 
-#### Signing Process
+This signs v4, v5, and succ-v2 sequentially and produces three output files:
+- `out-v4.json`
+- `out-v5.json`
+- `out-succ-v2.json`
 
-1. Run: `just sign_ledger succinct-v102 [clabs|council] [eth|celo] <index>`
-2. Sign on your Ledger device
-3. Verify the `out.json` file contains your correct account address
-4. Send `out.json` to the facilitator (cLabs)
+**Send all three files to the facilitator.**
 
-**Notes:**
-- 📍 Default path: Ethereum (`m/44'/60'/<index>'/0/0`)
-- 📱 Celo app: See [Ledger workaround](#ledger-workaround-for-celo-app-users)
-- 🔗 Nested multisig: Add address as final parameter (see examples below)
-
-### Verification Options
-
-<details>
-<summary><strong>Option 1: Decode Calldata</strong> (View exact operations)</summary>
+#### Examples
 
 ```bash
-./scripts/decode_succinct-v102_calldata.sh
+# Council team, Ethereum app, default account
+just sign_all_ledger council eth
+
+# cLabs team, Ethereum app, account index 1
+just sign_all_ledger clabs eth 1
+
+# Council team with nested multisig (e.g. Mento)
+just sign_all_ledger council eth 0 0xMentoMultisigAddress
 ```
 
-This shows:
-- **setImplementation:** gameType=42, impl=0xc5bd131ceaeb72f15c66418bc2668332ab99de37
+To sign a single version individually:
+```bash
+just sign_ledger v4 clabs eth
+just sign_ledger succ-v2 council eth 0 0xMentoMultisigAddress
+```
 
-</details>
+### Tenderly Simulations
 
-<details>
-<summary><strong>Option 2: Simulate in Tenderly</strong> (Visual confirmation)</summary>
+All three transactions have been simulated on a Tenderly fork of Ethereum mainnet:
 
 ```bash
-just simulate succinct-v102
+# Show all simulation links
+just simulate
+
+# Show a specific version
+just simulate v4
 ```
 
-Displays simulation URL showing governance proposal execution. Enable "Dev" mode in Tenderly UI for best results.
+| Version | Tenderly Simulation |
+|---------|---------------------|
+| v4 | [View on Tenderly](https://dashboard.tenderly.co/c-labs/project/testnet/9f9b9ed3-6527-4a30-958d-8942e6ebe434/tx/0x962ef321746bb075a44226bdd645b469e761fb7dbdeb42869902b6e7ebc3b7ef) |
+| v5 | [View on Tenderly](https://dashboard.tenderly.co/c-labs/project/testnet/9f9b9ed3-6527-4a30-958d-8942e6ebe434/tx/0x833bca6071ad1cf1c82acbb58fccefe75e06978454431c0597819cb743363bbb) |
+| succ-v2 | [View on Tenderly](https://dashboard.tenderly.co/c-labs/project/testnet/9f9b9ed3-6527-4a30-958d-8942e6ebe434/tx/0x74a2518b93017f39c888abd116ebf977425d788874a57ab52dd5d528c1977159) |
 
-See [TENDERLY.md](./TENDERLY.md) for detailed verification guide.
-
-</details>
-
-<details>
-<summary><strong>Option 3: Verify Bytecode</strong> (Check on-chain contracts)</summary>
-
-Contracts are deployed using CREATE3 deterministic deployment.
+### Verification
 
 ```bash
-# Clone and build op-succinct contracts
-git clone https://github.com/celo-org/op-succinct
-cd op-succinct && git checkout v1.0.2
-cd contracts && forge build
-
-# Compare on-chain bytecode with artifacts
-cd /path/to/celo-superchain-ops
-./scripts/compare_succinct-v102.sh /path/to/op-succinct/contracts/out
+# Decode succ-v2 calldata
+cast calldata-decode "aggregate3((address,bool,bytes)[])" \
+  $(jq -r '.calldata' upgrades/mainnet/07-succ-v2.json)
 ```
-
-This verifies on-chain bytecode matches compiled artifacts.
-
-</details>
-
-
-### Sign the Transaction
-
-```bash
-# 👥 Council team
-just sign_ledger succinct-v102 council [eth|celo] <index>
-
-# 🏢 cLabs team
-just sign_ledger succinct-v102 clabs [eth|celo] <index>
-```
-
-**Examples:**
-
-<details open>
-<summary>📝 <strong>Regular Signing (Majority)</strong></summary>
-
-```bash
-# Default account (index 0)
-just sign_ledger succinct-v102 clabs eth
-
-# Specific account index
-just sign_ledger succinct-v102 council eth 1
-```
-
-</details>
-
-<details>
-<summary>🔗 <strong>Nested Multisig (Mento)</strong></summary>
-
-For signers of nested multisigs within Security Council:
-
-```bash
-just sign_ledger succinct-v102 council eth 0 0xMentoMultisigAddress
-```
-
-Replace `0xMentoMultisigAddress` with your nested multisig address.
-
-</details>
-
----
-
-**After signing:** ✅ Verify `out.json` contains your correct address, then send to facilitator.
 
 ### Ledger Workaround for Celo App Users
 
-The Celo Ledger app does not support signing EIP-712 typed data, which is required for this process. However, there is a workaround using the "Eth Recovery" app on your Ledger.
+The Celo Ledger app does not support signing EIP-712 typed data. Use the "Eth Recovery" app instead:
 
-**Steps for Ledger Live (to get Eth Recovery app):**
-1. Open Ledger Live
-2. Settings → Experimental Features → Developer Mode
-3. Plug in Ledger and unlock
-4. Go to My Ledger menu
-5. Search in App Catalog for "Eth Recovery"
-6. If no app found, check if ledger is prompting to upgrade firmware. If so, upgrade and return to step 5.
-7. Install Eth Recovery App
-
-**Steps for Transaction Signing:**
-
-Connect as you usually would to the Safe using Celo terminal, but instead of opening the Celo App, have the Eth Recovery App open on your Ledger device.
-
-You can use `celo` as the ledger app parameter, but you need to have the Eth Recovery App open on your device for the signing to succeed.
+1. Open Ledger Live → Settings → Experimental Features → Developer Mode
+2. My Ledger → Search "Eth Recovery" → Install
+3. Open the Eth Recovery app on your Ledger before signing
 
 ```bash
-just sign_ledger succinct-v102 clabs celo 1
+just sign_all_ledger clabs celo 1
 ```
 
 ## Command Reference
 
+<details open>
+<summary><strong>sign_all_ledger</strong> - Sign all Jovian transactions (v4 + v5 + succ-v2)</summary>
+
+```bash
+just sign_all_ledger <team> <ledger_app> [account_index] [grand_child]
+```
+
+| Parameter | Options | Default | Description |
+|-----------|---------|---------|-------------|
+| `team` | `clabs`, `council` | - | Your team |
+| `ledger_app` | `eth`, `celo` | - | Ledger app |
+| `account_index` | `0`, `1`, `2`... | `0` | Account index |
+| `grand_child` | `0x...` | - | Nested multisig address |
+
+Produces `out-v4.json`, `out-v5.json`, `out-succ-v2.json`.
+
+</details>
+
 <details>
-<summary>📝 <strong>sign_ledger</strong> - Main signing command</summary>
+<summary><strong>sign_ledger</strong> - Sign a single version</summary>
 
 ```bash
 just sign_ledger <version> <team> <ledger_app> [account_index] [grand_child]
@@ -237,11 +164,11 @@ just sign_ledger <version> <team> <ledger_app> [account_index] [grand_child]
 
 | Parameter | Options | Default | Description |
 |-----------|---------|---------|-------------|
-| `version` | `succinct-v102`, `succinct`, `v2`, `v3` | - | Upgrade version |
+| `version` | `v2`, `v3`, `v4`, `v5`, `succ-v1`, `succ-v102`, `succ-v2` | - | Upgrade version |
 | `team` | `clabs`, `council` | - | Your team |
 | `ledger_app` | `eth`, `celo` | - | Ledger app |
 | `account_index` | `0`, `1`, `2`... | `0` | Account index |
-| `grand_child` | `0x...` | - | 🔗 Nested multisig address |
+| `grand_child` | `0x...` | - | Nested multisig address |
 
 **Derivation paths:**
 - `eth`: `m/44'/60'/<index>'/0/0`
@@ -250,45 +177,20 @@ just sign_ledger <version> <team> <ledger_app> [account_index] [grand_child]
 </details>
 
 <details>
-<summary>🔧 <strong>sign</strong> - Custom HD path</summary>
+<summary><strong>sign</strong> / <strong>sign_all</strong> - Custom HD path variants</summary>
 
 ```bash
+just sign_all <team> [hd_path] [grand_child]
 just sign <version> <team> [hd_path] [grand_child]
 ```
 
-| Parameter | Options | Default | Description |
-|-----------|---------|---------|-------------|
-| `version` | `succinct-v102`, `succinct`, `v2`, `v3` | - | Upgrade version |
-| `team` | `clabs`, `council` | - | Your team |
-| `hd_path` | Custom path | - | Derivation path (e.g., `m/44'/60'/1'/0/0`) |
-| `grand_child` | `0x...` | - | 🔗 Nested multisig address |
-
-For advanced users needing non-standard derivation paths. Must escape special characters.
-
-</details>
-
-<details>
-<summary>🔍 <strong>simulate</strong> - Tenderly simulation</summary>
-
-```bash
-just simulate <version>
-```
-
-| Parameter | Options | Description |
-|-----------|---------|-------------|
-| `version` | `succinct-v102`, `succinct`, `v2`, `v3` | Upgrade version to simulate |
-
-Displays Tenderly simulation URLs showing contract deployment and governance proposal execution.
+For advanced users needing non-standard derivation paths.
 
 </details>
 
 ## Execution Flow
 
-1. **Signers** → Sign proposal and send `out.json` to facilitator
+1. **Signers** → Run `just sign_all_ledger` and send `out-v4.json`, `out-v5.json`, `out-succ-v2.json` to facilitator
 2. **Facilitator** → Collects signatures and performs child multisig approvals (cLabs + Security Council)
 3. **Child Multisigs** → Approve execution on parent multisig
-4. **Parent Multisig** → Executes transaction:
-   - `DisputeGameFactory.setImplementation(42, 0xc5bd131ceaeb72f15c66418bc2668332ab99de37)`
-5. **Post-Execution** → Switch to OP Succinct v1.0.2 proposer
-
-**Note:** Contracts are already deployed on mainnet ([addresses/succinct-v102.json](./addresses/succinct-v102.json)). This proposal updates the implementation to v1.0.2.
+4. **Parent Multisig** → Executes each transaction (v4, v5, succ-v2) sequentially
