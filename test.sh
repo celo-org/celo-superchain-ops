@@ -8,6 +8,9 @@ ACCOUNT=0xC2F43D252b2F3868061189F876EB215Cd78108f2
 GRAND_CHILD_MULTISIG=0xD1C635987B6Aa287361d08C6461491Fa9df087f2
 SIM_URL_SUCC_V1="https://dashboard.tenderly.co/explorer/vnet/053b540e-ae59-42c8-80a0-1250820dc894/tx/0x55742ec449b9659f3a5662c5b2f6d6a92d9d955a39eeaaeaf1df1726a3f2ff3f"
 SIM_URL_SUCC_V102="https://dashboard.tenderly.co/explorer/vnet/39498d1a-4638-47d3-8bbc-010de8f718ce/tx/0x27f7a467c7d7faa3aa9934ffc2810a4d910e2404783aed427a5fa1f732f7e12d"
+SIM_URL_V4="https://dashboard.tenderly.co/c-labs/project/testnet/9f9b9ed3-6527-4a30-958d-8942e6ebe434/tx/0x962ef321746bb075a44226bdd645b469e761fb7dbdeb42869902b6e7ebc3b7ef"
+SIM_URL_V5="https://dashboard.tenderly.co/c-labs/project/testnet/9f9b9ed3-6527-4a30-958d-8942e6ebe434/tx/0x833bca6071ad1cf1c82acbb58fccefe75e06978454431c0597819cb743363bbb"
+SIM_URL_SUCC_V2="https://dashboard.tenderly.co/c-labs/project/testnet/9f9b9ed3-6527-4a30-958d-8942e6ebe434/tx/0x74a2518b93017f39c888abd116ebf977425d788874a57ab52dd5d528c1977159"
 PARENT_HASH_V2=0xce6a4dc9ab7084ad8a53c87e6229860b09e8ad6ddd685eb9af1303fc28687966
 PARENT_HASH_V3=0x7d2b307080c30634b946a54347349523ca40066f2538ae522edcee0c5ac3f20b
 PARENT_HASH_SUCC_V1=0xf51bc03017739d768a7f1b9d8ba6ad81a5e89ae658b46f8fc6762216d36961ef
@@ -234,43 +237,43 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
 @test "Test simulate v2" {
   run just simulate v2
   [ "$status" -eq 0 ]
-  [ "${lines[2]}" = "Simulation URL inactive" ]
+  [ "${lines[2]}" = "Simulation URL inactive for mainnet/v2" ]
 }
 
 @test "Test simulate v3" {
   run just simulate v3
   [ "$status" -eq 0 ]
-  [ "${lines[2]}" = "Simulation URL inactive" ]
+  [ "${lines[2]}" = "Simulation URL inactive for mainnet/v3" ]
 }
 
 @test "Test simulate succ-v1" {
   run just simulate succ-v1
   [ "$status" -eq 0 ]
-  [ "${lines[2]}" = "Link to Tenderly sim: $SIM_URL_SUCC_V1" ]
+  [ "${lines[2]}" = "succ-v1: $SIM_URL_SUCC_V1" ]
 }
 
 @test "Test simulate succ-v102" {
   run just simulate succ-v102
   [ "$status" -eq 0 ]
-  [ "${lines[2]}" = "Link to Tenderly sim: $SIM_URL_SUCC_V102" ]
+  [ "${lines[2]}" = "succ-v102: $SIM_URL_SUCC_V102" ]
 }
 
 @test "Test simulate v4" {
   run just simulate v4
   [ "$status" -eq 0 ]
-  [ "${lines[2]}" = "Simulation URL inactive" ]
+  [ "${lines[2]}" = "v4: $SIM_URL_V4" ]
 }
 
 @test "Test simulate v5" {
   run just simulate v5
   [ "$status" -eq 0 ]
-  [ "${lines[2]}" = "Simulation URL inactive" ]
+  [ "${lines[2]}" = "v5: $SIM_URL_V5" ]
 }
 
 @test "Test simulate succ-v2" {
   run just simulate succ-v2
   [ "$status" -eq 0 ]
-  [ "${lines[2]}" = "Simulation URL inactive" ]
+  [ "${lines[2]}" = "succ-v2: $SIM_URL_SUCC_V2" ]
 }
 
 @test "Test sign v2 clabs" {
