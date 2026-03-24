@@ -97,6 +97,24 @@ just sign_ledger v4 clabs eth
 just sign_ledger succ-v2 council eth 0 0xMentoMultisigAddress
 ```
 
+### Tenderly Simulations
+
+All three transactions have been simulated on a Tenderly fork of Ethereum mainnet:
+
+```bash
+# Show all simulation links
+just simulate
+
+# Show a specific version
+just simulate v4
+```
+
+| Version | Tenderly Simulation |
+|---------|---------------------|
+| v4 | [View on Tenderly](https://dashboard.tenderly.co/c-labs/project/testnet/9f9b9ed3-6527-4a30-958d-8942e6ebe434/tx/0x962ef321746bb075a44226bdd645b469e761fb7dbdeb42869902b6e7ebc3b7ef) |
+| v5 | [View on Tenderly](https://dashboard.tenderly.co/c-labs/project/testnet/9f9b9ed3-6527-4a30-958d-8942e6ebe434/tx/0x833bca6071ad1cf1c82acbb58fccefe75e06978454431c0597819cb743363bbb) |
+| succ-v2 | [View on Tenderly](https://dashboard.tenderly.co/c-labs/project/testnet/9f9b9ed3-6527-4a30-958d-8942e6ebe434/tx/0x74a2518b93017f39c888abd116ebf977425d788874a57ab52dd5d528c1977159) |
+
 ### Verification
 
 ```bash
