@@ -44,11 +44,11 @@ Follow these instructions for your shell, then restart your terminal or run `sou
 
 This upgrade bundles three transactions that must be signed together:
 
-| TX | Version | Description |
-|----|---------|-------------|
-| 1 | **v4** | Proxy implementation upgrade |
-| 2 | **v5** | Proxy implementation upgrade |
-| 3 | **succ-v2** | Register new OPSuccinctFaultDisputeGame + transfer SystemConfig ownership |
+| TX | Version | Description | Source |
+|----|---------|-------------|--------|
+| 1 | **v4** | Proxy implementation upgrade | [`celo-contracts/v4.1.0`](https://github.com/celo-org/optimism/tree/celo-contracts/v4.1.0) |
+| 2 | **v5** | Proxy implementation upgrade | [`celo-contracts/v5.0.0`](https://github.com/celo-org/optimism/tree/celo-contracts/v5.0.0) |
+| 3 | **succ-v2** | Register new OPSuccinctFaultDisputeGame + transfer SystemConfig ownership | [`celo/v2.0.0-rc.1`](https://github.com/celo-org/op-succinct/tree/celo/v2.0.0-rc.1) |
 
 **Previous upgrades:** v2, v3 (Isthmus), succ-v1 (OpSuccinct v1.0.0), and succ-v102 (OpSuccinct v1.0.2) have been executed.
 
