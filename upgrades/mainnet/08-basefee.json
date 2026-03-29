@@ -1,0 +1,14 @@
+{
+  "description": "Set minimum base fee on SystemConfig via cLabs Safe (direct owner after 07-succ-v2)",
+  "safe": "0x9Eb44Da23433b5cAA1c87e35594D15FcEb08D34d",
+  "target": "0x9641d764fc13c8B624c04430C7356C1C7C8102e2",
+  "system_config": "0x89E31965D844a309231B1f17759Ccaf1b7c09861",
+  "operation": 1,
+  "nonce": {
+    "clabs": 27
+  },
+  "params": {
+    "min_base_fee_gwei": 50,
+    "da_footprint_gas_scalar": 1
+  }
+}
