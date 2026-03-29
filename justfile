@@ -306,6 +306,9 @@ sign_ledger version team ledger_app account_index='0' grand_child='':
 create_json version hash data sig account:
     echo "{\"version\": \"{{version}}\", \"network\": \"{{NETWORK}}\", \"hash\": \"{{hash}}\", \"data\": \"{{data}}\", \"sig\": \"{{sig}}\", \"account\": \"{{account}}\"}" > out.json
 
+sign_basefee ledger_app account_index='0' min_base_fee_wei='50000000000' da_scalar='1':
+    ./sign-basefee.sh --ledger-app {{ledger_app}} --account-index {{account_index}} --min-base-fee {{min_base_fee_wei}} --da-scalar {{da_scalar}}
+
 print_json grand_child='':
     #!/usr/bin/env bash
     set -euo pipefail
