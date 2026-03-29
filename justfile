@@ -228,6 +228,28 @@ sign version team hd_path='' grand_child='':
         echo "Your signature for grand child tx hash: $SIG"
     fi
 
+    # Verify signer is an owner of the correct Safe
+    if [ -z ${GRAND_CHILD:-} ]; then
+        VERIFY_SAFE="$CHILD_SAFE_ADDRESS"
+        VERIFY_LABEL="$TEAM Safe"
+    else
+        VERIFY_SAFE="$GRAND_CHILD"
+        VERIFY_LABEL="grand child Safe ($GRAND_CHILD)"
+    fi
+    ACCOUNT_LOWER=$(echo "$ACCOUNT" | tr '[:upper:]' '[:lower:]')
+    OWNERS=$(cast call "$VERIFY_SAFE" "getOwners()(address[])" -r $RPC_URL)
+    OWNERS_LOWER=$(echo "$OWNERS" | tr '[:upper:]' '[:lower:]')
+    if echo "$OWNERS_LOWER" | grep -q "$ACCOUNT_LOWER"; then
+        echo "Signer is an owner of $VERIFY_LABEL ✓"
+    else
+        echo ""
+        echo "ERROR: Account $ACCOUNT is NOT an owner of $VERIFY_LABEL ($VERIFY_SAFE)."
+        echo "  You may be signing with the wrong Ledger account or derivation path."
+        echo "  Owners: $OWNERS"
+        rm -f .tmp
+        exit 1
+    fi
+
     if [ -z ${GRAND_CHILD:-} ]; then
         just create_json $VERSION $CHILD_TX_HASH $CHILD_TX_DATA $SIG $ACCOUNT
     else
