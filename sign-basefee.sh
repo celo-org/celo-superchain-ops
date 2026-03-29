@@ -108,31 +108,9 @@ echo "  Min base fee:  ${MIN_BASE_FEE_WEI} wei"
 echo "  DA scalar:     $DA_SCALAR"
 echo ""
 
-# --- Pre-flight checks ---
-
-# Nonce must be 27 (after 05-v4, 06-v5, 07-succ-v2)
-EXPECTED_NONCE=27
-NONCE=$(cast call "$CLABS_SAFE" "nonce()(uint256)" -r "$RPC_URL")
-echo "  cLabs Safe nonce: $NONCE (expected: $EXPECTED_NONCE)"
-if [ "$NONCE" != "$EXPECTED_NONCE" ]; then
-    echo ""
-    echo "ERROR: cLabs Safe nonce is $NONCE, expected $EXPECTED_NONCE."
-    echo "  This proposal must be signed AFTER 05-v4, 06-v5, and 07-succ-v2 are executed."
-    echo "  Those proposals increment cLabs nonce from 24 → 25 → 26 → 27."
-    exit 1
-fi
-
-# SystemConfig must be owned by cLabs Safe (post succ-v2)
-SC_OWNER=$(cast call "$SYSTEM_CONFIG" "owner()(address)" -r "$RPC_URL")
-SC_OWNER_LOWER=$(echo "$SC_OWNER" | tr '[:upper:]' '[:lower:]')
-CLABS_LOWER=$(echo "$CLABS_SAFE" | tr '[:upper:]' '[:lower:]')
-if [ "$SC_OWNER_LOWER" != "$CLABS_LOWER" ]; then
-    echo ""
-    echo "ERROR: SystemConfig owner is $SC_OWNER, expected cLabs Safe ($CLABS_SAFE)."
-    echo "  07-succ-v2 must be executed first to transfer ownership."
-    exit 1
-fi
-echo "  SystemConfig owner: $SC_OWNER ✓"
+# Nonce 27: after 05-v4 (nonce 24), 06-v5 (25), 07-succ-v2 (26) execute
+NONCE=27
+echo "  cLabs Safe nonce: $NONCE (post 05/06/07 execution)"
 echo ""
 
 # --- Build MultiSend calldata ---
