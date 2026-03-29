@@ -8,7 +8,7 @@
     "clabs": 27
   },
   "params": {
-    "min_base_fee_gwei": 50,
+    "min_base_fee_wei": 50000000000,
     "da_footprint_gas_scalar": 1
   }
 }
