@@ -1,7 +1,7 @@
 # Manual Verification on Tenderly
 
 To manually verify the upgrades, please follow these steps:
-1. Open the Tenderly link for the specific version (v2 or v3).
+1. Open the Tenderly link for the specific version (v2, v3, succ-v1, succ-v102, succ-v2, or succ-v201).
 2. Turn on "dev mode" in the Tenderly interface (top right corner).
 3. Navigate to the "Storage changes" tab.
 4. Search for the proxy address in the "Storage Changes" tab.
@@ -60,3 +60,26 @@ Verify the following change:
 | ------------------------------------ | -------------------------------------------- |
 | AccessManager                        | 0xf59a19c5578291cb7fd22618d16281adf76f2816   |
 | OPSuccinctFaultDisputeGame          | 0xc5bd131ceaeb72f15c66418bc2668332ab99de37   |
+
+# succ-v2 (OPSuccinct v2.0.0) Upgrade
+
+Tenderly link for succ-v2: https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0xce7dc169f6885f8ca937135a562068e3444e6c7fc299ffb7e2341372ed006dda
+
+Verify the following changes on `DisputeGameFactory` (`0xFbAC162162f4009Bb007C6DeBC36B1dAC10aF683`):
+- `gameImpls[42]` is updated to `0xE7bd695d6A17970A2D9dB55cfeF7F2024d630aE1` (OPSuccinctFaultDisputeGame v2.0.0)
+- `owner` is transferred to the cLabs Safe `0x9Eb44Da23433b5cAA1c87e35594D15FcEb08D34d`
+
+| Contract                             | Address                                      |
+| ------------------------------------ | -------------------------------------------- |
+| OPSuccinctFaultDisputeGame          | 0xE7bd695d6A17970A2D9dB55cfeF7F2024d630aE1   |
+
+# succ-v201 (OPSuccinct v2.0.1) Upgrade
+
+Tenderly link for succ-v201: https://dashboard.tenderly.co/explorer/vnet/6044ea35-ad95-4d0c-8440-135ccb38ba95/tx/0x0b1d4c6376df347fc937439862c65aebaa4dcb693ed785e3202f1591a4c88bcf
+
+Verify the following change on `DisputeGameFactory` (`0xFbAC162162f4009Bb007C6DeBC36B1dAC10aF683`):
+- `gameImpls[42]` is updated to `0xA35d2A7F365b42EcFCB7Db9240c3973Fc8e65139` (OPSuccinctFaultDisputeGame v2.0.1)
+
+| Contract                             | Address                                      |
+| ------------------------------------ | -------------------------------------------- |
+| OPSuccinctFaultDisputeGame          | 0xA35d2A7F365b42EcFCB7Db9240c3973Fc8e65139   |

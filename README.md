@@ -40,98 +40,72 @@ Follow these instructions for your shell, then restart your terminal or run `sou
 
 </details>
 
-## Current Release: Jovian Upgrade (v4 + v5 + succ-v2)
+## Active Release: succ-v201 (OPSuccinctFaultDisputeGame impl update)
 
-This upgrade bundles three transactions that must be signed together:
+The Jovian upgrade (v4 + v5 + succ-v2) has been executed on mainnet. The next standalone proposal re-registers a new `OPSuccinctFaultDisputeGame` implementation for game type `42`.
 
-| TX | Version | Description | Source |
-|----|---------|-------------|--------|
-| 1 | **v4** | Proxy implementation upgrade | [`celo-contracts/v4.1.0`](https://github.com/celo-org/optimism/tree/celo-contracts/v4.1.0) |
-| 2 | **v5** | Proxy implementation upgrade | [`celo-contracts/v5.0.0`](https://github.com/celo-org/optimism/tree/celo-contracts/v5.0.0) |
-| 3 | **succ-v2** | Register new OPSuccinctFaultDisputeGame + transfer SystemConfig ownership | [`celo/v2.0.0-rc.1`](https://github.com/celo-org/op-succinct/tree/celo/v2.0.0-rc.1) |
+| Version | Description | Source |
+|---------|-------------|--------|
+| **succ-v201** | Register new OPSuccinctFaultDisputeGame on DisputeGameFactory (game type 42) | [`celo/v2.0.1-rc.1`](https://github.com/celo-org/op-succinct/tree/celo/v2.0.1-rc.1) |
 
-**Previous upgrades:** v2, v3 (Isthmus), succ-v1 (OpSuccinct v1.0.0), and succ-v102 (OpSuccinct v1.0.2) have been executed.
+**Previous upgrades (executed):** v2, v3 (Isthmus), succ-v1 (OpSuccinct v1.0.0), succ-v102 (OpSuccinct v1.0.2), v4, v5, and succ-v2.
 
 ### What You're Signing
 
-Three governance proposals executed via the parent multisig:
+A single governance proposal executed via the parent multisig:
 
-1. **v4** and **v5**: Proxy implementation upgrades via OPCM (`upgrade()`)
-2. **succ-v2**: Multicall3 batch that:
-   - Calls `setImplementation(42, impl)` on DisputeGameFactory — registers the new `OPSuccinctFaultDisputeGame` at [`0xE7bd695d6A17970A2D9dB55cfeF7F2024d630aE1`](https://etherscan.io/address/0xE7bd695d6A17970A2D9dB55cfeF7F2024d630aE1)
-   - Calls `transferOwnership(newOwner)` on SystemConfig — transfers ownership to cLabs Safe
+- **succ-v201**: Multicall3 batch that calls `setImplementation(42, impl)` on DisputeGameFactory — registers the new `OPSuccinctFaultDisputeGame` at [`0xA35d2A7F365b42EcFCB7Db9240c3973Fc8e65139`](https://etherscan.io/address/0xA35d2A7F365b42EcFCB7Db9240c3973Fc8e65139).
 
-See [addresses/mainnet/07-succ-v2.json](./addresses/mainnet/07-succ-v2.json) for deployed contract addresses.
+See [addresses/mainnet/09-succ-v201.json](./addresses/mainnet/09-succ-v201.json) for the deployed contract address and [upgrades/mainnet/09-succ-v201.json](./upgrades/mainnet/09-succ-v201.json) for the calldata.
 
 ### Signing Process
 
-Use `sign_all_ledger` to sign all three transactions in one flow:
+Sign with `sign_ledger`:
 
 ```bash
-just sign_all_ledger <team> <ledger_app> [account_index] [grand_child]
+just sign_ledger succ-v201 <team> <ledger_app> [account_index] [grand_child]
 ```
 
-This signs v4, v5, and succ-v2 sequentially and produces three output files:
-- `out-v4.json`
-- `out-v5.json`
-- `out-succ-v2.json`
-
-**Send all three files to the facilitator.**
+This produces `out.json` — **send it to the facilitator.**
 
 #### Examples
 
 ```bash
 # Council team, Ethereum app, default account
-just sign_all_ledger council eth
+just sign_ledger succ-v201 council eth
 
 # cLabs team, Ethereum app, account index 1
-just sign_all_ledger clabs eth 1
+just sign_ledger succ-v201 clabs eth 1
 
 # Council team with nested multisig (e.g. Mento)
-just sign_all_ledger council eth 0 0xMentoMultisigAddress
-```
-
-To sign a single version individually:
-```bash
-just sign_ledger v4 clabs eth
-just sign_ledger succ-v2 council eth 0 0xMentoMultisigAddress
+just sign_ledger succ-v201 council eth 0 0xMentoMultisigAddress
 ```
 
 ### Tenderly Simulations
-
-All three transactions have been simulated on a Tenderly fork of Ethereum mainnet:
 
 ```bash
 # Show all simulation links
 just simulate
 
 # Show a specific version
-just simulate v4
+just simulate succ-v201
 ```
 
 | Version | Tenderly Simulation |
 |---------|---------------------|
-| v4 | [View on Tenderly](https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0x962ef321746bb075a44226bdd645b469e761fb7dbdeb42869902b6e7ebc3b7ef) |
-| v5 | [View on Tenderly](https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0x833bca6071ad1cf1c82acbb58fccefe75e06978454431c0597819cb743363bbb) |
-| succ-v2 | [View on Tenderly](https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0xce7dc169f6885f8ca937135a562068e3444e6c7fc299ffb7e2341372ed006dda) |
+| succ-v201 | [View on Tenderly](https://dashboard.tenderly.co/explorer/vnet/6044ea35-ad95-4d0c-8440-135ccb38ba95/tx/0x0b1d4c6376df347fc937439862c65aebaa4dcb693ed785e3202f1591a4c88bcf) |
+
+Historical executed-upgrade simulations (v4, v5, succ-v2) remain registered in `justfile` for reference.
 
 ### Verification
 
 ```bash
-# Decode v4 calldata (OPCM upgrade)
-cast calldata-decode "upgrade((address,address,bytes32)[],bool)" \
-  $(jq -r '.calldata' upgrades/mainnet/05-v4.json)
-
-# Decode v5 calldata (OPCM upgrade)
-cast calldata-decode "upgrade((address,address,bytes32)[],bool)" \
-  $(jq -r '.calldata' upgrades/mainnet/06-v5.json)
-
-# Decode succ-v2 calldata (Multicall3 aggregate3)
+# Decode succ-v201 calldata (Multicall3 aggregate3)
 cast calldata-decode "aggregate3((address,bool,bytes)[])" \
-  $(jq -r '.calldata' upgrades/mainnet/07-succ-v2.json)
+  $(jq -r '.calldata' upgrades/mainnet/09-succ-v201.json)
 ```
 
-All three upgrades have been executed and verified on **Sepolia** prior to mainnet signing.
+succ-v201 should be verified on **Sepolia** prior to mainnet signing.
 
 ### Ledger Workaround for Celo App Users
 
@@ -142,30 +116,12 @@ The Celo Ledger app does not support signing EIP-712 typed data. Use the "Eth Re
 3. Open the Eth Recovery app on your Ledger before signing
 
 ```bash
-just sign_all_ledger clabs celo 1
+just sign_ledger succ-v201 clabs celo 1
 ```
 
 ## Command Reference
 
 <details open>
-<summary><strong>sign_all_ledger</strong> - Sign all Jovian transactions (v4 + v5 + succ-v2)</summary>
-
-```bash
-just sign_all_ledger <team> <ledger_app> [account_index] [grand_child]
-```
-
-| Parameter | Options | Default | Description |
-|-----------|---------|---------|-------------|
-| `team` | `clabs`, `council` | - | Your team |
-| `ledger_app` | `eth`, `celo` | - | Ledger app |
-| `account_index` | `0`, `1`, `2`... | `0` | Account index |
-| `grand_child` | `0x...` | - | Nested multisig address |
-
-Produces `out-v4.json`, `out-v5.json`, `out-succ-v2.json`.
-
-</details>
-
-<details>
 <summary><strong>sign_ledger</strong> - Sign a single version</summary>
 
 ```bash
@@ -174,7 +130,7 @@ just sign_ledger <version> <team> <ledger_app> [account_index] [grand_child]
 
 | Parameter | Options | Default | Description |
 |-----------|---------|---------|-------------|
-| `version` | `v2`, `v3`, `v4`, `v5`, `succ-v1`, `succ-v102`, `succ-v2` | - | Upgrade version |
+| `version` | `v2`, `v3`, `v4`, `v5`, `succ-v1`, `succ-v102`, `succ-v2`, `succ-v201` | - | Upgrade version |
 | `team` | `clabs`, `council` | - | Your team |
 | `ledger_app` | `eth`, `celo` | - | Ledger app |
 | `account_index` | `0`, `1`, `2`... | `0` | Account index |
@@ -187,10 +143,9 @@ just sign_ledger <version> <team> <ledger_app> [account_index] [grand_child]
 </details>
 
 <details>
-<summary><strong>sign</strong> / <strong>sign_all</strong> - Custom HD path variants</summary>
+<summary><strong>sign</strong> - Custom HD path variant</summary>
 
 ```bash
-just sign_all <team> [hd_path] [grand_child]
 just sign <version> <team> [hd_path] [grand_child]
 ```
 
@@ -200,7 +155,7 @@ For advanced users needing non-standard derivation paths.
 
 ## Execution Flow
 
-1. **Signers** → Run `just sign_all_ledger` and send `out-v4.json`, `out-v5.json`, `out-succ-v2.json` to facilitator
+1. **Signers** → Run `just sign_ledger succ-v201 <team> <ledger_app>` and send `out.json` to the facilitator
 2. **Facilitator** → Collects signatures and performs child multisig approvals (cLabs + Security Council)
-3. **Child Multisigs** → Approve execution on parent multisig
-4. **Parent Multisig** → Executes each transaction (v4, v5, succ-v2) sequentially
+3. **Child Multisigs** → Approve execution on the parent multisig
+4. **Parent Multisig** → Executes the succ-v201 transaction
