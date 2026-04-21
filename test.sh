@@ -11,6 +11,7 @@ SIM_URL_SUCC_V102="https://dashboard.tenderly.co/explorer/vnet/39498d1a-4638-47d
 SIM_URL_V4="https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0x962ef321746bb075a44226bdd645b469e761fb7dbdeb42869902b6e7ebc3b7ef"
 SIM_URL_V5="https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0x833bca6071ad1cf1c82acbb58fccefe75e06978454431c0597819cb743363bbb"
 SIM_URL_SUCC_V2="https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0xce7dc169f6885f8ca937135a562068e3444e6c7fc299ffb7e2341372ed006dda"
+SIM_URL_SUCC_V201="https://dashboard.tenderly.co/explorer/vnet/6044ea35-ad95-4d0c-8440-135ccb38ba95/tx/0x0b1d4c6376df347fc937439862c65aebaa4dcb693ed785e3202f1591a4c88bcf"
 PARENT_HASH_V2=0xce6a4dc9ab7084ad8a53c87e6229860b09e8ad6ddd685eb9af1303fc28687966
 PARENT_HASH_V3=0x7d2b307080c30634b946a54347349523ca40066f2538ae522edcee0c5ac3f20b
 PARENT_HASH_SUCC_V1=0xf51bc03017739d768a7f1b9d8ba6ad81a5e89ae658b46f8fc6762216d36961ef
@@ -160,6 +161,12 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
   [ "${lines[0]}" = "Detected version: succ-v2" ]
 }
 
+@test "Test check-version succ-v201" {
+  run just check-version succ-v201
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = "Detected version: succ-v201" ]
+}
+
 @test "Test check-version v99" {
   run just check-version v99
   [ "$status" -eq 1 ]
@@ -210,6 +217,7 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
   [ -f "upgrades/mainnet/05-v4.json" ]
   [ -f "upgrades/mainnet/06-v5.json" ]
   [ -f "upgrades/mainnet/07-succ-v2.json" ]
+  [ -f "upgrades/mainnet/09-succ-v201.json" ]
 }
 
 @test "Test sepolia upgrade files exist" {
@@ -226,6 +234,7 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
   [ -f "addresses/mainnet/05-v4.json" ]
   [ -f "addresses/mainnet/06-v5.json" ]
   [ -f "addresses/mainnet/07-succ-v2.json" ]
+  [ -f "addresses/mainnet/09-succ-v201.json" ]
 }
 
 @test "Test sepolia address files exist" {
@@ -274,6 +283,12 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
   run just simulate succ-v2
   [ "$status" -eq 0 ]
   [ "${lines[2]}" = "succ-v2: $SIM_URL_SUCC_V2" ]
+}
+
+@test "Test simulate succ-v201" {
+  run just simulate succ-v201
+  [ "$status" -eq 0 ]
+  [ "${lines[2]}" = "succ-v201: $SIM_URL_SUCC_V201" ]
 }
 
 @test "Test sign v2 clabs" {

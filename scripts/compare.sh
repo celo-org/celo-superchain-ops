@@ -30,7 +30,7 @@ if [ ! -d "$FORGE_ARTIFACTS_DIR" ]; then
 fi
 
 case $VERSION in
-succ-v1|succ-v102|succ-v2)
+succ-v1|succ-v102|succ-v2|succ-v201)
     echo "============================================="
     echo "OpSuccinct Contract Verification ($VERSION)"
     echo "============================================="

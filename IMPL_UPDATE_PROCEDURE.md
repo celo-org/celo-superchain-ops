@@ -2,6 +2,8 @@
 
 This document describes the exact steps to update the succ-v2 upgrade when a new OPSuccinctFaultDisputeGame implementation is deployed to Ethereum mainnet.
 
+> **Note:** Once succ-v2 has been executed on mainnet, subsequent impl updates are published as new standalone proposals (e.g. `succ-v201` → `upgrades/mainnet/09-succ-v201.json`) rather than edits to `07-succ-v2.json`. The new proposal is a Multicall3 batch with a single `setImplementation(42, <NEW_IMPL>)` call (no `transferOwnership`).
+
 ## Prerequisites
 
 - New implementation address deployed on Ethereum mainnet (must have code)
@@ -211,13 +213,7 @@ Mock safes, set thresholds to 1, sign with test keys, execute all 3 upgrades, ve
 **Important:** Only succ-v2 signatures need to be re-collected. v4 and v5 signatures remain valid because their calldata did not change.
 
 ```bash
-just sign_all_ledger <team> <ledger_app> [account_index] [grand_child]
-```
-
-Or sign only succ-v2:
-
-```bash
-just sign_ledger succ-v2 <team> <ledger_app> [account_index] [grand_child]
+just sign_ledger <new-version> <team> <ledger_app> [account_index] [grand_child]
 ```
 
 ### 14. Notify signers

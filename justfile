@@ -41,7 +41,7 @@ check-version version:
 
     VERSION={{version}}
     case $VERSION in
-    "v2"|"v3"|"v4"|"v5"|"succ-v1"|"succ-v102"|"succ-v2")
+    "v2"|"v3"|"v4"|"v5"|"succ-v1"|"succ-v102"|"succ-v2"|"succ-v201")
         echo "Detected version: $VERSION"
         ;;
     *)
@@ -77,6 +77,7 @@ simulate version='':
         "mainnet/v4")       echo "https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0x962ef321746bb075a44226bdd645b469e761fb7dbdeb42869902b6e7ebc3b7ef" ;;
         "mainnet/v5")       echo "https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0x833bca6071ad1cf1c82acbb58fccefe75e06978454431c0597819cb743363bbb" ;;
         "mainnet/succ-v2")  echo "https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0xce7dc169f6885f8ca937135a562068e3444e6c7fc299ffb7e2341372ed006dda" ;;
+        "mainnet/succ-v201") echo "https://dashboard.tenderly.co/explorer/vnet/6044ea35-ad95-4d0c-8440-135ccb38ba95/tx/0x0b1d4c6376df347fc937439862c65aebaa4dcb693ed785e3202f1591a4c88bcf" ;;
         *) echo "" ;;
         esac
     }
@@ -86,7 +87,7 @@ simulate version='':
     if [ -z "$VERSION" ]; then
         echo "Tenderly Simulations (${NETWORK}):"
         echo ""
-        for VER in v2 v3 succ-v1 succ-v102 v4 v5 succ-v2; do
+        for VER in v2 v3 succ-v1 succ-v102 v4 v5 succ-v2 succ-v201; do
             URL=$(get_url "$VER")
             if [ -n "$URL" ]; then
                 printf "  %-10s %s\n" "$VER:" "$URL"
@@ -233,54 +234,6 @@ sign version team hd_path='' grand_child='':
     else
         just create_json $VERSION $GRAND_CHILD_TX_HASH $GRAND_CHILD_TX_DATA $SIG $ACCOUNT
     fi
-
-sign_all team hd_path='' grand_child='':
-    #!/usr/bin/env bash
-    set -euo pipefail
-
-    VERSIONS=("v4" "v5" "succ-v2")
-
-    for VERSION in "${VERSIONS[@]}"; do
-        echo ""
-        echo "========================================="
-        echo "  Signing: $VERSION"
-        echo "========================================="
-        echo ""
-        just sign $VERSION {{team}} "{{hd_path}}" "{{grand_child}}"
-        mv out.json out-${VERSION}.json
-        echo "Saved to out-${VERSION}.json"
-    done
-
-    echo ""
-    echo "========================================="
-    echo "  All signatures collected"
-    echo "========================================="
-    for VERSION in "${VERSIONS[@]}"; do
-        echo "  $VERSION -> out-${VERSION}.json"
-    done
-    echo ""
-    echo "Send all out-*.json files to the facilitator."
-
-sign_all_ledger team ledger_app account_index='0' grand_child='':
-    #!/usr/bin/env bash
-    set -euo pipefail
-
-    LEDGER_APP="{{ledger_app}}"
-    ACCOUNT_INDEX="{{account_index}}"
-
-    case $LEDGER_APP in
-    "celo")
-        HD_PATH="m/44'/52752'/$ACCOUNT_INDEX'/0/0"
-        ;;
-    "eth")
-        HD_PATH="m/44'/60'/$ACCOUNT_INDEX'/0/0"
-        ;;
-    *)
-        echo "Invalid ledger_app: $LEDGER_APP. Must be 'celo' or 'eth'." && exit 1
-        ;;
-    esac
-
-    just sign_all {{team}} "$HD_PATH" {{grand_child}}
 
 sign_ledger version team ledger_app account_index='0' grand_child='':
     #!/usr/bin/env bash
