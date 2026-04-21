@@ -1,7 +1,7 @@
 # Manual Verification on Tenderly
 
 To manually verify the upgrades, please follow these steps:
-1. Open the Tenderly link for the specific version (v2, v3, succinct, succinct-v102, succ-v2, or succ-v201).
+1. Open the Tenderly link for the specific version (v2, v3, succ-v1, succ-v102, succ-v2, or succ-v201).
 2. Turn on "dev mode" in the Tenderly interface (top right corner).
 3. Navigate to the "Storage changes" tab.
 4. Search for the proxy address in the "Storage Changes" tab.

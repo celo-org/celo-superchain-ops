@@ -28,8 +28,8 @@ The Tenderly vnet exposes a **public RPC endpoint** (no auth needed). Pick the v
 | succ-v201 | `0x0b1d4c6376df347fc937439862c65aebaa4dcb693ed785e3202f1591a4c88bcf` |
 
 ```bash
-TENDERLY_RPC="https://virtual.mainnet.rpc.tenderly.co/1baaac03-3928-48a7-99b6-2fdf0b2add6d"
-TX_HASH="0x962ef321746bb075a44226bdd645b469e761fb7dbdeb42869902b6e7ebc3b7ef"  # v4
+TENDERLY_RPC="https://virtual.mainnet.rpc.tenderly.co/6044ea35-ad95-4d0c-8440-135ccb38ba95"
+TX_HASH="0x0b1d4c6376df347fc937439862c65aebaa4dcb693ed785e3202f1591a4c88bcf"  # succ-v201
 
 cast tx $TX_HASH --rpc-url $TENDERLY_RPC --json | jq -r '.input' > tenderly_input.txt
 ```
@@ -94,9 +94,9 @@ The signing tool calls `Safe.getTransactionHash()` **on the live mainnet Safe co
 ```bash
 # 1. Compute parent Safe tx hash
 PARENT_SAFE="0x4092A77bAF58fef0309452cEaCb09221e556E112"
-TARGET=$(jq -r '.target' upgrades/mainnet/05-v4.json)
-CALLDATA=$(jq -r '.calldata' upgrades/mainnet/05-v4.json)
-PARENT_NONCE=$(jq -r '.nonce.parent' upgrades/mainnet/05-v4.json)
+TARGET=$(jq -r '.target' upgrades/mainnet/09-succ-v201.json)
+CALLDATA=$(jq -r '.calldata' upgrades/mainnet/09-succ-v201.json)
+PARENT_NONCE=$(jq -r '.nonce.parent' upgrades/mainnet/09-succ-v201.json)
 
 PARENT_TX_HASH=$(cast call $PARENT_SAFE \
     "getTransactionHash(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
@@ -110,7 +110,7 @@ echo "Parent tx hash: $PARENT_TX_HASH"
 
 # 2. Compute council child Safe EIP-712 data (what the Ledger will show)
 COUNCIL_SAFE="0xC03172263409584f7860C25B6eB4985f0f6F4636"
-COUNCIL_NONCE=$(jq -r '.nonce.council' upgrades/mainnet/05-v4.json)
+COUNCIL_NONCE=$(jq -r '.nonce.council' upgrades/mainnet/09-succ-v201.json)
 CHILD_CALLDATA=$(cast calldata 'approveHash(bytes32)' $PARENT_TX_HASH)
 
 CHILD_TX_DATA=$(cast call $COUNCIL_SAFE \
@@ -136,9 +136,9 @@ echo "Message hash: $MESSAGE_HASH"
 ```bash
 # 1. Compute parent Safe tx hash
 PARENT_SAFE="0x4092A77bAF58fef0309452cEaCb09221e556E112"
-TARGET=$(jq -r '.target' upgrades/mainnet/05-v4.json)
-CALLDATA=$(jq -r '.calldata' upgrades/mainnet/05-v4.json)
-PARENT_NONCE=$(jq -r '.nonce.parent' upgrades/mainnet/05-v4.json)
+TARGET=$(jq -r '.target' upgrades/mainnet/09-succ-v201.json)
+CALLDATA=$(jq -r '.calldata' upgrades/mainnet/09-succ-v201.json)
+PARENT_NONCE=$(jq -r '.nonce.parent' upgrades/mainnet/09-succ-v201.json)
 
 PARENT_TX_HASH=$(cast call $PARENT_SAFE \
     "getTransactionHash(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
@@ -152,7 +152,7 @@ echo "Parent tx hash: $PARENT_TX_HASH"
 
 # 2. Compute cLabs child Safe EIP-712 data (what the Ledger will show)
 CLABS_SAFE="0x9Eb44Da23433b5cAA1c87e35594D15FcEb08D34d"
-CLABS_NONCE=$(jq -r '.nonce.clabs' upgrades/mainnet/05-v4.json)
+CLABS_NONCE=$(jq -r '.nonce.clabs' upgrades/mainnet/09-succ-v201.json)
 CHILD_CALLDATA=$(cast calldata 'approveHash(bytes32)' $PARENT_TX_HASH)
 
 CHILD_TX_DATA=$(cast call $CLABS_SAFE \
