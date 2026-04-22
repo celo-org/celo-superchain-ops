@@ -46,7 +46,7 @@ The Jovian upgrade (v4 + v5 + succ-v2) has been executed on mainnet. The next st
 
 | Version | Description | Source |
 |---------|-------------|--------|
-| **succ-v201** | Register new OPSuccinctFaultDisputeGame on DisputeGameFactory (game type 42) | [`celo/v2.0.1-rc.1`](https://github.com/celo-org/op-succinct/tree/celo/v2.0.1-rc.1) |
+| **succ-v201** | Register new OPSuccinctFaultDisputeGame on DisputeGameFactory (game type 42) | Currently in a private repository for a GHSA, contact us to get added to that repository. |
 
 **Previous upgrades (executed):** v2, v3 (Isthmus), succ-v1 (OpSuccinct v1.0.0), succ-v102 (OpSuccinct v1.0.2), v4, v5, and succ-v2.
 
