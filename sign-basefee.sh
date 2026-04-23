@@ -178,6 +178,24 @@ echo "  Your account: $ACCOUNT"
 echo "  Your signature: $SIG"
 echo ""
 
+# --- Verify signer is a cLabs Safe owner ---
+ACCOUNT_LOWER=$(echo "$ACCOUNT" | tr '[:upper:]' '[:lower:]')
+OWNERS=$(cast call "$CLABS_SAFE" "getOwners()(address[])" -r "$RPC_URL")
+OWNERS_LOWER=$(echo "$OWNERS" | tr '[:upper:]' '[:lower:]')
+
+if echo "$OWNERS_LOWER" | grep -q "$ACCOUNT_LOWER"; then
+    echo "  Signer is a cLabs Safe owner ✓"
+else
+    echo ""
+    echo "ERROR: Account $ACCOUNT is NOT an owner of cLabs Safe ($CLABS_SAFE)."
+    echo "  You may be signing with the wrong Ledger account or derivation path."
+    echo "  cLabs Safe owners:"
+    echo "  $OWNERS"
+    rm -f .tmp
+    exit 1
+fi
+echo ""
+
 # --- Write output ---
 
 echo "{\"version\": \"basefee\", \"network\": \"${NETWORK}\", \"hash\": \"${TX_HASH}\", \"data\": \"${TX_DATA}\", \"sig\": \"${SIG}\", \"account\": \"${ACCOUNT}\"}" > out-basefee.json
