@@ -115,13 +115,14 @@ sign version team hd_path='' grand_child='':
         PARENT_SAFE_ADDRESS="0x4092A77bAF58fef0309452cEaCb09221e556E112"
         CLABS_SAFE_ADDRESS="0x9Eb44Da23433b5cAA1c87e35594D15FcEb08D34d"
         COUNCIL_SAFE_ADDRESS="0xC03172263409584f7860C25B6eB4985f0f6F4636"
+        RPC_URL="${RPC_URL:-https://ethereum.publicnode.com}"
         REFUND_RECEIVER="0x95ffac468e37ddeef407ffef18f0cc9e86d8f13b"
         ;;
     "sepolia")
         PARENT_SAFE_ADDRESS="0x009A6Ac23EeBe98488ED28A52af69Bf46F1C18cb"
         CLABS_SAFE_ADDRESS="0x769b480A8036873a2a5EB01FE39278e5Ab78Bb27"
         COUNCIL_SAFE_ADDRESS="0x3b00043E8C82006fbE5f56b47F9889a04c20c5d6"
-        RPC_URL="${SEPOLIA_RPC_URL:?Set SEPOLIA_RPC_URL in .env}"
+        RPC_URL="${SEPOLIA_RPC_URL:-https://ethereum-sepolia-rpc.publicnode.com}"
         REFUND_RECEIVER="0x5e60d897Cd62588291656b54655e98ee73f0aabF"
         ;;
     esac
