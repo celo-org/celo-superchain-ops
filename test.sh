@@ -77,41 +77,89 @@ GRAND_CHILD_HASH_COUNCIL_SUCC_V102=0xf55fb48d534eaf441b0b1941e742cc235a12abacec5
 GRAND_CHILD_DATA_COUNCIL_SUCC_V102=0x1901b889fe0bca2c1159d0891cdc881184aad05e5f55c5cf93ef3be10360d179694f8040306269cbf1b624ba5f3c352a9e883dbe01ac3fb714da2bc8a96e0c4e131f
 GRAND_CHILD_SIG_COUNCIL_SUCC_V102=e6832e2ee6d31c3bf6891a12787c6ba41df73008616590ab08474f6aac6e188535227a07f907b783e8a763fb0dbafdc63bff0f5b6c6775cc357fc03bef61c67b1c
 
-# TODO: v4 - populate after calldata is finalized
-PARENT_HASH_V4=TODO
-CHILD_HASH_CLABS_V4=TODO
-CHILD_DATA_CLABS_V4=TODO
-CHILD_SIG_CLABS_V4=TODO
-CHILD_HASH_COUNCIL_V4=TODO
-CHILD_DATA_COUNCIL_V4=TODO
-CHILD_SIG_COUNCIL_V4=TODO
-GRAND_CHILD_HASH_COUNCIL_V4=TODO
-GRAND_CHILD_DATA_COUNCIL_V4=TODO
-GRAND_CHILD_SIG_COUNCIL_V4=TODO
+# mainnet v4
+PARENT_HASH_V4=0xe7dd2f018e5ab62df31a1cc0c102b829a872f8a85e032f1bc635878f9e7ef3ae
+CHILD_HASH_CLABS_V4=0xeb29110d67b6a92efbcff0d75eeb07d4291bcde69972483a79ce8590f90d1a79
+CHILD_DATA_CLABS_V4=0x1901c7a8fb49e5d601acc381538cdace161d64d5f25a93261cded88243db64e1cff4a351fb3d5520affa1732afb50a173c026726529416f4d492ead46449067c0dbc
+CHILD_SIG_CLABS_V4=31960ec49fcd97527b68f56e553dd6d31bb1e8c058c509ea125a9e2a0703281271fe805e4cf7d99f636f658522ea40bfc9a0c3d3f921130cad93beccd32815e61b
+CHILD_HASH_COUNCIL_V4=0x44ec89171bad653c4668ec651d523c5a030651bc916f18f5317f9e1e514dbcc9
+CHILD_DATA_COUNCIL_V4=0x1901006bcc13a9a6b3224caf34092bd0db63b90656971bfec6731c9c61f278a239ad2cc4a924638f66c0f3cb1b117440f0a538b09b993a8436352b6bd7beb7f2a692
+CHILD_SIG_COUNCIL_V4=31ffe59c8965568d3528df36104c72dd1bbbdec60e71c76ffdfbd81d021b65d75159a982da7ec1148bf597b406559e95db59e59fcebe9a1446a4a6cb5610b9881b
+GRAND_CHILD_HASH_COUNCIL_V4=0x2c11da2ae980fcffb3746c85fa74e4a346379ca37064a88f1e71fb7d91edb02a
+GRAND_CHILD_DATA_COUNCIL_V4=0x1901b889fe0bca2c1159d0891cdc881184aad05e5f55c5cf93ef3be10360d179694f9a90909b6558af93ba481bca490cd955cf01168fdd0018983c476e16e9201c8c
+GRAND_CHILD_SIG_COUNCIL_V4=0c92c8d65fcafd3688cc01bfcfeb5d6ed94fe1fc870dbda4061903bf8745bbbd0f44ecd96119f9392f3b3b3f423acc56460cb0d499995e90addc4b5fd4ae7ef51b
 
-# TODO: v5 - populate after calldata is finalized
-PARENT_HASH_V5=TODO
-CHILD_HASH_CLABS_V5=TODO
-CHILD_DATA_CLABS_V5=TODO
-CHILD_SIG_CLABS_V5=TODO
-CHILD_HASH_COUNCIL_V5=TODO
-CHILD_DATA_COUNCIL_V5=TODO
-CHILD_SIG_COUNCIL_V5=TODO
-GRAND_CHILD_HASH_COUNCIL_V5=TODO
-GRAND_CHILD_DATA_COUNCIL_V5=TODO
-GRAND_CHILD_SIG_COUNCIL_V5=TODO
+# mainnet v5
+PARENT_HASH_V5=0x4ec4658f345c5f9a767a24ce5963903534cda8385ba208347fffa84ea6b60372
+CHILD_HASH_CLABS_V5=0x45ed492b9418637703c60b80a62ac195f9292d5ae5e43158d90127c6ae141ab4
+CHILD_DATA_CLABS_V5=0x1901c7a8fb49e5d601acc381538cdace161d64d5f25a93261cded88243db64e1cff4c9cd5b7157f288304a16b1895492a23b8c0fe23692bec0924ec6a0e594d9b273
+CHILD_SIG_CLABS_V5=4f15f3db6b17f7be3774283501da70e276c5114053c9a23e862e62ea2952c2531bde7e99f9f923a90cac620a48ee78d051c386f810799239467cb6b7c7a1a5121c
+CHILD_HASH_COUNCIL_V5=0x37e3f4c413e01d24c70688f4d1c88cf99b8f34dd8c8a11b6aafc11a01fb3a724
+CHILD_DATA_COUNCIL_V5=0x1901006bcc13a9a6b3224caf34092bd0db63b90656971bfec6731c9c61f278a239ad6c25ee01a09badcf6130b27368ac1465d182cf7f7abf4f500358eb3d57b965be
+CHILD_SIG_COUNCIL_V5=3c273aac627294a377510cb018e265a5055a89cfebae741037994c65dd822413315b4cec69e1809e3a8f9b89bf4f6b263c4481a8d8b0cf33ef4c436af54f15f71c
+GRAND_CHILD_HASH_COUNCIL_V5=0x3c474fb15bcacd725c2ea002034d2ee0c509d0ebbfe2fd294dc0dd1aaf0b2bce
+GRAND_CHILD_DATA_COUNCIL_V5=0x1901b889fe0bca2c1159d0891cdc881184aad05e5f55c5cf93ef3be10360d179694fa845df950524230a108f0bfe7d376bf90767eaba1d93d23d6c292952ddf6c8c2
+GRAND_CHILD_SIG_COUNCIL_V5=f035ee3b6bfefe7db91611d2c7d815ab0c320fb916cb3dac8ac4582326bd054516f9fc539921b2779429796454737ed9d32a53ad966112f37697bd1e589a50ef1c
 
-# TODO: succ-v2 - populate after calldata is finalized
-PARENT_HASH_SUCC_V2=TODO
-CHILD_HASH_CLABS_SUCC_V2=TODO
-CHILD_DATA_CLABS_SUCC_V2=TODO
-CHILD_SIG_CLABS_SUCC_V2=TODO
-CHILD_HASH_COUNCIL_SUCC_V2=TODO
-CHILD_DATA_COUNCIL_SUCC_V2=TODO
-CHILD_SIG_COUNCIL_SUCC_V2=TODO
-GRAND_CHILD_HASH_COUNCIL_SUCC_V2=TODO
-GRAND_CHILD_DATA_COUNCIL_SUCC_V2=TODO
-GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
+# mainnet succ-v210
+PARENT_HASH_SUCC_V210=0xb9764747865fc50d1e9ee3ef2bbcd6b31819a116f249c79c76e485b3425d8603
+CHILD_HASH_CLABS_SUCC_V210=0x555e055d2d028f797edb4c237f06c160ae88377653677c7aec80fa9738485a04
+CHILD_DATA_CLABS_SUCC_V210=0x1901c7a8fb49e5d601acc381538cdace161d64d5f25a93261cded88243db64e1cff4334f86d22c6199e07be12e4b9b19b83bae5785618b1fb35eb63fef12c6809166
+CHILD_SIG_CLABS_SUCC_V210=41357fb5faef41ec0f1fd15b3951ebfcd74bc9363bfffcd2fa8106ff125a35757ddb7b1514ecf0f065afad568fecf61b94ef00aacbb2d61e32b465c214f890941c
+CHILD_HASH_COUNCIL_SUCC_V210=0xfff6133825fc191f2a227e834961f36ee19e212d1f3752032710b45b91814ab2
+CHILD_DATA_COUNCIL_SUCC_V210=0x1901006bcc13a9a6b3224caf34092bd0db63b90656971bfec6731c9c61f278a239adc1a953ec40354715dd654725d33ed135f0dc2cda1e8f43c97167d15079ef8fe9
+CHILD_SIG_COUNCIL_SUCC_V210=141f57ddd41a9d2554797fe3745a2db1d1ac5ff62267cb4f4e32e4c18535ec7b7e1200b642719431b05a6bc5706565610df744d70e59cf8acffee748324768f51b
+GRAND_CHILD_HASH_COUNCIL_SUCC_V210=0x469f006cb90b3a0a361a76209477e22f8e7c3b8effc32e4d90fddeb3aa56dab0
+GRAND_CHILD_DATA_COUNCIL_SUCC_V210=0x1901b889fe0bca2c1159d0891cdc881184aad05e5f55c5cf93ef3be10360d179694f36b02223dc4e738d1e031c8eb30363156e0a6ab8f0d1545db701adc928073fbe
+GRAND_CHILD_SIG_COUNCIL_SUCC_V210=5ce0af68fcc05ae3062d74172af7421858502d2dd724d7fbdb3dce2d83d41f6b49927604d43d7f3b9bb14837c55233d5be648f7aa641c024385cdfebf50a58bf1c
+
+# mainnet succ-v2
+PARENT_HASH_SUCC_V2=0xb87fa55e7ec055bb6b4a4a2b4f46c30e671a3b41510e9b83b4e76dda427561e7
+CHILD_HASH_CLABS_SUCC_V2=0x37645c36dfd556412f0e7ea4568851534d4b85ebbea50c16057d48ea1be25a1b
+CHILD_DATA_CLABS_SUCC_V2=0x1901c7a8fb49e5d601acc381538cdace161d64d5f25a93261cded88243db64e1cff4d2164f66cc364ac0d435efccf45a4505cace5cf2a5c715f1b3a26abe81473694
+CHILD_SIG_CLABS_SUCC_V2=c59e5752d7b92af6395da5fc022996f81fc1fe52273ec78a38059e04959b5ace2d445b165c7d0a47a11f96a13410e1511c2e842cad89a5e7ebf9fa8593a54c4b1c
+CHILD_HASH_COUNCIL_SUCC_V2=0xe3619f852be1c3e7b8030cb7ff2ea613bead17d179e4428dc7995c59f42fe01f
+CHILD_DATA_COUNCIL_SUCC_V2=0x1901006bcc13a9a6b3224caf34092bd0db63b90656971bfec6731c9c61f278a239ad8b8000a59fc46a8dc228a0578a2df4da0c8d1f38d0a39c6a96e3a35d8c17f6a4
+CHILD_SIG_COUNCIL_SUCC_V2=387e5c108a02cb8fadca32bb3166843fae1acffc2d717d7e82da575ded020d9002ea106b1ffd198eea94bd44f7a7306a7415f6190177106daf4f2e1a0c54d3d51c
+GRAND_CHILD_HASH_COUNCIL_SUCC_V2=0x68125bdde5167d54aef14258aab83c9ce5c4c3ec2120fcd4c09c13f857c00285
+GRAND_CHILD_DATA_COUNCIL_SUCC_V2=0x1901b889fe0bca2c1159d0891cdc881184aad05e5f55c5cf93ef3be10360d179694f5c3409dad16d68b98628d09be3ae4cb87b20ebfb51b79dbffc0176183886c40c
+GRAND_CHILD_SIG_COUNCIL_SUCC_V2=18b9986fb67b9159ef4c144c9d0ab7b71ad4b0c1195d2c8be17a229410cfce890fd6ef84708e4cc979411c9f2abf8d8cd0209832899dc999c7e7d99e12c7f06f1c
+
+# sepolia v4
+SEPOLIA_PARENT_HASH_V4=0x5596eeb4559143b00bf03d5bc3c9865b8d79f0eb524ea95d2e19f4a38c56d63a
+SEPOLIA_CHILD_HASH_CLABS_V4=0x277254b44d20055d7fdc01d3daceb616e043ce32e7f4d87f2bebb2ab7e79a8ec
+SEPOLIA_CHILD_DATA_CLABS_V4=0x19010997447f88a2bb698764da0831cf77290b5f52333cf06515d7c747a213b37add7755091a1efc158ab154b006fa089af6016de41e13b987eb1903e41b8dc2228b
+SEPOLIA_CHILD_SIG_CLABS_V4=c9c9784fc2914d2b614dca755c55b17a0515511c2f53852fd9619772d5335c3f3909409568a9fcd2d0a58dad045ff24610d5f5f1e8c858ad48eb845e322407d51b
+SEPOLIA_CHILD_HASH_COUNCIL_V4=0xdd92ba01d36bfa15bba3e2da8d01c34bd857e458cc986a6fc8bda84c138d8fb1
+SEPOLIA_CHILD_DATA_COUNCIL_V4=0x1901cd00dbdd235174967fdd794795e947ae94fb2433442e6f497cbcb8ade286c3ff7755091a1efc158ab154b006fa089af6016de41e13b987eb1903e41b8dc2228b
+SEPOLIA_CHILD_SIG_COUNCIL_V4=8f3f606053fa554dfbe5f0ac52b933db194094b9cdc6951a21d5b460eae09d1d34b8c72b2f210e5cb2b10dbeb07dc56d8491dffb2b2fcffc684382cb658bf2481c
+
+# sepolia v5
+SEPOLIA_PARENT_HASH_V5=0xfb9a4ff006153396dd05481ce534a5112a866bd2d8044e9c99fc6ead5457efd4
+SEPOLIA_CHILD_HASH_CLABS_V5=0xc5972b23f22e702a0149a6739f2ea304add2ef18f4b68171ba55c0e058d2e070
+SEPOLIA_CHILD_DATA_CLABS_V5=0x19010997447f88a2bb698764da0831cf77290b5f52333cf06515d7c747a213b37add594634563c3dc06fe228833f5d9cab98af19a1502285336450b6c925049d526e
+SEPOLIA_CHILD_SIG_CLABS_V5=1cc82d963eb3308bf51f6d4bc19153c3a60c81c7aa4cc5818e94d6dc0f2a1e1d31aa91db3c62c619a8cf22450fcc47bebc3ed8b837dec577f48ac510245c3cb71b
+SEPOLIA_CHILD_HASH_COUNCIL_V5=0x037b932d690879e954911a573a05a9011d046a7bd04772a765f7ef63cadb9a02
+SEPOLIA_CHILD_DATA_COUNCIL_V5=0x1901cd00dbdd235174967fdd794795e947ae94fb2433442e6f497cbcb8ade286c3ff594634563c3dc06fe228833f5d9cab98af19a1502285336450b6c925049d526e
+SEPOLIA_CHILD_SIG_COUNCIL_V5=865b27782d36a13c2fa481d549ad18d2d31c93d5ee0f4a0a34d43994881099544d61b7af2a3ef54c923271a0547b58e9d72f815bb9a3ec2596f89811dc3a1f971b
+
+# sepolia succ-v2
+SEPOLIA_PARENT_HASH_SUCC_V2=0xc44dab38d4befca24b2f1fdc0fa0acd6426aae34699cd1fe53b973de786d2348
+SEPOLIA_CHILD_HASH_CLABS_SUCC_V2=0x0d1f7f43cc5719765f2af830a4e149de10f8176878795310d52d3c8d9ffeb56f
+SEPOLIA_CHILD_DATA_CLABS_SUCC_V2=0x19010997447f88a2bb698764da0831cf77290b5f52333cf06515d7c747a213b37addf3167c00a8d1eb314153239227692d662ab3d47c0c8526a75200c0d1636e4449
+SEPOLIA_CHILD_SIG_CLABS_SUCC_V2=caac3918e752aa8d50deeda1011ecbbca9d0e0deb59467ebd4c1d91d4085afaf55f0b4f4c0df8ffa76a4dbfc3fa4c16a1a0c94390840148457e5c71238a5f0881c
+SEPOLIA_CHILD_HASH_COUNCIL_SUCC_V2=0xdd73251c3f75d83cd0f51a80da35d9f03bb1d2a56f48d3693aac7fae75598d8a
+SEPOLIA_CHILD_DATA_COUNCIL_SUCC_V2=0x1901cd00dbdd235174967fdd794795e947ae94fb2433442e6f497cbcb8ade286c3fff3167c00a8d1eb314153239227692d662ab3d47c0c8526a75200c0d1636e4449
+SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V2=c6fbc1f19097efdfef5f10e67e5bd124f7218becfb0b571612f0b6230fee59aa72d9d5cbbd3878be82a3a5a719291bbd3ae043ea816cc02080ed64dcae1e89191b
+
+# sepolia succ-v210
+SEPOLIA_PARENT_HASH_SUCC_V210=0xe9c6363c2f2894ce09ede64e8123ea536c978741304106fb7ef9d73d8466ae95
+SEPOLIA_CHILD_HASH_CLABS_SUCC_V210=0xd0dac870b6804424dfbd9e699a2fb365de2d0ed83507b0e647dd9f98f95f44ad
+SEPOLIA_CHILD_DATA_CLABS_SUCC_V210=0x19010997447f88a2bb698764da0831cf77290b5f52333cf06515d7c747a213b37add91c9acda29eba8506aa7e913380b702a7903283c59a0ebcc086435595b63f36a
+SEPOLIA_CHILD_SIG_CLABS_SUCC_V210=187d4822d299103825ef10f65ef04c17d8a2717a2d563c6383a1037df1d416e71c75a79ab8f4335f7310d0573d08ec64c7664b490d66f80468f3663ff6993e6b1b
+SEPOLIA_CHILD_HASH_COUNCIL_SUCC_V210=0x49b8a0b7cf67dca65b91a064509dc601811e2d8b5c9076297e941761f7fe3217
+SEPOLIA_CHILD_DATA_COUNCIL_SUCC_V210=0x1901cd00dbdd235174967fdd794795e947ae94fb2433442e6f497cbcb8ade286c3ff1b076146bc336f70b37650b8e3916a7fa3e05473f0652ec37a809b805251a0e1
+SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V210=78eb003c9369f140e5396e099f9175e3ca529026311d2647a54871e6ff85e85f4302b4e8ef089f811a9d4f490277548b69317133a2917196353567ce0ff4f9b21c
 
 @test "Test default command" {
   run just
@@ -167,6 +215,12 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
   [ "${lines[0]}" = "Detected version: succ-v201" ]
 }
 
+@test "Test check-version succ-v210" {
+  run just check-version succ-v210
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = "Detected version: succ-v210" ]
+}
+
 @test "Test check-version v99" {
   run just check-version v99
   [ "$status" -eq 1 ]
@@ -218,12 +272,14 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
   [ -f "upgrades/mainnet/06-v5.json" ]
   [ -f "upgrades/mainnet/07-succ-v2.json" ]
   [ -f "upgrades/mainnet/09-succ-v201.json" ]
+  [ -f "upgrades/mainnet/10-succ-v210.json" ]
 }
 
 @test "Test sepolia upgrade files exist" {
   [ -f "upgrades/sepolia/01-v4.json" ]
   [ -f "upgrades/sepolia/02-v5.json" ]
   [ -f "upgrades/sepolia/03-succ-v2.json" ]
+  [ -f "upgrades/sepolia/04-succ-v210.json" ]
 }
 
 @test "Test mainnet address files exist" {
@@ -235,12 +291,14 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
   [ -f "addresses/mainnet/06-v5.json" ]
   [ -f "addresses/mainnet/07-succ-v2.json" ]
   [ -f "addresses/mainnet/09-succ-v201.json" ]
+  [ -f "addresses/mainnet/10-succ-v210.json" ]
 }
 
 @test "Test sepolia address files exist" {
   [ -f "addresses/sepolia/01-v4.json" ]
   [ -f "addresses/sepolia/02-v5.json" ]
   [ -f "addresses/sepolia/03-succ-v2.json" ]
+  [ -f "addresses/sepolia/04-succ-v210.json" ]
 }
 
 @test "Test simulate v2" {
@@ -289,6 +347,12 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
   run just simulate succ-v201
   [ "$status" -eq 0 ]
   [ "${lines[2]}" = "succ-v201: $SIM_URL_SUCC_V201" ]
+}
+
+@test "Test simulate succ-v210" {
+  run just simulate succ-v210
+  [ "$status" -eq 0 ]
+  [ "${lines[2]}" = "Simulation URL inactive for mainnet/succ-v210" ]
 }
 
 @test "Test sign v2 clabs" {
@@ -533,10 +597,9 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
   [ "${lines[11]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_SUCC_V102" ]
 }
 
-# --- v4 sign tests (TODO: populate expected values) ---
+# --- v4 sign tests ---
 
 @test "Test sign v4 clabs" {
-  skip "TODO: populate expected values in test constants"
   TEST_PK=$TEST_PK run just sign v4 clabs
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v4" ]
@@ -549,7 +612,6 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
 }
 
 @test "Test sign v4 council" {
-  skip "TODO: populate expected values in test constants"
   TEST_PK=$TEST_PK run just sign v4 council
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v4" ]
@@ -562,7 +624,6 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
 }
 
 @test "Test sign v4 council with grand child" {
-  skip "TODO: populate expected values in test constants"
   TEST_PK=$TEST_PK run just sign v4 council "" $GRAND_CHILD_MULTISIG
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v4" ]
@@ -578,7 +639,6 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
 }
 
 @test "Test sign_ledger v4 clabs celo" {
-  skip "TODO: populate expected values in test constants"
   TEST_PK=$TEST_PK run just sign_ledger v4 clabs celo
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v4" ]
@@ -588,7 +648,6 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
 }
 
 @test "Test sign_ledger v4 clabs eth" {
-  skip "TODO: populate expected values in test constants"
   TEST_PK=$TEST_PK run just sign_ledger v4 clabs eth
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v4" ]
@@ -598,7 +657,6 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
 }
 
 @test "Test sign_ledger v4 council celo" {
-  skip "TODO: populate expected values in test constants"
   TEST_PK=$TEST_PK run just sign_ledger v4 council celo
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v4" ]
@@ -607,10 +665,9 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
   [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V4" ]
 }
 
-# --- v5 sign tests (TODO: populate expected values) ---
+# --- v5 sign tests ---
 
 @test "Test sign v5 clabs" {
-  skip "TODO: populate expected values in test constants"
   TEST_PK=$TEST_PK run just sign v5 clabs
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v5" ]
@@ -623,7 +680,6 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
 }
 
 @test "Test sign v5 council" {
-  skip "TODO: populate expected values in test constants"
   TEST_PK=$TEST_PK run just sign v5 council
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v5" ]
@@ -636,7 +692,6 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
 }
 
 @test "Test sign v5 council with grand child" {
-  skip "TODO: populate expected values in test constants"
   TEST_PK=$TEST_PK run just sign v5 council "" $GRAND_CHILD_MULTISIG
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v5" ]
@@ -652,7 +707,6 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
 }
 
 @test "Test sign_ledger v5 clabs celo" {
-  skip "TODO: populate expected values in test constants"
   TEST_PK=$TEST_PK run just sign_ledger v5 clabs celo
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v5" ]
@@ -662,7 +716,6 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
 }
 
 @test "Test sign_ledger v5 clabs eth" {
-  skip "TODO: populate expected values in test constants"
   TEST_PK=$TEST_PK run just sign_ledger v5 clabs eth
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v5" ]
@@ -672,7 +725,6 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
 }
 
 @test "Test sign_ledger v5 council celo" {
-  skip "TODO: populate expected values in test constants"
   TEST_PK=$TEST_PK run just sign_ledger v5 council celo
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v5" ]
@@ -681,10 +733,9 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
   [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V5" ]
 }
 
-# --- succ-v2 sign tests (TODO: populate expected values) ---
+# --- succ-v2 sign tests ---
 
 @test "Test sign succ-v2 clabs" {
-  skip "TODO: populate expected values in test constants"
   TEST_PK=$TEST_PK run just sign succ-v2 clabs
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: succ-v2" ]
@@ -697,7 +748,6 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
 }
 
 @test "Test sign succ-v2 council" {
-  skip "TODO: populate expected values in test constants"
   TEST_PK=$TEST_PK run just sign succ-v2 council
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: succ-v2" ]
@@ -710,7 +760,6 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
 }
 
 @test "Test sign succ-v2 council with grand child" {
-  skip "TODO: populate expected values in test constants"
   TEST_PK=$TEST_PK run just sign succ-v2 council "" $GRAND_CHILD_MULTISIG
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: succ-v2" ]
@@ -725,28 +774,149 @@ GRAND_CHILD_SIG_COUNCIL_SUCC_V2=TODO
   [ "${lines[11]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_SUCC_V2" ]
 }
 
-# --- sepolia sign tests (TODO: populate after sepolia Safe deployment) ---
+# --- succ-v210 sign tests ---
+
+@test "Test sign succ-v210 clabs" {
+  TEST_PK=$TEST_PK run just sign succ-v210 clabs
+  [ "$status" -eq 0 ]
+  [ "${lines[1]}" = "Detected version: succ-v210" ]
+  [ "${lines[2]}" = "Detected team: clabs" ]
+  [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V210" ]
+  [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_CLABS_SUCC_V210" ]
+  [ "${lines[5]}" = "Child tx data: $CHILD_DATA_CLABS_SUCC_V210" ]
+  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_SUCC_V210" ]
+}
+
+@test "Test sign succ-v210 council" {
+  TEST_PK=$TEST_PK run just sign succ-v210 council
+  [ "$status" -eq 0 ]
+  [ "${lines[1]}" = "Detected version: succ-v210" ]
+  [ "${lines[2]}" = "Detected team: council" ]
+  [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V210" ]
+  [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_SUCC_V210" ]
+  [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_SUCC_V210" ]
+  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_SUCC_V210" ]
+}
+
+@test "Test sign succ-v210 council with grand child" {
+  TEST_PK=$TEST_PK run just sign succ-v210 council "" $GRAND_CHILD_MULTISIG
+  [ "$status" -eq 0 ]
+  [ "${lines[1]}" = "Detected version: succ-v210" ]
+  [ "${lines[2]}" = "Detected team: council" ]
+  [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V210" ]
+  [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_SUCC_V210" ]
+  [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_SUCC_V210" ]
+  [ "${lines[6]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
+  [ "${lines[8]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_SUCC_V210" ]
+  [ "${lines[9]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_SUCC_V210" ]
+  [ "${lines[10]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[11]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_SUCC_V210" ]
+}
+
+# --- sepolia sign tests ---
 
 @test "Test sign v4 clabs on sepolia" {
-  skip "TODO: populate sepolia upgrade calldata and expected values"
+  NETWORK=sepolia TEST_PK=$TEST_PK run just sign v4 clabs
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = "Detected network: sepolia" ]
+  [ "${lines[1]}" = "Detected version: v4" ]
+  [ "${lines[2]}" = "Detected team: clabs" ]
+  [ "${lines[3]}" = "Parent tx hash: $SEPOLIA_PARENT_HASH_V4" ]
+  [ "${lines[4]}" = "Child tx hash: $SEPOLIA_CHILD_HASH_CLABS_V4" ]
+  [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_CLABS_V4" ]
+  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_CLABS_V4" ]
 }
 
 @test "Test sign v4 council on sepolia" {
-  skip "TODO: populate sepolia upgrade calldata and expected values"
+  NETWORK=sepolia TEST_PK=$TEST_PK run just sign v4 council
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = "Detected network: sepolia" ]
+  [ "${lines[1]}" = "Detected version: v4" ]
+  [ "${lines[2]}" = "Detected team: council" ]
+  [ "${lines[3]}" = "Parent tx hash: $SEPOLIA_PARENT_HASH_V4" ]
+  [ "${lines[4]}" = "Child tx hash: $SEPOLIA_CHILD_HASH_COUNCIL_V4" ]
+  [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_COUNCIL_V4" ]
+  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_COUNCIL_V4" ]
 }
 
 @test "Test sign v5 clabs on sepolia" {
-  skip "TODO: populate sepolia upgrade calldata and expected values"
+  NETWORK=sepolia TEST_PK=$TEST_PK run just sign v5 clabs
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = "Detected network: sepolia" ]
+  [ "${lines[1]}" = "Detected version: v5" ]
+  [ "${lines[2]}" = "Detected team: clabs" ]
+  [ "${lines[3]}" = "Parent tx hash: $SEPOLIA_PARENT_HASH_V5" ]
+  [ "${lines[4]}" = "Child tx hash: $SEPOLIA_CHILD_HASH_CLABS_V5" ]
+  [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_CLABS_V5" ]
+  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_CLABS_V5" ]
 }
 
 @test "Test sign v5 council on sepolia" {
-  skip "TODO: populate sepolia upgrade calldata and expected values"
+  NETWORK=sepolia TEST_PK=$TEST_PK run just sign v5 council
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = "Detected network: sepolia" ]
+  [ "${lines[1]}" = "Detected version: v5" ]
+  [ "${lines[2]}" = "Detected team: council" ]
+  [ "${lines[3]}" = "Parent tx hash: $SEPOLIA_PARENT_HASH_V5" ]
+  [ "${lines[4]}" = "Child tx hash: $SEPOLIA_CHILD_HASH_COUNCIL_V5" ]
+  [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_COUNCIL_V5" ]
+  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_COUNCIL_V5" ]
 }
 
 @test "Test sign succ-v2 clabs on sepolia" {
-  skip "TODO: populate sepolia upgrade calldata and expected values"
+  NETWORK=sepolia TEST_PK=$TEST_PK run just sign succ-v2 clabs
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = "Detected network: sepolia" ]
+  [ "${lines[1]}" = "Detected version: succ-v2" ]
+  [ "${lines[2]}" = "Detected team: clabs" ]
+  [ "${lines[3]}" = "Parent tx hash: $SEPOLIA_PARENT_HASH_SUCC_V2" ]
+  [ "${lines[4]}" = "Child tx hash: $SEPOLIA_CHILD_HASH_CLABS_SUCC_V2" ]
+  [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_CLABS_SUCC_V2" ]
+  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_CLABS_SUCC_V2" ]
 }
 
 @test "Test sign succ-v2 council on sepolia" {
-  skip "TODO: populate sepolia upgrade calldata and expected values"
+  NETWORK=sepolia TEST_PK=$TEST_PK run just sign succ-v2 council
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = "Detected network: sepolia" ]
+  [ "${lines[1]}" = "Detected version: succ-v2" ]
+  [ "${lines[2]}" = "Detected team: council" ]
+  [ "${lines[3]}" = "Parent tx hash: $SEPOLIA_PARENT_HASH_SUCC_V2" ]
+  [ "${lines[4]}" = "Child tx hash: $SEPOLIA_CHILD_HASH_COUNCIL_SUCC_V2" ]
+  [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_COUNCIL_SUCC_V2" ]
+  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V2" ]
+}
+
+@test "Test sign succ-v210 clabs on sepolia" {
+  NETWORK=sepolia TEST_PK=$TEST_PK run just sign succ-v210 clabs
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = "Detected network: sepolia" ]
+  [ "${lines[1]}" = "Detected version: succ-v210" ]
+  [ "${lines[2]}" = "Detected team: clabs" ]
+  [ "${lines[3]}" = "Parent tx hash: $SEPOLIA_PARENT_HASH_SUCC_V210" ]
+  [ "${lines[4]}" = "Child tx hash: $SEPOLIA_CHILD_HASH_CLABS_SUCC_V210" ]
+  [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_CLABS_SUCC_V210" ]
+  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_CLABS_SUCC_V210" ]
+}
+
+@test "Test sign succ-v210 council on sepolia" {
+  NETWORK=sepolia TEST_PK=$TEST_PK run just sign succ-v210 council
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = "Detected network: sepolia" ]
+  [ "${lines[1]}" = "Detected version: succ-v210" ]
+  [ "${lines[2]}" = "Detected team: council" ]
+  [ "${lines[3]}" = "Parent tx hash: $SEPOLIA_PARENT_HASH_SUCC_V210" ]
+  [ "${lines[4]}" = "Child tx hash: $SEPOLIA_CHILD_HASH_COUNCIL_SUCC_V210" ]
+  [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_COUNCIL_SUCC_V210" ]
+  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V210" ]
 }

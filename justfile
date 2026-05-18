@@ -41,7 +41,7 @@ check-version version:
 
     VERSION={{version}}
     case $VERSION in
-    "v2"|"v3"|"v4"|"v5"|"succ-v1"|"succ-v102"|"succ-v2"|"succ-v201")
+    "v2"|"v3"|"v4"|"v5"|"succ-v1"|"succ-v102"|"succ-v2"|"succ-v201"|"succ-v210")
         echo "Detected version: $VERSION"
         ;;
     *)
@@ -87,7 +87,7 @@ simulate version='':
     if [ -z "$VERSION" ]; then
         echo "Tenderly Simulations (${NETWORK}):"
         echo ""
-        for VER in v2 v3 succ-v1 succ-v102 v4 v5 succ-v2 succ-v201; do
+        for VER in v2 v3 succ-v1 succ-v102 v4 v5 succ-v2 succ-v201 succ-v210; do
             URL=$(get_url "$VER")
             if [ -n "$URL" ]; then
                 printf "  %-10s %s\n" "$VER:" "$URL"

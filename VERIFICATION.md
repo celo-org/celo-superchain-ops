@@ -26,10 +26,13 @@ The Tenderly vnet exposes a **public RPC endpoint** (no auth needed). Pick the v
 | v5 | `0x833bca6071ad1cf1c82acbb58fccefe75e06978454431c0597819cb743363bbb` |
 | succ-v2 | `0xce7dc169f6885f8ca937135a562068e3444e6c7fc299ffb7e2341372ed006dda` |
 | succ-v201 | `0x0b1d4c6376df347fc937439862c65aebaa4dcb693ed785e3202f1591a4c88bcf` |
+| **succ-v210** | _Pending — substitute once simulation is published_ |
+
+> **Note:** The Tenderly simulation for the active release (succ-v210) is pending. Steps 1–3 require this simulation; please wait for the URL to be published before completing them. Steps 4–6 can be performed now using the upgrade JSON directly.
 
 ```bash
-TENDERLY_RPC="https://virtual.mainnet.rpc.tenderly.co/6044ea35-ad95-4d0c-8440-135ccb38ba95"
-TX_HASH="0x0b1d4c6376df347fc937439862c65aebaa4dcb693ed785e3202f1591a4c88bcf"  # succ-v201
+TENDERLY_RPC="<pending — substitute Tenderly vnet RPC URL once simulation is run>"
+TX_HASH="<pending>"  # succ-v210
 
 cast tx $TX_HASH --rpc-url $TENDERLY_RPC --json | jq -r '.input' > tenderly_input.txt
 ```
@@ -83,6 +86,10 @@ cast calldata-decode "aggregate3((address,bool,bytes)[])" \
 # succ-v201 (Multicall3 batch — single setImplementation)
 cast calldata-decode "aggregate3((address,bool,bytes)[])" \
   $(jq -r '.calldata' upgrades/mainnet/09-succ-v201.json)
+
+# succ-v210 (Multicall3 batch — single setImplementation, adds Hypercube)
+cast calldata-decode "aggregate3((address,bool,bytes)[])" \
+  $(jq -r '.calldata' upgrades/mainnet/10-succ-v210.json)
 ```
 
 ## Step 5: Compute the hash you'll sign — from the same inputs
@@ -94,9 +101,9 @@ The signing tool calls `Safe.getTransactionHash()` **on the live mainnet Safe co
 ```bash
 # 1. Compute parent Safe tx hash
 PARENT_SAFE="0x4092A77bAF58fef0309452cEaCb09221e556E112"
-TARGET=$(jq -r '.target' upgrades/mainnet/09-succ-v201.json)
-CALLDATA=$(jq -r '.calldata' upgrades/mainnet/09-succ-v201.json)
-PARENT_NONCE=$(jq -r '.nonce.parent' upgrades/mainnet/09-succ-v201.json)
+TARGET=$(jq -r '.target' upgrades/mainnet/10-succ-v210.json)
+CALLDATA=$(jq -r '.calldata' upgrades/mainnet/10-succ-v210.json)
+PARENT_NONCE=$(jq -r '.nonce.parent' upgrades/mainnet/10-succ-v210.json)
 
 PARENT_TX_HASH=$(cast call $PARENT_SAFE \
     "getTransactionHash(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
@@ -110,7 +117,7 @@ echo "Parent tx hash: $PARENT_TX_HASH"
 
 # 2. Compute council child Safe EIP-712 data (what the Ledger will show)
 COUNCIL_SAFE="0xC03172263409584f7860C25B6eB4985f0f6F4636"
-COUNCIL_NONCE=$(jq -r '.nonce.council' upgrades/mainnet/09-succ-v201.json)
+COUNCIL_NONCE=$(jq -r '.nonce.council' upgrades/mainnet/10-succ-v210.json)
 CHILD_CALLDATA=$(cast calldata 'approveHash(bytes32)' $PARENT_TX_HASH)
 
 CHILD_TX_DATA=$(cast call $COUNCIL_SAFE \
@@ -136,9 +143,9 @@ echo "Message hash: $MESSAGE_HASH"
 ```bash
 # 1. Compute parent Safe tx hash
 PARENT_SAFE="0x4092A77bAF58fef0309452cEaCb09221e556E112"
-TARGET=$(jq -r '.target' upgrades/mainnet/09-succ-v201.json)
-CALLDATA=$(jq -r '.calldata' upgrades/mainnet/09-succ-v201.json)
-PARENT_NONCE=$(jq -r '.nonce.parent' upgrades/mainnet/09-succ-v201.json)
+TARGET=$(jq -r '.target' upgrades/mainnet/10-succ-v210.json)
+CALLDATA=$(jq -r '.calldata' upgrades/mainnet/10-succ-v210.json)
+PARENT_NONCE=$(jq -r '.nonce.parent' upgrades/mainnet/10-succ-v210.json)
 
 PARENT_TX_HASH=$(cast call $PARENT_SAFE \
     "getTransactionHash(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
@@ -152,7 +159,7 @@ echo "Parent tx hash: $PARENT_TX_HASH"
 
 # 2. Compute cLabs child Safe EIP-712 data (what the Ledger will show)
 CLABS_SAFE="0x9Eb44Da23433b5cAA1c87e35594D15FcEb08D34d"
-CLABS_NONCE=$(jq -r '.nonce.clabs' upgrades/mainnet/09-succ-v201.json)
+CLABS_NONCE=$(jq -r '.nonce.clabs' upgrades/mainnet/10-succ-v210.json)
 CHILD_CALLDATA=$(cast calldata 'approveHash(bytes32)' $PARENT_TX_HASH)
 
 CHILD_TX_DATA=$(cast call $CLABS_SAFE \
@@ -177,10 +184,10 @@ echo "Message hash: $MESSAGE_HASH"
 
 ```bash
 # Council signers:
-just sign_ledger succ-v201 council eth
+just sign_ledger succ-v210 council eth
 
 # cLabs signers:
-just sign_ledger succ-v201 clabs eth
+just sign_ledger succ-v210 clabs eth
 ```
 
 Your Ledger will show two screens for each transaction:

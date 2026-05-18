@@ -1,7 +1,7 @@
 # Manual Verification on Tenderly
 
 To manually verify the upgrades, please follow these steps:
-1. Open the Tenderly link for the specific version (v2, v3, succ-v1, succ-v102, succ-v2, or succ-v201).
+1. Open the Tenderly link for the specific version (v2, v3, succ-v1, succ-v102, succ-v2, succ-v201, or succ-v210).
 2. Turn on "dev mode" in the Tenderly interface (top right corner).
 3. Navigate to the "Storage changes" tab.
 4. Search for the proxy address in the "Storage Changes" tab.
@@ -83,3 +83,14 @@ Verify the following change on `DisputeGameFactory` (`0xFbAC162162f4009Bb007C6De
 | Contract                             | Address                                      |
 | ------------------------------------ | -------------------------------------------- |
 | OPSuccinctFaultDisputeGame          | 0xA35d2A7F365b42EcFCB7Db9240c3973Fc8e65139   |
+
+# succ-v210 (OPSuccinct v2.1.0 — Hypercube) Upgrade
+
+Tenderly link for succ-v210: _Pending — will be published once the simulation is run._
+
+Verify the following change on `DisputeGameFactory` (`0xFbAC162162f4009Bb007C6DeBC36B1dAC10aF683`):
+- `gameImpls[42]` is updated to `0xfF1caC738a5263736AF258e4b3D6a4970C6351FF` (OPSuccinctFaultDisputeGame v2.1.0, adds Hypercube)
+
+| Contract                             | Address                                      |
+| ------------------------------------ | -------------------------------------------- |
+| OPSuccinctFaultDisputeGame          | 0xfF1caC738a5263736AF258e4b3D6a4970C6351FF   |
