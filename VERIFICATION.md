@@ -26,13 +26,11 @@ The Tenderly vnet exposes a **public RPC endpoint** (no auth needed). Pick the v
 | v5 | `0x833bca6071ad1cf1c82acbb58fccefe75e06978454431c0597819cb743363bbb` |
 | succ-v2 | `0xce7dc169f6885f8ca937135a562068e3444e6c7fc299ffb7e2341372ed006dda` |
 | succ-v201 | `0x0b1d4c6376df347fc937439862c65aebaa4dcb693ed785e3202f1591a4c88bcf` |
-| **succ-v210** | _Pending — substitute once simulation is published_ |
-
-> **Note:** The Tenderly simulation for the active release (succ-v210) is pending. Steps 1–3 require this simulation; please wait for the URL to be published before completing them. Steps 4–6 can be performed now using the upgrade JSON directly.
+| **succ-v210** | `0x96891cb8e0f89e77228ae0ca53ca4cf9c97c9bb162615eb11b506de1644734e4` |
 
 ```bash
-TENDERLY_RPC="<pending — substitute Tenderly vnet RPC URL once simulation is run>"
-TX_HASH="<pending>"  # succ-v210
+TENDERLY_RPC="https://virtual.mainnet.rpc.tenderly.co/7682d855-f265-40df-abe0-b3b829eb824a"
+TX_HASH="0x96891cb8e0f89e77228ae0ca53ca4cf9c97c9bb162615eb11b506de1644734e4"  # succ-v210
 
 cast tx $TX_HASH --rpc-url $TENDERLY_RPC --json | jq -r '.input' > tenderly_input.txt
 ```

@@ -93,7 +93,7 @@ just simulate succ-v210
 
 | Version | Tenderly Simulation |
 |---------|---------------------|
-| succ-v210 | _Pending — link will be added once simulation is run_ |
+| succ-v210 | [View on Tenderly](https://dashboard.tenderly.co/explorer/vnet/7682d855-f265-40df-abe0-b3b829eb824a/tx/0x96891cb8e0f89e77228ae0ca53ca4cf9c97c9bb162615eb11b506de1644734e4) |
 
 Historical executed-upgrade simulations (v4, v5, succ-v2, succ-v201) remain registered in `justfile` for reference.
 

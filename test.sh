@@ -12,6 +12,7 @@ SIM_URL_V4="https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-
 SIM_URL_V5="https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0x833bca6071ad1cf1c82acbb58fccefe75e06978454431c0597819cb743363bbb"
 SIM_URL_SUCC_V2="https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0xce7dc169f6885f8ca937135a562068e3444e6c7fc299ffb7e2341372ed006dda"
 SIM_URL_SUCC_V201="https://dashboard.tenderly.co/explorer/vnet/6044ea35-ad95-4d0c-8440-135ccb38ba95/tx/0x0b1d4c6376df347fc937439862c65aebaa4dcb693ed785e3202f1591a4c88bcf"
+SIM_URL_SUCC_V210="https://dashboard.tenderly.co/explorer/vnet/7682d855-f265-40df-abe0-b3b829eb824a/tx/0x96891cb8e0f89e77228ae0ca53ca4cf9c97c9bb162615eb11b506de1644734e4"
 PARENT_HASH_V2=0xce6a4dc9ab7084ad8a53c87e6229860b09e8ad6ddd685eb9af1303fc28687966
 PARENT_HASH_V3=0x7d2b307080c30634b946a54347349523ca40066f2538ae522edcee0c5ac3f20b
 PARENT_HASH_SUCC_V1=0xf51bc03017739d768a7f1b9d8ba6ad81a5e89ae658b46f8fc6762216d36961ef
@@ -352,7 +353,7 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V210=78eb003c9369f140e5396e099f9175e3ca529026311d
 @test "Test simulate succ-v210" {
   run just simulate succ-v210
   [ "$status" -eq 0 ]
-  [ "${lines[2]}" = "Simulation URL inactive for mainnet/succ-v210" ]
+  [ "${lines[2]}" = "succ-v210: $SIM_URL_SUCC_V210" ]
 }
 
 @test "Test sign v2 clabs" {

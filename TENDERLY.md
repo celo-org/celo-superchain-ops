@@ -86,7 +86,7 @@ Verify the following change on `DisputeGameFactory` (`0xFbAC162162f4009Bb007C6De
 
 # succ-v210 (OPSuccinct v2.1.0 — Hypercube) Upgrade
 
-Tenderly link for succ-v210: _Pending — will be published once the simulation is run._
+Tenderly link for succ-v210: https://dashboard.tenderly.co/explorer/vnet/7682d855-f265-40df-abe0-b3b829eb824a/tx/0x96891cb8e0f89e77228ae0ca53ca4cf9c97c9bb162615eb11b506de1644734e4
 
 Verify the following change on `DisputeGameFactory` (`0xFbAC162162f4009Bb007C6DeBC36B1dAC10aF683`):
 - `gameImpls[42]` is updated to `0xfF1caC738a5263736AF258e4b3D6a4970C6351FF` (OPSuccinctFaultDisputeGame v2.1.0, adds Hypercube)
