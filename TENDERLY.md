@@ -1,7 +1,7 @@
 # Manual Verification on Tenderly
 
 To manually verify the upgrades, please follow these steps:
-1. Open the Tenderly link for the specific version (v2, v3, succ-v1, succ-v102, succ-v2, succ-v201, succ-v210, or eigenda-cert-v3).
+1. Open the Tenderly link for the specific version (v2, v3, succ-v2, succ-v201, succ-v210, or eigenda-cert-v3). The succ-v1 and succ-v102 virtual testnets have been retired and are no longer available.
 2. Turn on "dev mode" in the Tenderly interface (top right corner).
 3. Navigate to the "Storage changes" tab.
 4. Search for the proxy address in the "Storage Changes" tab.
@@ -38,7 +38,7 @@ Tenderly link for v3: https://dashboard.tenderly.co/explorer/vnet/4c92d88c-598f-
 
 # succinct (OpSuccinct v1.0.0) Upgrade
 
-Tenderly link for succinct: https://dashboard.tenderly.co/explorer/vnet/053b540e-ae59-42c8-80a0-1250820dc894/tx/0x55742ec449b9659f3a5662c5b2f6d6a92d9d955a39eeaaeaf1df1726a3f2ff3f
+Tenderly link for succinct: retired — this virtual testnet is no longer available (upgrade executed on mainnet). The verification details below are kept for historical reference.
 
 Verify the following changes:
 - `initBonds[42]` is set to `10000000000000000` (0.01 ETH)
@@ -51,7 +51,7 @@ Verify the following changes:
 
 # succinct-v102 (OpSuccinct v1.0.2) Upgrade
 
-Tenderly link for succinct-v102: https://dashboard.tenderly.co/explorer/vnet/39498d1a-4638-47d3-8bbc-010de8f718ce/tx/0x27f7a467c7d7faa3aa9934ffc2810a4d910e2404783aed427a5fa1f732f7e12d
+Tenderly link for succinct-v102: retired — this virtual testnet is no longer available (upgrade executed on mainnet). The verification details below are kept for historical reference.
 
 Verify the following change:
 - `gameImpls[42]` is updated to `0xc5bd131ceaeb72f15c66418bc2668332ab99de37` (OPSuccinctFaultDisputeGame v1.0.2)
