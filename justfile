@@ -41,7 +41,7 @@ check-version version:
 
     VERSION={{version}}
     case $VERSION in
-    "v2"|"v3"|"v4"|"v5"|"succ-v1"|"succ-v102"|"succ-v2"|"succ-v201"|"succ-v210")
+    "v2"|"v3"|"v4"|"v5"|"succ-v1"|"succ-v102"|"succ-v2"|"succ-v201"|"succ-v210"|"eigenda-cert-v3")
         echo "Detected version: $VERSION"
         ;;
     *)
@@ -72,13 +72,12 @@ simulate version='':
 
     get_url() {
         case "${NETWORK}/$1" in
-        "mainnet/succ-v1")  echo "https://dashboard.tenderly.co/explorer/vnet/053b540e-ae59-42c8-80a0-1250820dc894/tx/0x55742ec449b9659f3a5662c5b2f6d6a92d9d955a39eeaaeaf1df1726a3f2ff3f" ;;
-        "mainnet/succ-v102") echo "https://dashboard.tenderly.co/explorer/vnet/39498d1a-4638-47d3-8bbc-010de8f718ce/tx/0x27f7a467c7d7faa3aa9934ffc2810a4d910e2404783aed427a5fa1f732f7e12d" ;;
         "mainnet/v4")       echo "https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0x962ef321746bb075a44226bdd645b469e761fb7dbdeb42869902b6e7ebc3b7ef" ;;
         "mainnet/v5")       echo "https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0x833bca6071ad1cf1c82acbb58fccefe75e06978454431c0597819cb743363bbb" ;;
         "mainnet/succ-v2")  echo "https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0xce7dc169f6885f8ca937135a562068e3444e6c7fc299ffb7e2341372ed006dda" ;;
         "mainnet/succ-v201") echo "https://dashboard.tenderly.co/explorer/vnet/6044ea35-ad95-4d0c-8440-135ccb38ba95/tx/0x0b1d4c6376df347fc937439862c65aebaa4dcb693ed785e3202f1591a4c88bcf" ;;
         "mainnet/succ-v210") echo "https://dashboard.tenderly.co/explorer/vnet/7682d855-f265-40df-abe0-b3b829eb824a/tx/0x96891cb8e0f89e77228ae0ca53ca4cf9c97c9bb162615eb11b506de1644734e4" ;;
+        "mainnet/eigenda-cert-v3") echo "https://dashboard.tenderly.co/explorer/vnet/7f58af78-e2ba-4ef2-8cd1-6dd329723aee/tx/0x2792faf8a438323dfd76844ef9f5d6b346c677fbf1951430cb458883073c6fd7" ;;
         *) echo "" ;;
         esac
     }
@@ -88,7 +87,7 @@ simulate version='':
     if [ -z "$VERSION" ]; then
         echo "Tenderly Simulations (${NETWORK}):"
         echo ""
-        for VER in v2 v3 succ-v1 succ-v102 v4 v5 succ-v2 succ-v201 succ-v210; do
+        for VER in v2 v3 succ-v1 succ-v102 v4 v5 succ-v2 succ-v201 succ-v210 eigenda-cert-v3; do
             URL=$(get_url "$VER")
             if [ -n "$URL" ]; then
                 printf "  %-10s %s\n" "$VER:" "$URL"

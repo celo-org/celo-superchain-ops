@@ -27,13 +27,16 @@ The Tenderly vnet exposes a **public RPC endpoint** (no auth needed). Pick the v
 | succ-v2 | `0xce7dc169f6885f8ca937135a562068e3444e6c7fc299ffb7e2341372ed006dda` |
 | succ-v201 | `0x0b1d4c6376df347fc937439862c65aebaa4dcb693ed785e3202f1591a4c88bcf` |
 | **succ-v210** | `0x96891cb8e0f89e77228ae0ca53ca4cf9c97c9bb162615eb11b506de1644734e4` |
+| **eigenda-cert-v3** | `0x2792faf8a438323dfd76844ef9f5d6b346c677fbf1951430cb458883073c6fd7` |
 
 ```bash
-TENDERLY_RPC="https://virtual.mainnet.rpc.tenderly.co/7682d855-f265-40df-abe0-b3b829eb824a"
-TX_HASH="0x96891cb8e0f89e77228ae0ca53ca4cf9c97c9bb162615eb11b506de1644734e4"  # succ-v210
+TENDERLY_RPC="https://virtual.mainnet.rpc.tenderly.co/7f58af78-e2ba-4ef2-8cd1-6dd329723aee"
+TX_HASH="0x2792faf8a438323dfd76844ef9f5d6b346c677fbf1951430cb458883073c6fd7"  # eigenda-cert-v3
 
 cast tx $TX_HASH --rpc-url $TENDERLY_RPC --json | jq -r '.input' > tenderly_input.txt
 ```
+
+> **eigenda-cert-v3** was also verified on Sepolia (tx 0x4b87a3…16a6). The on-chain Safe hash recompute (Steps 5-6) is verifiable against the live mainnet Safe.
 
 ## Step 2: Decode the `execTransaction` calldata
 
@@ -88,6 +91,12 @@ cast calldata-decode "aggregate3((address,bool,bytes)[])" \
 # succ-v210 (Multicall3 batch — single setImplementation, adds Hypercube)
 cast calldata-decode "aggregate3((address,bool,bytes)[])" \
   $(jq -r '.calldata' upgrades/mainnet/10-succ-v210.json)
+
+# eigenda-cert-v3 (Multicall3 batch — single addCertVerifier)
+cast calldata-decode "aggregate3((address,bool,bytes)[])" \
+  $(jq -r '.calldata' upgrades/mainnet/11-eigenda-cert-v3.json)
+# then decode the inner call bytes → (25624000, 0xd9C4dA492c60e92e2B53abB5Bea7Aa4b8aA5b181)
+cast calldata-decode "addCertVerifier(uint32,address)" <inner-bytes>
 ```
 
 ## Step 5: Compute the hash you'll sign — from the same inputs
@@ -99,9 +108,9 @@ The signing tool calls `Safe.getTransactionHash()` **on the live mainnet Safe co
 ```bash
 # 1. Compute parent Safe tx hash
 PARENT_SAFE="0x4092A77bAF58fef0309452cEaCb09221e556E112"
-TARGET=$(jq -r '.target' upgrades/mainnet/10-succ-v210.json)
-CALLDATA=$(jq -r '.calldata' upgrades/mainnet/10-succ-v210.json)
-PARENT_NONCE=$(jq -r '.nonce.parent' upgrades/mainnet/10-succ-v210.json)
+TARGET=$(jq -r '.target' upgrades/mainnet/11-eigenda-cert-v3.json)
+CALLDATA=$(jq -r '.calldata' upgrades/mainnet/11-eigenda-cert-v3.json)
+PARENT_NONCE=$(jq -r '.nonce.parent' upgrades/mainnet/11-eigenda-cert-v3.json)  # = 31
 
 PARENT_TX_HASH=$(cast call $PARENT_SAFE \
     "getTransactionHash(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
@@ -115,7 +124,7 @@ echo "Parent tx hash: $PARENT_TX_HASH"
 
 # 2. Compute council child Safe EIP-712 data (what the Ledger will show)
 COUNCIL_SAFE="0xC03172263409584f7860C25B6eB4985f0f6F4636"
-COUNCIL_NONCE=$(jq -r '.nonce.council' upgrades/mainnet/10-succ-v210.json)
+COUNCIL_NONCE=$(jq -r '.nonce.council' upgrades/mainnet/11-eigenda-cert-v3.json)  # = 31
 CHILD_CALLDATA=$(cast calldata 'approveHash(bytes32)' $PARENT_TX_HASH)
 
 CHILD_TX_DATA=$(cast call $COUNCIL_SAFE \
@@ -141,9 +150,9 @@ echo "Message hash: $MESSAGE_HASH"
 ```bash
 # 1. Compute parent Safe tx hash
 PARENT_SAFE="0x4092A77bAF58fef0309452cEaCb09221e556E112"
-TARGET=$(jq -r '.target' upgrades/mainnet/10-succ-v210.json)
-CALLDATA=$(jq -r '.calldata' upgrades/mainnet/10-succ-v210.json)
-PARENT_NONCE=$(jq -r '.nonce.parent' upgrades/mainnet/10-succ-v210.json)
+TARGET=$(jq -r '.target' upgrades/mainnet/11-eigenda-cert-v3.json)
+CALLDATA=$(jq -r '.calldata' upgrades/mainnet/11-eigenda-cert-v3.json)
+PARENT_NONCE=$(jq -r '.nonce.parent' upgrades/mainnet/11-eigenda-cert-v3.json)  # = 31
 
 PARENT_TX_HASH=$(cast call $PARENT_SAFE \
     "getTransactionHash(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
@@ -157,7 +166,7 @@ echo "Parent tx hash: $PARENT_TX_HASH"
 
 # 2. Compute cLabs child Safe EIP-712 data (what the Ledger will show)
 CLABS_SAFE="0x9Eb44Da23433b5cAA1c87e35594D15FcEb08D34d"
-CLABS_NONCE=$(jq -r '.nonce.clabs' upgrades/mainnet/10-succ-v210.json)
+CLABS_NONCE=$(jq -r '.nonce.clabs' upgrades/mainnet/11-eigenda-cert-v3.json)  # = 33
 CHILD_CALLDATA=$(cast calldata 'approveHash(bytes32)' $PARENT_TX_HASH)
 
 CHILD_TX_DATA=$(cast call $CLABS_SAFE \
@@ -182,10 +191,10 @@ echo "Message hash: $MESSAGE_HASH"
 
 ```bash
 # Council signers:
-just sign_ledger succ-v210 council eth
+just sign_ledger eigenda-cert-v3 council eth
 
 # cLabs signers:
-just sign_ledger succ-v210 clabs eth
+just sign_ledger eigenda-cert-v3 clabs eth
 ```
 
 Your Ledger will show two screens for each transaction:

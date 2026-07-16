@@ -40,30 +40,30 @@ Follow these instructions for your shell, then restart your terminal or run `sou
 
 </details>
 
-## Active Release: succ-v210 (OPSuccinct v2.1.0 — Hypercube)
+## Active Release: eigenda-cert-v3 (EigenDA Cert Verifier activation)
 
-A single proposal that updates the `OPSuccinctFaultDisputeGame` implementation for game type `42`, adding Hypercube support. Succeeds succ-v201, which has been executed on mainnet.
+A single proposal that registers a new EigenDA cert verifier on the `EigenDACertVerifierRouter`, scheduled to activate at Ethereum L1 block `25624000`. The router is owned by the parent Security Council Safe.
 
 | Version | Description | Source |
 |---------|-------------|--------|
-| **succ-v210** | Update `OPSuccinctFaultDisputeGame` impl on DisputeGameFactory (game type 42) — adds Hypercube | Contact maintainers for source access |
+| **eigenda-cert-v3** | Register new `EigenDACertVerifier` (`0xd9C4dA492c60e92e2B53abB5Bea7Aa4b8aA5b181`) on `EigenDACertVerifierRouter` (`0x2ea418AE1852bfC79e18B37E55F278F9c598AA08`) with activation block `25624000` | Layr-Labs/eigenda |
 
-**Previous upgrades (executed):** v2, v3 (Isthmus), succ-v1 (OpSuccinct v1.0.0), succ-v102 (OpSuccinct v1.0.2), v4, v5, succ-v2, and succ-v201.
+**Previous upgrades (executed):** v2, v3 (Isthmus), succ-v1 (OpSuccinct v1.0.0), succ-v102 (OpSuccinct v1.0.2), v4, v5, succ-v2, succ-v201, and succ-v210 (OPSuccinct v2.1.0 — Hypercube).
 
 ### What You're Signing
 
 A single governance proposal executed via the parent multisig:
 
-- **succ-v210**: Multicall3 batch that calls `setImplementation(42, impl)` on DisputeGameFactory — registers the new `OPSuccinctFaultDisputeGame` at [`0xfF1caC738a5263736AF258e4b3D6a4970C6351FF`](https://etherscan.io/address/0xfF1caC738a5263736AF258e4b3D6a4970C6351FF).
+- **eigenda-cert-v3**: Multicall3 batch that calls `addCertVerifier(25624000, 0xd9C4dA492c60e92e2B53abB5Bea7Aa4b8aA5b181)` on the `EigenDACertVerifierRouter` at [`0x2ea418AE1852bfC79e18B37E55F278F9c598AA08`](https://etherscan.io/address/0x2ea418AE1852bfC79e18B37E55F278F9c598AA08) — registering the new cert verifier to activate at L1 block `25624000`.
 
-See [addresses/mainnet/10-succ-v210.json](./addresses/mainnet/10-succ-v210.json) for the deployed contract address and [upgrades/mainnet/10-succ-v210.json](./upgrades/mainnet/10-succ-v210.json) for the calldata.
+See [addresses/mainnet/11-eigenda-cert-v3.json](./addresses/mainnet/11-eigenda-cert-v3.json) for the deployed contract addresses and [upgrades/mainnet/11-eigenda-cert-v3.json](./upgrades/mainnet/11-eigenda-cert-v3.json) for the calldata.
 
 ### Signing Process
 
 Sign with `sign_ledger`:
 
 ```bash
-just sign_ledger succ-v210 <team> <ledger_app> [account_index] [grand_child]
+just sign_ledger eigenda-cert-v3 <team> <ledger_app> [account_index] [grand_child]
 ```
 
 This produces `out.json` — **send it to the facilitator.**
@@ -72,13 +72,13 @@ This produces `out.json` — **send it to the facilitator.**
 
 ```bash
 # Council team, Ethereum app, default account
-just sign_ledger succ-v210 council eth
+just sign_ledger eigenda-cert-v3 council eth
 
 # cLabs team, Ethereum app, account index 1
-just sign_ledger succ-v210 clabs eth 1
+just sign_ledger eigenda-cert-v3 clabs eth 1
 
 # Council team with nested multisig (e.g. Mento)
-just sign_ledger succ-v210 council eth 0 0xMentoMultisigAddress
+just sign_ledger eigenda-cert-v3 council eth 0 0xMentoMultisigAddress
 ```
 
 ### Tenderly Simulations
@@ -88,24 +88,30 @@ just sign_ledger succ-v210 council eth 0 0xMentoMultisigAddress
 just simulate
 
 # Show a specific version
-just simulate succ-v210
+just simulate eigenda-cert-v3
 ```
 
 | Version | Tenderly Simulation |
 |---------|---------------------|
 | succ-v210 | [View on Tenderly](https://dashboard.tenderly.co/explorer/vnet/7682d855-f265-40df-abe0-b3b829eb824a/tx/0x96891cb8e0f89e77228ae0ca53ca4cf9c97c9bb162615eb11b506de1644734e4) |
+| eigenda-cert-v3 | [View on Tenderly](https://dashboard.tenderly.co/explorer/vnet/7f58af78-e2ba-4ef2-8cd1-6dd329723aee/tx/0x2792faf8a438323dfd76844ef9f5d6b346c677fbf1951430cb458883073c6fd7) |
 
 Historical executed-upgrade simulations (v4, v5, succ-v2, succ-v201) remain registered in `justfile` for reference.
 
 ### Verification
 
 ```bash
-# Decode succ-v210 calldata (Multicall3 aggregate3)
+# Decode eigenda-cert-v3 calldata (Multicall3 aggregate3)
 cast calldata-decode "aggregate3((address,bool,bytes)[])" \
-  $(jq -r '.calldata' upgrades/mainnet/10-succ-v210.json)
+  $(jq -r '.calldata' upgrades/mainnet/11-eigenda-cert-v3.json)
+
+# Decode the inner router call
+cast calldata-decode "addCertVerifier(uint32,address)" <inner-bytes-from-aggregate3>
 ```
 
-succ-v210 should be verified on **Sepolia** prior to mainnet signing (see [upgrades/sepolia/04-succ-v210.json](./upgrades/sepolia/04-succ-v210.json)).
+The inner call should decode to `(25624000, 0xd9C4dA492c60e92e2B53abB5Bea7Aa4b8aA5b181)`.
+
+eigenda-cert-v3 was verified on **Sepolia** (tx [`0x4b87a3…16a6`](https://sepolia.etherscan.io/tx/0x4b87a3680430af092c060c2b7f7ea96c058c9d7e79c95ea26fe6cc85d38116a6)) prior to mainnet signing.
 
 ### Ledger Workaround for Celo App Users
 
@@ -116,7 +122,7 @@ The Celo Ledger app does not support signing EIP-712 typed data. Use the "Eth Re
 3. Open the Eth Recovery app on your Ledger before signing
 
 ```bash
-just sign_ledger succ-v210 clabs celo 1
+just sign_ledger eigenda-cert-v3 clabs celo 1
 ```
 
 ## Command Reference
@@ -130,7 +136,7 @@ just sign_ledger <version> <team> <ledger_app> [account_index] [grand_child]
 
 | Parameter | Options | Default | Description |
 |-----------|---------|---------|-------------|
-| `version` | `v2`, `v3`, `v4`, `v5`, `succ-v1`, `succ-v102`, `succ-v2`, `succ-v201`, `succ-v210` | - | Upgrade version |
+| `version` | `v2`, `v3`, `v4`, `v5`, `succ-v1`, `succ-v102`, `succ-v2`, `succ-v201`, `succ-v210`, `eigenda-cert-v3` | - | Upgrade version |
 | `team` | `clabs`, `council` | - | Your team |
 | `ledger_app` | `eth`, `celo` | - | Ledger app |
 | `account_index` | `0`, `1`, `2`... | `0` | Account index |
@@ -155,7 +161,7 @@ For advanced users needing non-standard derivation paths.
 
 ## Execution Flow
 
-1. **Signers** → Run `just sign_ledger succ-v210 <team> <ledger_app>` and send `out.json` to the facilitator
+1. **Signers** → Run `just sign_ledger eigenda-cert-v3 <team> <ledger_app>` and send `out.json` to the facilitator
 2. **Facilitator** → Collects signatures and performs child multisig approvals (cLabs + Security Council)
 3. **Child Multisigs** → Approve execution on the parent multisig
-4. **Parent Multisig** → Executes the succ-v210 transaction
+4. **Parent Multisig** → Executes the eigenda-cert-v3 transaction
