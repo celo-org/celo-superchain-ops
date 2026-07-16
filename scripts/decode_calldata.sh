@@ -104,6 +104,40 @@ if echo $CALLDATA | grep -q "14f6b1a3"; then
     echo ""
 fi
 
+if echo $CALLDATA | grep -q "bfda00de"; then
+    FOUND_KNOWN_SELECTOR=true
+    echo "=== Add Cert Verifier ==="
+    echo "-------------------------"
+    echo "Found: addCertVerifier(uint32,address)"
+    echo "Selector: 0xbfda00de"
+    echo ""
+
+    CERT_START=$(echo $CALLDATA | grep -b -o "bfda00de" | head -1 | cut -d: -f1)
+    CERT_DATA=$(echo ${CALLDATA:CERT_START:136})
+    echo "Call data: $CERT_DATA"
+    echo ""
+    echo "Decoding parameters:"
+    cast 4byte-decode $CERT_DATA 2>/dev/null || echo "Manual decode needed - see raw hex above"
+    echo ""
+
+    CERT_ABN_HEX=$(echo $CALLDATA | grep -o "bfda00de.\{64\}" | head -1 | cut -c9-72)
+    CERT_ABN=$((16#$CERT_ABN_HEX))
+    CERT_ADDR_HEX=$(echo $CALLDATA | grep -o "bfda00de.\{128\}" | head -1 | cut -c97-136)
+    CERT_ADDR="0x$CERT_ADDR_HEX"
+
+    echo "Activation Block: $CERT_ABN (0x$CERT_ABN_HEX)"
+    echo "Cert Verifier: $CERT_ADDR"
+
+    ADDRESSES_FILE=$(ls addresses/${NETWORK}/[0-9][0-9]-${VERSION}.json 2>/dev/null)
+    if [ -n "$ADDRESSES_FILE" ]; then
+        EXPECTED=$(jq -r '.EigenDACertVerifier // empty' "$ADDRESSES_FILE")
+        if [ -n "$EXPECTED" ]; then
+            echo "  (Should match: $EXPECTED)"
+        fi
+    fi
+    echo ""
+fi
+
 if echo $CALLDATA | grep -q "f2fde38b"; then
     FOUND_KNOWN_SELECTOR=true
     echo "=== Transfer Ownership ==="
@@ -141,6 +175,11 @@ fi
 if [ -n "${IMPL_GAME_TYPE:-}" ]; then
     OP_COUNT=$((OP_COUNT + 1))
     SUMMARY_LINES="${SUMMARY_LINES}${OP_COUNT}. setImplementation(gameType=$IMPL_GAME_TYPE, impl=$IMPL_ADDR)\n"
+fi
+
+if [ -n "${CERT_ABN:-}" ]; then
+    OP_COUNT=$((OP_COUNT + 1))
+    SUMMARY_LINES="${SUMMARY_LINES}${OP_COUNT}. addCertVerifier(activationBlock=$CERT_ABN, certVerifier=$CERT_ADDR)\n"
 fi
 
 if [ -n "${TRANSFER_NEW_OWNER:-}" ]; then

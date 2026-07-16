@@ -1,7 +1,7 @@
 # Manual Verification on Tenderly
 
 To manually verify the upgrades, please follow these steps:
-1. Open the Tenderly link for the specific version (v2, v3, succ-v1, succ-v102, succ-v2, succ-v201, or succ-v210).
+1. Open the Tenderly link for the specific version (v2, v3, succ-v2, succ-v201, succ-v210, or eigenda-cert-v3). The succ-v1 and succ-v102 virtual testnets have been retired and are no longer available.
 2. Turn on "dev mode" in the Tenderly interface (top right corner).
 3. Navigate to the "Storage changes" tab.
 4. Search for the proxy address in the "Storage Changes" tab.
@@ -38,7 +38,7 @@ Tenderly link for v3: https://dashboard.tenderly.co/explorer/vnet/4c92d88c-598f-
 
 # succinct (OpSuccinct v1.0.0) Upgrade
 
-Tenderly link for succinct: https://dashboard.tenderly.co/explorer/vnet/053b540e-ae59-42c8-80a0-1250820dc894/tx/0x55742ec449b9659f3a5662c5b2f6d6a92d9d955a39eeaaeaf1df1726a3f2ff3f
+Tenderly link for succinct: retired — this virtual testnet is no longer available (upgrade executed on mainnet). The verification details below are kept for historical reference.
 
 Verify the following changes:
 - `initBonds[42]` is set to `10000000000000000` (0.01 ETH)
@@ -51,7 +51,7 @@ Verify the following changes:
 
 # succinct-v102 (OpSuccinct v1.0.2) Upgrade
 
-Tenderly link for succinct-v102: https://dashboard.tenderly.co/explorer/vnet/39498d1a-4638-47d3-8bbc-010de8f718ce/tx/0x27f7a467c7d7faa3aa9934ffc2810a4d910e2404783aed427a5fa1f732f7e12d
+Tenderly link for succinct-v102: retired — this virtual testnet is no longer available (upgrade executed on mainnet). The verification details below are kept for historical reference.
 
 Verify the following change:
 - `gameImpls[42]` is updated to `0xc5bd131ceaeb72f15c66418bc2668332ab99de37` (OPSuccinctFaultDisputeGame v1.0.2)
@@ -94,3 +94,16 @@ Verify the following change on `DisputeGameFactory` (`0xFbAC162162f4009Bb007C6De
 | Contract                             | Address                                      |
 | ------------------------------------ | -------------------------------------------- |
 | OPSuccinctFaultDisputeGame          | 0xfF1caC738a5263736AF258e4b3D6a4970C6351FF   |
+
+# eigenda-cert-v3 (EigenDA Cert Verifier activation) Upgrade
+
+Tenderly link for eigenda-cert-v3: https://dashboard.tenderly.co/explorer/vnet/7f58af78-e2ba-4ef2-8cd1-6dd329723aee/tx/0x2792faf8a438323dfd76844ef9f5d6b346c677fbf1951430cb458883073c6fd7
+
+Cross-network reference: the analogous registration was executed on Sepolia in tx [0x4b87a3…16a6](https://sepolia.etherscan.io/tx/0x4b87a3680430af092c060c2b7f7ea96c058c9d7e79c95ea26fe6cc85d38116a6).
+
+Verify the following change on `EigenDACertVerifierRouter` (`0x2ea418AE1852bfC79e18B37E55F278F9c598AA08`):
+- A new activation-block-number entry is appended: `certVerifiers[25624000]` is set to `0xd9C4dA492c60e92e2B53abB5Bea7Aa4b8aA5b181` (new `EigenDACertVerifier`), and `25624000` is appended to `certVerifierABNs`.
+
+| Contract                             | Address                                      |
+| ------------------------------------ | -------------------------------------------- |
+| EigenDACertVerifier                 | 0xd9C4dA492c60e92e2B53abB5Bea7Aa4b8aA5b181   |
