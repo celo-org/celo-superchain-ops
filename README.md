@@ -136,7 +136,7 @@ just sign_ledger <version> <team> <ledger_app> [account_index] [grand_child]
 
 | Parameter | Options | Default | Description |
 |-----------|---------|---------|-------------|
-| `version` | `v2`, `v3`, `v4`, `v5`, `succ-v1`, `succ-v102`, `succ-v2`, `succ-v201`, `succ-v210`, `eigenda-cert-v3` | - | Upgrade version |
+| `version` | `v2`, `v3`, `v4`, `v5`, `succ-v1`, `succ-v102`, `succ-v2`, `succ-v201`, `succ-v210`, `eigenda-cert-v3`, `succ-v220` | - | Upgrade version |
 | `team` | `clabs`, `council` | - | Your team |
 | `ledger_app` | `eth`, `celo` | - | Ledger app |
 | `account_index` | `0`, `1`, `2`... | `0` | Account index |

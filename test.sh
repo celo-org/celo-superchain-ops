@@ -173,6 +173,15 @@ SEPOLIA_CHILD_HASH_COUNCIL_SUCC_V210=0x49b8a0b7cf67dca65b91a064509dc601811e2d8b5
 SEPOLIA_CHILD_DATA_COUNCIL_SUCC_V210=0x1901cd00dbdd235174967fdd794795e947ae94fb2433442e6f497cbcb8ade286c3ff1b076146bc336f70b37650b8e3916a7fa3e05473f0652ec37a809b805251a0e1
 SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V210=78eb003c9369f140e5396e099f9175e3ca529026311d2647a54871e6ff85e85f4302b4e8ef089f811a9d4f490277548b69317133a2917196353567ce0ff4f9b21c
 
+# sepolia succ-v220
+SEPOLIA_PARENT_HASH_SUCC_V220=0xd0c8b8be6530fc7393c4980f709f63f262d5f8b02e7282b92474d73a660f5f15
+SEPOLIA_CHILD_HASH_CLABS_SUCC_V220=0x31d0326b9eafd8340131077479c16eaed9e48658fcde5e1df139687e1ddc2830
+SEPOLIA_CHILD_DATA_CLABS_SUCC_V220=0x19010997447f88a2bb698764da0831cf77290b5f52333cf06515d7c747a213b37add929824f4540cfdd8dbcf79178523f0e02cf9ab060b694f065a11d35e1169d431
+SEPOLIA_CHILD_SIG_CLABS_SUCC_V220=eb63a6e43e1fe4d934ab6aad82379460116c3c034241f1995628c9e6dc4c211536d749ae1fdd9aba9a17e46c5d05359bef0453a8195b1281b0b633132e32aa281b
+SEPOLIA_CHILD_HASH_COUNCIL_SUCC_V220=0x062b948e07186421527c497fdd7a65a0f6b6e83f5e2229bab5f2280ffbe17155
+SEPOLIA_CHILD_DATA_COUNCIL_SUCC_V220=0x1901cd00dbdd235174967fdd794795e947ae94fb2433442e6f497cbcb8ade286c3ff344a89332c06fb94691a097caf0acd16df983514dcead114f19b2aabf148393d
+SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e95131cc9153b12ef0aa7053417e1c6b6946b148a3769189c4ade01179dc1c05e19d8d74facdfa379cea71c
+
 @test "Test default command" {
   run just
   [ "$status" -eq 0 ]
@@ -239,6 +248,12 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V210=78eb003c9369f140e5396e099f9175e3ca529026311d
   [ "${lines[0]}" = "Detected version: eigenda-cert-v3" ]
 }
 
+@test "Test check-version succ-v220" {
+  run just check-version succ-v220
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = "Detected version: succ-v220" ]
+}
+
 @test "Test check-version v99" {
   run just check-version v99
   [ "$status" -eq 1 ]
@@ -299,6 +314,7 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V210=78eb003c9369f140e5396e099f9175e3ca529026311d
   [ -f "upgrades/sepolia/02-v5.json" ]
   [ -f "upgrades/sepolia/03-succ-v2.json" ]
   [ -f "upgrades/sepolia/04-succ-v210.json" ]
+  [ -f "upgrades/sepolia/05-succ-v220.json" ]
 }
 
 @test "Test mainnet address files exist" {
@@ -319,6 +335,7 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V210=78eb003c9369f140e5396e099f9175e3ca529026311d
   [ -f "addresses/sepolia/02-v5.json" ]
   [ -f "addresses/sepolia/03-succ-v2.json" ]
   [ -f "addresses/sepolia/04-succ-v210.json" ]
+  [ -f "addresses/sepolia/05-succ-v220.json" ]
 }
 
 @test "Test simulate v2" {
@@ -974,4 +991,30 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V210=78eb003c9369f140e5396e099f9175e3ca529026311d
   [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_COUNCIL_SUCC_V210" ]
   [ "${lines[6]}" = "Your account is $ACCOUNT" ]
   [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V210" ]
+}
+
+@test "Test sign succ-v220 clabs on sepolia" {
+  NETWORK=sepolia TEST_PK=$TEST_PK run just sign succ-v220 clabs
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = "Detected network: sepolia" ]
+  [ "${lines[1]}" = "Detected version: succ-v220" ]
+  [ "${lines[2]}" = "Detected team: clabs" ]
+  [ "${lines[3]}" = "Parent tx hash: $SEPOLIA_PARENT_HASH_SUCC_V220" ]
+  [ "${lines[4]}" = "Child tx hash: $SEPOLIA_CHILD_HASH_CLABS_SUCC_V220" ]
+  [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_CLABS_SUCC_V220" ]
+  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_CLABS_SUCC_V220" ]
+}
+
+@test "Test sign succ-v220 council on sepolia" {
+  NETWORK=sepolia TEST_PK=$TEST_PK run just sign succ-v220 council
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = "Detected network: sepolia" ]
+  [ "${lines[1]}" = "Detected version: succ-v220" ]
+  [ "${lines[2]}" = "Detected team: council" ]
+  [ "${lines[3]}" = "Parent tx hash: $SEPOLIA_PARENT_HASH_SUCC_V220" ]
+  [ "${lines[4]}" = "Child tx hash: $SEPOLIA_CHILD_HASH_COUNCIL_SUCC_V220" ]
+  [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_COUNCIL_SUCC_V220" ]
+  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220" ]
 }
