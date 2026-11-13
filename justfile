@@ -41,7 +41,7 @@ check-version version:
 
     VERSION={{version}}
     case $VERSION in
-    "v2"|"v3"|"v4"|"v5"|"succ-v1"|"succ-v102"|"succ-v2"|"succ-v201"|"succ-v210"|"eigenda-cert-v3")
+    "v2"|"v3"|"v4"|"v5"|"succ-v1"|"succ-v102"|"succ-v2"|"succ-v201"|"succ-v210"|"eigenda-cert-v3"|"succ-v220")
         echo "Detected version: $VERSION"
         ;;
     *)
