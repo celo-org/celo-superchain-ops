@@ -35,8 +35,7 @@ succ-*)
     echo "OpSuccinct Contract Verification ($VERSION)"
     echo "============================================="
     echo ""
-    echo "The OpSuccinct contracts were deployed using CREATE3"
-    echo "deterministic deployment to pre-calculated addresses:"
+    echo "OpSuccinct contracts deployed for this release:"
     echo ""
     for key in $(jq -r 'keys[]' "$ADDRESSES_FILE"); do
         addr=$(jq -r ".$key" "$ADDRESSES_FILE")

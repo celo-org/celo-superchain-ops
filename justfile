@@ -78,6 +78,7 @@ simulate version='':
         "mainnet/succ-v201") echo "https://dashboard.tenderly.co/explorer/vnet/6044ea35-ad95-4d0c-8440-135ccb38ba95/tx/0x0b1d4c6376df347fc937439862c65aebaa4dcb693ed785e3202f1591a4c88bcf" ;;
         "mainnet/succ-v210") echo "https://dashboard.tenderly.co/explorer/vnet/7682d855-f265-40df-abe0-b3b829eb824a/tx/0x96891cb8e0f89e77228ae0ca53ca4cf9c97c9bb162615eb11b506de1644734e4" ;;
         "mainnet/eigenda-cert-v3") echo "https://dashboard.tenderly.co/explorer/vnet/7f58af78-e2ba-4ef2-8cd1-6dd329723aee/tx/0x2792faf8a438323dfd76844ef9f5d6b346c677fbf1951430cb458883073c6fd7" ;;
+        "mainnet/succ-v220") echo "https://dashboard.tenderly.co/explorer/vnet/06033781-b88b-4942-b821-fd5450c45439/tx/0xb5864c68c41725af58188e14a66c4624c5aa9b637c10748eab27485acc20b62b" ;;
         *) echo "" ;;
         esac
     }
@@ -87,7 +88,7 @@ simulate version='':
     if [ -z "$VERSION" ]; then
         echo "Tenderly Simulations (${NETWORK}):"
         echo ""
-        for VER in v2 v3 succ-v1 succ-v102 v4 v5 succ-v2 succ-v201 succ-v210 eigenda-cert-v3; do
+        for VER in v2 v3 succ-v1 succ-v102 v4 v5 succ-v2 succ-v201 succ-v210 eigenda-cert-v3 succ-v220; do
             URL=$(get_url "$VER")
             if [ -n "$URL" ]; then
                 printf "  %-10s %s\n" "$VER:" "$URL"
@@ -142,6 +143,7 @@ sign version team hd_path='' grand_child='':
     TARGET=$(cat $UPGRADE_FILE | jq -r .target)
     PARENT_CALLDATA=$(cat $UPGRADE_FILE | jq -r .calldata)
     PARENT_NONCE=$(cat $UPGRADE_FILE | jq -r .nonce.parent)
+    REFUND_RECEIVER=$(jq -r --arg d "$REFUND_RECEIVER" '.refundReceiver // $d' $UPGRADE_FILE)
     PARENT_TX_HASH=$(cast call $PARENT_SAFE_ADDRESS \
         "getTransactionHash(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,uint256)(bytes32)" \
         $TARGET $VALUE $PARENT_CALLDATA $TX_DELEGATECALL $SAFE_TX_GAS $BASE_GAS $GAS_PRICE $GAS_TOKEN $REFUND_RECEIVER $PARENT_NONCE \

@@ -11,6 +11,7 @@ SIM_URL_V5="https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-
 SIM_URL_SUCC_V2="https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0xce7dc169f6885f8ca937135a562068e3444e6c7fc299ffb7e2341372ed006dda"
 SIM_URL_SUCC_V201="https://dashboard.tenderly.co/explorer/vnet/6044ea35-ad95-4d0c-8440-135ccb38ba95/tx/0x0b1d4c6376df347fc937439862c65aebaa4dcb693ed785e3202f1591a4c88bcf"
 SIM_URL_SUCC_V210="https://dashboard.tenderly.co/explorer/vnet/7682d855-f265-40df-abe0-b3b829eb824a/tx/0x96891cb8e0f89e77228ae0ca53ca4cf9c97c9bb162615eb11b506de1644734e4"
+SIM_URL_SUCC_V220="https://dashboard.tenderly.co/explorer/vnet/06033781-b88b-4942-b821-fd5450c45439/tx/0xb5864c68c41725af58188e14a66c4624c5aa9b637c10748eab27485acc20b62b"
 SIM_URL_EIGENDA_CERT_V3="https://dashboard.tenderly.co/explorer/vnet/7f58af78-e2ba-4ef2-8cd1-6dd329723aee/tx/0x2792faf8a438323dfd76844ef9f5d6b346c677fbf1951430cb458883073c6fd7"
 PARENT_HASH_V2=0xce6a4dc9ab7084ad8a53c87e6229860b09e8ad6ddd685eb9af1303fc28687966
 PARENT_HASH_V3=0x7d2b307080c30634b946a54347349523ca40066f2538ae522edcee0c5ac3f20b
@@ -136,6 +137,18 @@ CHILD_SIG_COUNCIL_EIGENDA_CERT_V3=cee835f528618270a67a691490776bc98d64d6f9db5f7c
 GRAND_CHILD_HASH_COUNCIL_EIGENDA_CERT_V3=0x534d853589d4a115294ed7a0d8da1f68821f70589dd163f3948bc06c3eb3ef39
 GRAND_CHILD_DATA_COUNCIL_EIGENDA_CERT_V3=0x1901b889fe0bca2c1159d0891cdc881184aad05e5f55c5cf93ef3be10360d179694f1f3990505570a22595d4a4c496fef4ff67a4c5c72393a3a03ae35890d07908ea
 GRAND_CHILD_SIG_COUNCIL_EIGENDA_CERT_V3=e4f4866823ff31b73b4d6c6746e466c053f303af27a6d812336e024eabe333222c50a46c7e09189eb51b06a77d1a74c5c894d040ece30e6497b193071ae804121b
+
+# mainnet succ-v220
+PARENT_HASH_SUCC_V220=0x48851a6e5cd9df63879a71e7052d12f31c7e1fd5ebf40a2663d11b1535b55aab
+CHILD_HASH_CLABS_SUCC_V220=0xfadfb07f55a72b9ccff3fa7d40b72bae40f26e4d6f2ae28a1563eff847270431
+CHILD_DATA_CLABS_SUCC_V220=0x1901c7a8fb49e5d601acc381538cdace161d64d5f25a93261cded88243db64e1cff4afd401fa1ece1af3a4361dd21433606f9dc35257da83d39427e190bb7f263b9e
+CHILD_SIG_CLABS_SUCC_V220=f9bfe60ae3579e5caf114de814eb3f3f274edb59de9e7a17ffe6f2d18962ae79239f0e22a8e7837e72d836363069642731df05bc9dbc615408df7f9af3f49d511b
+CHILD_HASH_COUNCIL_SUCC_V220=0x32600ef092ee70b1129202850f4b41fb515949ce5c647dc3b41e4a819f6135e9
+CHILD_DATA_COUNCIL_SUCC_V220=0x1901006bcc13a9a6b3224caf34092bd0db63b90656971bfec6731c9c61f278a239ad3ea5305c8e81a6731dc24a8edd800d7b49e45fe44fd044617231168b4ab424dc
+CHILD_SIG_COUNCIL_SUCC_V220=f1600ad77254ceaad62597565b6697f2dc4e2e6451b0898e47d04e5f8ec3fdf34db97735c0383cac5494bd119414d73553fc2f2cdacf37e48a474d25aee5d36b1b
+GRAND_CHILD_HASH_COUNCIL_SUCC_V220=0x113aa7ec35cf8dafe24779cc05e1e34f3fa6fd08dbd443b225d8eaf646d521b3
+GRAND_CHILD_DATA_COUNCIL_SUCC_V220=0x1901b889fe0bca2c1159d0891cdc881184aad05e5f55c5cf93ef3be10360d179694f89e8865b5e0d5538076e7c019f8ed49fecce281cdc7778bf2ba28f7e90948503
+GRAND_CHILD_SIG_COUNCIL_SUCC_V220=7763bbbc920aead4ac933f822aa600e177b1292de6cc8b0e82b1ccee838430fb07b1c78c0559cacc5f15e3bfb1dd29f3afbcbae6fc76f8f3ee4a4db4511611b01b
 
 # sepolia v4
 SEPOLIA_PARENT_HASH_V4=0x5596eeb4559143b00bf03d5bc3c9865b8d79f0eb524ea95d2e19f4a38c56d63a
@@ -307,6 +320,7 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ -f "upgrades/mainnet/09-succ-v201.json" ]
   [ -f "upgrades/mainnet/10-succ-v210.json" ]
   [ -f "upgrades/mainnet/11-eigenda-cert-v3.json" ]
+  [ -f "upgrades/mainnet/12-succ-v220.json" ]
 }
 
 @test "Test sepolia upgrade files exist" {
@@ -328,6 +342,7 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ -f "addresses/mainnet/09-succ-v201.json" ]
   [ -f "addresses/mainnet/10-succ-v210.json" ]
   [ -f "addresses/mainnet/11-eigenda-cert-v3.json" ]
+  [ -f "addresses/mainnet/12-succ-v220.json" ]
 }
 
 @test "Test sepolia address files exist" {
@@ -384,6 +399,12 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   run just simulate eigenda-cert-v3
   [ "$status" -eq 0 ]
   [ "${lines[2]}" = "eigenda-cert-v3: $SIM_URL_EIGENDA_CERT_V3" ]
+}
+
+@test "Test simulate succ-v220" {
+  run just simulate succ-v220
+  [ "$status" -eq 0 ]
+  [ "${lines[2]}" = "succ-v220: $SIM_URL_SUCC_V220" ]
 }
 
 @test "Test sign v2 clabs" {
@@ -885,6 +906,47 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[9]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_EIGENDA_CERT_V3" ]
   [ "${lines[10]}" = "Your account is $ACCOUNT" ]
   [ "${lines[11]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_EIGENDA_CERT_V3" ]
+}
+
+# --- succ-v220 sign tests ---
+
+@test "Test sign succ-v220 clabs" {
+  TEST_PK=$TEST_PK run just sign succ-v220 clabs
+  [ "$status" -eq 0 ]
+  [ "${lines[1]}" = "Detected version: succ-v220" ]
+  [ "${lines[2]}" = "Detected team: clabs" ]
+  [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V220" ]
+  [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_CLABS_SUCC_V220" ]
+  [ "${lines[5]}" = "Child tx data: $CHILD_DATA_CLABS_SUCC_V220" ]
+  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_SUCC_V220" ]
+}
+
+@test "Test sign succ-v220 council" {
+  TEST_PK=$TEST_PK run just sign succ-v220 council
+  [ "$status" -eq 0 ]
+  [ "${lines[1]}" = "Detected version: succ-v220" ]
+  [ "${lines[2]}" = "Detected team: council" ]
+  [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V220" ]
+  [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_SUCC_V220" ]
+  [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_SUCC_V220" ]
+  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_SUCC_V220" ]
+}
+
+@test "Test sign succ-v220 council with grand child" {
+  TEST_PK=$TEST_PK run just sign succ-v220 council "" $GRAND_CHILD_MULTISIG
+  [ "$status" -eq 0 ]
+  [ "${lines[1]}" = "Detected version: succ-v220" ]
+  [ "${lines[2]}" = "Detected team: council" ]
+  [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V220" ]
+  [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_SUCC_V220" ]
+  [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_SUCC_V220" ]
+  [ "${lines[6]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
+  [ "${lines[8]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_SUCC_V220" ]
+  [ "${lines[9]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_SUCC_V220" ]
+  [ "${lines[10]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[11]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_SUCC_V220" ]
 }
 
 # --- sepolia sign tests ---

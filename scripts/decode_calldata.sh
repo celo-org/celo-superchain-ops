@@ -70,39 +70,41 @@ if echo $CALLDATA | grep -q "1e334240"; then
     echo ""
 fi
 
-if echo $CALLDATA | grep -q "14f6b1a3"; then
+IMPL_OPS=()
+for IMPL_DATA in $(echo $CALLDATA | grep -o "14f6b1a3.\{128\}" || true); do
     FOUND_KNOWN_SELECTOR=true
     echo "=== Set Game Implementation ==="
     echo "-------------------------------"
     echo "Found: setImplementation(uint32,address)"
     echo "Selector: 0x14f6b1a3"
     echo ""
-
-    IMPL_START=$(echo $CALLDATA | grep -b -o "14f6b1a3" | head -1 | cut -d: -f1)
-    IMPL_DATA=$(echo ${CALLDATA:IMPL_START:138})
     echo "Call data: $IMPL_DATA"
     echo ""
     echo "Decoding parameters:"
     cast 4byte-decode $IMPL_DATA 2>/dev/null || echo "Manual decode needed - see raw hex above"
     echo ""
 
-    IMPL_GAME_TYPE_HEX=$(echo $CALLDATA | grep -o "14f6b1a3.\{64\}" | head -1 | cut -c9-72)
+    IMPL_GAME_TYPE_HEX=${IMPL_DATA:8:64}
     IMPL_GAME_TYPE=$((16#$IMPL_GAME_TYPE_HEX))
-    IMPL_ADDR_HEX=$(echo $CALLDATA | grep -o "14f6b1a3.\{128\}" | head -1 | cut -c97-136)
-    IMPL_ADDR="0x$IMPL_ADDR_HEX"
+    IMPL_ADDR="0x${IMPL_DATA:96:40}"
 
     echo "Game Type: $IMPL_GAME_TYPE (0x$IMPL_GAME_TYPE_HEX)"
     echo "Implementation Address: $IMPL_ADDR"
 
-    ADDRESSES_FILE=$(ls addresses/${NETWORK}/[0-9][0-9]-${VERSION}.json 2>/dev/null)
-    if [ -n "$ADDRESSES_FILE" ]; then
-        EXPECTED=$(jq -r '.OPSuccinctFaultDisputeGame // empty' "$ADDRESSES_FILE")
-        if [ -n "$EXPECTED" ]; then
-            echo "  (Should match: $EXPECTED)"
+    if [ "$IMPL_ADDR" = "0x0000000000000000000000000000000000000000" ]; then
+        echo "  (address(0): disables new games of type $IMPL_GAME_TYPE)"
+    else
+        ADDRESSES_FILE=$(ls addresses/${NETWORK}/[0-9][0-9]-${VERSION}.json 2>/dev/null)
+        if [ -n "$ADDRESSES_FILE" ]; then
+            EXPECTED=$(jq -r '.OPSuccinctFaultDisputeGame // empty' "$ADDRESSES_FILE")
+            if [ -n "$EXPECTED" ]; then
+                echo "  (Should match: $EXPECTED)"
+            fi
         fi
     fi
     echo ""
-fi
+    IMPL_OPS+=("setImplementation(gameType=$IMPL_GAME_TYPE, impl=$IMPL_ADDR)")
+done
 
 if echo $CALLDATA | grep -q "bfda00de"; then
     FOUND_KNOWN_SELECTOR=true
@@ -172,10 +174,10 @@ if [ -n "${GAME_TYPE:-}" ]; then
     SUMMARY_LINES="${SUMMARY_LINES}${OP_COUNT}. setInitBond(gameType=$GAME_TYPE, bond=$BOND_ETH ETH)\n"
 fi
 
-if [ -n "${IMPL_GAME_TYPE:-}" ]; then
+for IMPL_OP in "${IMPL_OPS[@]}"; do
     OP_COUNT=$((OP_COUNT + 1))
-    SUMMARY_LINES="${SUMMARY_LINES}${OP_COUNT}. setImplementation(gameType=$IMPL_GAME_TYPE, impl=$IMPL_ADDR)\n"
-fi
+    SUMMARY_LINES="${SUMMARY_LINES}${OP_COUNT}. ${IMPL_OP}\n"
+done
 
 if [ -n "${CERT_ABN:-}" ]; then
     OP_COUNT=$((OP_COUNT + 1))
