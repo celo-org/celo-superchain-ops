@@ -26,7 +26,7 @@ The Tenderly vnet exposes a **public RPC endpoint** (no auth needed). Pick the v
 | v5 | `0x833bca6071ad1cf1c82acbb58fccefe75e06978454431c0597819cb743363bbb` |
 | succ-v2 | `0xce7dc169f6885f8ca937135a562068e3444e6c7fc299ffb7e2341372ed006dda` |
 | succ-v201 | `0x0b1d4c6376df347fc937439862c65aebaa4dcb693ed785e3202f1591a4c88bcf` |
-| **succ-v210** | `0x96891cb8e0f89e77228ae0ca53ca4cf9c97c9bb162615eb11b506de1644734e4` |
+| succ-v210 | `0x96891cb8e0f89e77228ae0ca53ca4cf9c97c9bb162615eb11b506de1644734e4` |
 | eigenda-cert-v3 | `0x2792faf8a438323dfd76844ef9f5d6b346c677fbf1951430cb458883073c6fd7` |
 | **succ-v220** | `0xb5864c68c41725af58188e14a66c4624c5aa9b637c10748eab27485acc20b62b` |
 
@@ -41,18 +41,40 @@ cast tx $TX_HASH input --rpc-url $TENDERLY_RPC > tenderly_input.txt
 
 ## Step 2: Decode the `execTransaction` calldata
 
-The input is a call to `Safe.execTransaction(...)`. Decode it to extract the inner `target` and `calldata`:
+The input is a call to `Safe.execTransaction(...)`. Decode it:
 
 ```bash
 cast calldata-decode \
   "execTransaction(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,bytes)" \
-  $(cat tenderly_input.txt)
+  $(cat tenderly_input.txt) > tenderly_decoded.txt
+cat -n tenderly_decoded.txt
 ```
 
-Output (10 lines). The fields that matter:
-- **Line 1** = `to` (target contract)
-- **Line 3** = `data` (the upgrade calldata)
-- **Line 4** = `operation` (should be `1` = DELEGATECALL)
+The output has 10 lines, one per parameter. Lines 1-9 all go into the Safe transaction hash you sign, so a change in any of them gives a different hash. Expected values for succ-v220:
+
+| Line | Field | Expected |
+|------|-------|----------|
+| 1 | `to` | `0xcA11bde05977b3631167028862bE2a173976CA11` (Multicall3) |
+| 2 | `value` | `0` |
+| 3 | `data` | upgrade calldata from the JSON (decoded in Step 4) |
+| 4 | `operation` | `1` (DELEGATECALL) |
+| 5 | `safeTxGas` | `0` |
+| 6 | `baseGas` | `0` |
+| 7 | `gasPrice` | `0` |
+| 8 | `gasToken` | `0x0000000000000000000000000000000000000000` |
+| 9 | `refundReceiver` | `0x3bec6009e5b9611b7765BC245A4Bb420817483E2` |
+| 10 | `signatures` | simulation only; not part of the hash |
+
+The refund receiver is new for succ-v220 (earlier mainnet releases used `0x95ffac468e37ddeef407ffef18f0cc9e86d8f13b`). It is set in the upgrade JSON as `refundReceiver`. With `gasPrice` = `0` nothing is ever paid to it; it only changes the hash.
+
+Check lines 1-9 against the upgrade JSON in one go:
+
+```bash
+U=upgrades/mainnet/12-succ-v220.json
+diff -i <(printf '%s\n' "$(jq -r .target $U)" 0 "$(jq -r .calldata $U)" 1 0 0 0 \
+    0x0000000000000000000000000000000000000000 "$(jq -r .refundReceiver $U)") \
+  <(head -9 tenderly_decoded.txt) && echo "Lines 1-9 match $U"
+```
 
 ## Step 3: Compare with the upgrade JSON
 
