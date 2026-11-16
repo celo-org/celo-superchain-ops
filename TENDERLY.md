@@ -1,7 +1,7 @@
 # Manual Verification on Tenderly
 
 To manually verify the upgrades, please follow these steps:
-1. Open the Tenderly link for the specific version (v2, v3, succ-v2, succ-v201, succ-v210, or eigenda-cert-v3). The succ-v1 and succ-v102 virtual testnets have been retired and are no longer available.
+1. Open the Tenderly link for the specific version (v2, v3, succ-v2, succ-v201, succ-v210, eigenda-cert-v3, or succ-v220). The succ-v1 and succ-v102 virtual testnets have been retired and are no longer available.
 2. Turn on "dev mode" in the Tenderly interface (top right corner).
 3. Navigate to the "Storage changes" tab.
 4. Search for the proxy address in the "Storage Changes" tab.
@@ -107,3 +107,19 @@ Verify the following change on `EigenDACertVerifierRouter` (`0x2ea418AE1852bfC79
 | Contract                             | Address                                      |
 | ------------------------------------ | -------------------------------------------- |
 | EigenDACertVerifier                 | 0xd9C4dA492c60e92e2B53abB5Bea7Aa4b8aA5b181   |
+
+# succ-v220 (OPSuccinct v2.2.0) Upgrade
+
+Tenderly link for succ-v220: https://dashboard.tenderly.co/explorer/vnet/06033781-b88b-4942-b821-fd5450c45439/tx/0xb5864c68c41725af58188e14a66c4624c5aa9b637c10748eab27485acc20b62b
+
+Cross-network reference: the same two calls were executed on Sepolia in tx [0x2dbd82…540a](https://sepolia.etherscan.io/tx/0x2dbd8242cabc248f4ca0f65f230a4ff09e25295224ec1a22459e73c1aab6540a).
+
+Verify the following changes on `DisputeGameFactory` (`0xFbAC162162f4009Bb007C6DeBC36B1dAC10aF683`):
+- `gameImpls[42]` is set to `0x1736C1014BdcA32aBE1Bd67762bA97673701EDe7` (new `OPSuccinctFaultDisputeGame`); an `ImplementationSet` event is emitted for game type `42`.
+- `gameImpls[0]` is set to `0x0000000000000000000000000000000000000000`; an `ImplementationSet` event is emitted for game type `0`.
+- No other storage changes on the factory (init bonds, owner and game type `1` are unchanged).
+
+| Contract                             | Address                                      |
+| ------------------------------------ | -------------------------------------------- |
+| OPSuccinctFaultDisputeGame           | 0x1736C1014BdcA32aBE1Bd67762bA97673701EDe7   |
+| AccessManager                        | 0x2c4e8F333224139193790fB27Fc99b926061d889   |
