@@ -63,6 +63,31 @@ check-team team:
         ;;
     esac
 
+# Warn, and ask to continue, if the signer is not an owner of the Safe it signs for
+check-owner $safe $signer $rpc_url $other_safe='' $other_team='':
+    #!/usr/bin/env bash
+    set -euo pipefail
+    is_owner() { cast call "$1" "isOwner(address)(bool)" "$signer" -r "$rpc_url" 2>/dev/null || echo "unknown"; }
+    case $(is_owner "$safe") in
+    "true")
+        echo "Signer $signer is an owner of $safe"
+        ;;
+    "false")
+        echo -e "\e[1;31mWARNING: signer $signer is NOT an owner of $safe\e[0m"
+        if [ -n "$other_safe" ] && [ "$(is_owner "$other_safe")" = "true" ]; then
+            echo -e "\e[1;33mIt is an owner of the $other_team Safe ($other_safe). Did you mean team=$other_team?\e[0m"
+        fi
+        # Only prompt in interactive, non-test runs; elsewhere the warning is enough
+        if [ -z "${TEST_PK:-}" ] && [ -t 0 ]; then
+            read -r -p "Continue signing anyway? [y/N] " ANSWER
+            [[ "$ANSWER" =~ ^[yY]$ ]] || { echo "Aborted."; exit 1; }
+        fi
+        ;;
+    *)
+        echo -e "\e[1;33mWARNING: could not verify whether $signer is an owner of $safe (RPC error)\e[0m"
+        ;;
+    esac
+
 simulate version='':
     #!/usr/bin/env bash
     set -euo pipefail
@@ -175,18 +200,32 @@ sign version team hd_path='' grand_child='':
     echo "Child tx hash: $CHILD_TX_HASH"
     echo "Child tx data: $CHILD_TX_DATA"
 
+    if [ -n "${TEST_PK:-}" ]; then
+        SIGNER_ARGS=(-private-key "${TEST_PK:2}")
+    elif [ -n "${HD_PATH:-}" ]; then
+        SIGNER_ARGS=(-ledger -hd-paths "$HD_PATH")
+    else
+        SIGNER_ARGS=(-ledger)
+    fi
+
+    # Verify the signer owns the Safe it signs for before asking the Ledger to sign
+    SIGNER=$(./eip712sign "${SIGNER_ARGS[@]}" -address)
+    SIGNER="${SIGNER##*Signer: }"
+    if [ -z ${GRAND_CHILD:-} ]; then
+        case $TEAM in
+        "clabs") OTHER_TEAM="council"; OTHER_SAFE_ADDRESS=$COUNCIL_SAFE_ADDRESS ;;
+        "council") OTHER_TEAM="clabs"; OTHER_SAFE_ADDRESS=$CLABS_SAFE_ADDRESS ;;
+        esac
+        just check-owner "$CHILD_SAFE_ADDRESS" "$SIGNER" "$RPC_URL" "$OTHER_SAFE_ADDRESS" "$OTHER_TEAM"
+    else
+        just check-owner "$GRAND_CHILD" "$SIGNER" "$RPC_URL"
+    fi
+
     if [ -z ${GRAND_CHILD:-} ]; then
         if [ -z ${TEST_PK:-} ]; then
-             if [ -z ${HD_PATH:-} ]; then
-                echo "Signing Ledger wallet under default derivation path..."
-                echo $CHILD_TX_DATA | ./eip712sign -ledger > .tmp
-            else
-                echo "Signing Ledger wallet under $HD_PATH derivation path..."
-                echo $CHILD_TX_DATA | ./eip712sign -ledger -hd-paths "$HD_PATH" > .tmp
-            fi
-        else
-            echo $CHILD_TX_DATA | ./eip712sign -private-key ${TEST_PK:2} > .tmp
+            echo "Signing Ledger wallet under ${HD_PATH:-default} derivation path..."
         fi
+        echo $CHILD_TX_DATA | ./eip712sign "${SIGNER_ARGS[@]}" > .tmp
     else
         echo "Attempting to generate payload for grand child at: $GRAND_CHILD"
         GRAND_CHILD_VERSION=$(cast call $GRAND_CHILD "VERSION()(string)" -r $RPC_URL)
@@ -208,16 +247,9 @@ sign version team hd_path='' grand_child='':
         echo "Grand child tx data: $GRAND_CHILD_TX_DATA"
 
         if [ -z ${TEST_PK:-} ]; then
-             if [ -z ${HD_PATH:-} ]; then
-                echo "Signing Ledger wallet under default derivation path..."
-                echo $GRAND_CHILD_TX_DATA | ./eip712sign -ledger > .tmp
-            else
-                echo "Signing Ledger wallet under $HD_PATH derivation path..."
-                echo $GRAND_CHILD_TX_DATA | ./eip712sign -ledger -hd-paths "$HD_PATH" > .tmp
-            fi
-        else
-            echo $GRAND_CHILD_TX_DATA | ./eip712sign -private-key ${TEST_PK:2} > .tmp
+            echo "Signing Ledger wallet under ${HD_PATH:-default} derivation path..."
         fi
+        echo $GRAND_CHILD_TX_DATA | ./eip712sign "${SIGNER_ARGS[@]}" > .tmp
     fi
     
     ACCOUNT=$(cat .tmp | grep Signer)

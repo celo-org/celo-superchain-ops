@@ -415,8 +415,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_V2" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_CLABS_V2" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_CLABS_V2" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V2" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V2" ]
 }
 
 @test "Test sign v3 clabs" {
@@ -427,8 +427,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_V3" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_CLABS_V3" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_CLABS_V3" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V3" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V3" ]
 }
 
 @test "Test sign v2 council" {
@@ -439,8 +439,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_V2" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_V2" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_V2" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V2" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V2" ]
 }
 
 @test "Test sign v3 council" {
@@ -451,8 +451,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_V3" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_V3" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_V3" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V3" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V3" ]
 }
 
 @test "Test sign with hd path" {
@@ -460,8 +460,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v2" ]
   [ "${lines[2]}" = "Detected team: clabs" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V2" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V2" ]
 }
 
 @test "Test sign v2 with grand child" {
@@ -472,11 +472,11 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_V2" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_V2" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_V2" ]
-  [ "${lines[6]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
-  [ "${lines[8]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_V2" ]
-  [ "${lines[9]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_V2" ]
-  [ "${lines[10]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[11]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_V2" ]
+  [ "${lines[7]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
+  [ "${lines[9]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_V2" ]
+  [ "${lines[10]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_V2" ]
+  [ "${lines[11]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[12]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_V2" ]
 }
 
 @test "Test sign v3 with grand child" {
@@ -487,11 +487,11 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_V3" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_V3" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_V3" ]
-  [ "${lines[6]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
-  [ "${lines[8]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_V3" ]
-  [ "${lines[9]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_V3" ]
-  [ "${lines[10]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[11]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_V3" ]
+  [ "${lines[7]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
+  [ "${lines[9]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_V3" ]
+  [ "${lines[10]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_V3" ]
+  [ "${lines[11]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[12]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_V3" ]
 }
 
 @test "Test sign_ledger v2 clabs celo" {
@@ -499,8 +499,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v2" ]
   [ "${lines[2]}" = "Detected team: clabs" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V2" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V2" ]
 }
 
 @test "Test sign_ledger v3 clabs celo" {
@@ -508,8 +508,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v3" ]
   [ "${lines[2]}" = "Detected team: clabs" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V3" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V3" ]
 }
 
 @test "Test sign_ledger v2 clabs eth" {
@@ -517,8 +517,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v2" ]
   [ "${lines[2]}" = "Detected team: clabs" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V2" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V2" ]
 }
 
 @test "Test sign_ledger v3 clabs eth" {
@@ -526,8 +526,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v3" ]
   [ "${lines[2]}" = "Detected team: clabs" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V3" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V3" ]
 }
 
 @test "Test sign_ledger v2 council celo" {
@@ -535,8 +535,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v2" ]
   [ "${lines[2]}" = "Detected team: council" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V2" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V2" ]
 }
 
 @test "Test sign_ledger v3 council celo" {
@@ -544,8 +544,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v3" ]
   [ "${lines[2]}" = "Detected team: council" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V3" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V3" ]
 }
 
 @test "Test sign_ledger v2 clabs base" {
@@ -558,8 +558,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v2" ]
   [ "${lines[2]}" = "Detected team: council" ]
-  [ "${lines[10]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[11]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_V2" ]
+  [ "${lines[11]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[12]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_V2" ]
 }
 
 @test "Test sign_ledger eth with grand child" {
@@ -567,8 +567,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v2" ]
   [ "${lines[2]}" = "Detected team: council" ]
-  [ "${lines[10]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[11]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_V2" ]
+  [ "${lines[11]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[12]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_V2" ]
 }
 
 @test "Test sign succ-v1 clabs" {
@@ -579,8 +579,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V1" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_CLABS_SUCC_V1" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_CLABS_SUCC_V1" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_SUCC_V1" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_SUCC_V1" ]
 }
 
 @test "Test sign succ-v1 council" {
@@ -591,8 +591,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V1" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_SUCC_V1" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_SUCC_V1" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_SUCC_V1" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_SUCC_V1" ]
 }
 
 @test "Test sign succ-v1 council with grand child" {
@@ -603,11 +603,11 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V1" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_SUCC_V1" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_SUCC_V1" ]
-  [ "${lines[6]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
-  [ "${lines[8]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_SUCC_V1" ]
-  [ "${lines[9]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_SUCC_V1" ]
-  [ "${lines[10]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[11]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_SUCC_V1" ]
+  [ "${lines[7]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
+  [ "${lines[9]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_SUCC_V1" ]
+  [ "${lines[10]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_SUCC_V1" ]
+  [ "${lines[11]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[12]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_SUCC_V1" ]
 }
 
 @test "Test sign succ-v102 clabs" {
@@ -618,8 +618,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V102" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_CLABS_SUCC_V102" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_CLABS_SUCC_V102" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_SUCC_V102" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_SUCC_V102" ]
 }
 
 @test "Test sign succ-v102 council" {
@@ -630,8 +630,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V102" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_SUCC_V102" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_SUCC_V102" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_SUCC_V102" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_SUCC_V102" ]
 }
 
 @test "Test sign succ-v102 council with grand child" {
@@ -642,11 +642,11 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V102" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_SUCC_V102" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_SUCC_V102" ]
-  [ "${lines[6]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
-  [ "${lines[8]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_SUCC_V102" ]
-  [ "${lines[9]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_SUCC_V102" ]
-  [ "${lines[10]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[11]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_SUCC_V102" ]
+  [ "${lines[7]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
+  [ "${lines[9]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_SUCC_V102" ]
+  [ "${lines[10]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_SUCC_V102" ]
+  [ "${lines[11]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[12]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_SUCC_V102" ]
 }
 
 # --- v4 sign tests ---
@@ -659,8 +659,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_V4" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_CLABS_V4" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_CLABS_V4" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V4" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V4" ]
 }
 
 @test "Test sign v4 council" {
@@ -671,8 +671,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_V4" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_V4" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_V4" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V4" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V4" ]
 }
 
 @test "Test sign v4 council with grand child" {
@@ -683,11 +683,11 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_V4" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_V4" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_V4" ]
-  [ "${lines[6]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
-  [ "${lines[8]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_V4" ]
-  [ "${lines[9]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_V4" ]
-  [ "${lines[10]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[11]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_V4" ]
+  [ "${lines[7]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
+  [ "${lines[9]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_V4" ]
+  [ "${lines[10]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_V4" ]
+  [ "${lines[11]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[12]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_V4" ]
 }
 
 @test "Test sign_ledger v4 clabs celo" {
@@ -695,8 +695,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v4" ]
   [ "${lines[2]}" = "Detected team: clabs" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V4" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V4" ]
 }
 
 @test "Test sign_ledger v4 clabs eth" {
@@ -704,8 +704,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v4" ]
   [ "${lines[2]}" = "Detected team: clabs" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V4" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V4" ]
 }
 
 @test "Test sign_ledger v4 council celo" {
@@ -713,8 +713,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v4" ]
   [ "${lines[2]}" = "Detected team: council" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V4" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V4" ]
 }
 
 # --- v5 sign tests ---
@@ -727,8 +727,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_V5" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_CLABS_V5" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_CLABS_V5" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V5" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V5" ]
 }
 
 @test "Test sign v5 council" {
@@ -739,8 +739,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_V5" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_V5" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_V5" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V5" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V5" ]
 }
 
 @test "Test sign v5 council with grand child" {
@@ -751,11 +751,11 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_V5" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_V5" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_V5" ]
-  [ "${lines[6]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
-  [ "${lines[8]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_V5" ]
-  [ "${lines[9]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_V5" ]
-  [ "${lines[10]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[11]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_V5" ]
+  [ "${lines[7]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
+  [ "${lines[9]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_V5" ]
+  [ "${lines[10]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_V5" ]
+  [ "${lines[11]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[12]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_V5" ]
 }
 
 @test "Test sign_ledger v5 clabs celo" {
@@ -763,8 +763,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v5" ]
   [ "${lines[2]}" = "Detected team: clabs" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V5" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V5" ]
 }
 
 @test "Test sign_ledger v5 clabs eth" {
@@ -772,8 +772,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v5" ]
   [ "${lines[2]}" = "Detected team: clabs" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V5" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_V5" ]
 }
 
 @test "Test sign_ledger v5 council celo" {
@@ -781,8 +781,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "Detected version: v5" ]
   [ "${lines[2]}" = "Detected team: council" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V5" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_V5" ]
 }
 
 # --- succ-v2 sign tests ---
@@ -795,8 +795,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V2" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_CLABS_SUCC_V2" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_CLABS_SUCC_V2" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_SUCC_V2" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_SUCC_V2" ]
 }
 
 @test "Test sign succ-v2 council" {
@@ -807,8 +807,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V2" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_SUCC_V2" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_SUCC_V2" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_SUCC_V2" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_SUCC_V2" ]
 }
 
 @test "Test sign succ-v2 council with grand child" {
@@ -819,11 +819,11 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V2" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_SUCC_V2" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_SUCC_V2" ]
-  [ "${lines[6]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
-  [ "${lines[8]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_SUCC_V2" ]
-  [ "${lines[9]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_SUCC_V2" ]
-  [ "${lines[10]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[11]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_SUCC_V2" ]
+  [ "${lines[7]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
+  [ "${lines[9]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_SUCC_V2" ]
+  [ "${lines[10]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_SUCC_V2" ]
+  [ "${lines[11]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[12]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_SUCC_V2" ]
 }
 
 # --- succ-v210 sign tests ---
@@ -836,8 +836,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V210" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_CLABS_SUCC_V210" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_CLABS_SUCC_V210" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_SUCC_V210" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_SUCC_V210" ]
 }
 
 @test "Test sign succ-v210 council" {
@@ -848,8 +848,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V210" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_SUCC_V210" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_SUCC_V210" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_SUCC_V210" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_SUCC_V210" ]
 }
 
 @test "Test sign succ-v210 council with grand child" {
@@ -860,11 +860,11 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V210" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_SUCC_V210" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_SUCC_V210" ]
-  [ "${lines[6]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
-  [ "${lines[8]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_SUCC_V210" ]
-  [ "${lines[9]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_SUCC_V210" ]
-  [ "${lines[10]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[11]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_SUCC_V210" ]
+  [ "${lines[7]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
+  [ "${lines[9]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_SUCC_V210" ]
+  [ "${lines[10]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_SUCC_V210" ]
+  [ "${lines[11]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[12]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_SUCC_V210" ]
 }
 
 # --- eigenda-cert-v3 sign tests ---
@@ -877,8 +877,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_EIGENDA_CERT_V3" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_CLABS_EIGENDA_CERT_V3" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_CLABS_EIGENDA_CERT_V3" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_EIGENDA_CERT_V3" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_EIGENDA_CERT_V3" ]
 }
 
 @test "Test sign eigenda-cert-v3 council" {
@@ -889,8 +889,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_EIGENDA_CERT_V3" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_EIGENDA_CERT_V3" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_EIGENDA_CERT_V3" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_EIGENDA_CERT_V3" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_EIGENDA_CERT_V3" ]
 }
 
 @test "Test sign eigenda-cert-v3 council with grand child" {
@@ -901,11 +901,11 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_EIGENDA_CERT_V3" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_EIGENDA_CERT_V3" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_EIGENDA_CERT_V3" ]
-  [ "${lines[6]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
-  [ "${lines[8]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_EIGENDA_CERT_V3" ]
-  [ "${lines[9]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_EIGENDA_CERT_V3" ]
-  [ "${lines[10]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[11]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_EIGENDA_CERT_V3" ]
+  [ "${lines[7]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
+  [ "${lines[9]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_EIGENDA_CERT_V3" ]
+  [ "${lines[10]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_EIGENDA_CERT_V3" ]
+  [ "${lines[11]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[12]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_EIGENDA_CERT_V3" ]
 }
 
 # --- succ-v220 sign tests ---
@@ -918,8 +918,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V220" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_CLABS_SUCC_V220" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_CLABS_SUCC_V220" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_SUCC_V220" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_CLABS_SUCC_V220" ]
 }
 
 @test "Test sign succ-v220 council" {
@@ -930,8 +930,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V220" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_SUCC_V220" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_SUCC_V220" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_SUCC_V220" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $CHILD_SIG_COUNCIL_SUCC_V220" ]
 }
 
 @test "Test sign succ-v220 council with grand child" {
@@ -942,11 +942,11 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $PARENT_HASH_SUCC_V220" ]
   [ "${lines[4]}" = "Child tx hash: $CHILD_HASH_COUNCIL_SUCC_V220" ]
   [ "${lines[5]}" = "Child tx data: $CHILD_DATA_COUNCIL_SUCC_V220" ]
-  [ "${lines[6]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
-  [ "${lines[8]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_SUCC_V220" ]
-  [ "${lines[9]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_SUCC_V220" ]
-  [ "${lines[10]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[11]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_SUCC_V220" ]
+  [ "${lines[7]}" = "Attempting to generate payload for grand child at: $GRAND_CHILD_MULTISIG" ]
+  [ "${lines[9]}" = "Grand child tx hash: $GRAND_CHILD_HASH_COUNCIL_SUCC_V220" ]
+  [ "${lines[10]}" = "Grand child tx data: $GRAND_CHILD_DATA_COUNCIL_SUCC_V220" ]
+  [ "${lines[11]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[12]}" = "Your signature for grand child tx hash: $GRAND_CHILD_SIG_COUNCIL_SUCC_V220" ]
 }
 
 # --- sepolia sign tests ---
@@ -960,8 +960,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $SEPOLIA_PARENT_HASH_V4" ]
   [ "${lines[4]}" = "Child tx hash: $SEPOLIA_CHILD_HASH_CLABS_V4" ]
   [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_CLABS_V4" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_CLABS_V4" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_CLABS_V4" ]
 }
 
 @test "Test sign v4 council on sepolia" {
@@ -973,8 +973,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $SEPOLIA_PARENT_HASH_V4" ]
   [ "${lines[4]}" = "Child tx hash: $SEPOLIA_CHILD_HASH_COUNCIL_V4" ]
   [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_COUNCIL_V4" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_COUNCIL_V4" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_COUNCIL_V4" ]
 }
 
 @test "Test sign v5 clabs on sepolia" {
@@ -986,8 +986,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $SEPOLIA_PARENT_HASH_V5" ]
   [ "${lines[4]}" = "Child tx hash: $SEPOLIA_CHILD_HASH_CLABS_V5" ]
   [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_CLABS_V5" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_CLABS_V5" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_CLABS_V5" ]
 }
 
 @test "Test sign v5 council on sepolia" {
@@ -999,8 +999,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $SEPOLIA_PARENT_HASH_V5" ]
   [ "${lines[4]}" = "Child tx hash: $SEPOLIA_CHILD_HASH_COUNCIL_V5" ]
   [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_COUNCIL_V5" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_COUNCIL_V5" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_COUNCIL_V5" ]
 }
 
 @test "Test sign succ-v2 clabs on sepolia" {
@@ -1012,8 +1012,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $SEPOLIA_PARENT_HASH_SUCC_V2" ]
   [ "${lines[4]}" = "Child tx hash: $SEPOLIA_CHILD_HASH_CLABS_SUCC_V2" ]
   [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_CLABS_SUCC_V2" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_CLABS_SUCC_V2" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_CLABS_SUCC_V2" ]
 }
 
 @test "Test sign succ-v2 council on sepolia" {
@@ -1025,8 +1025,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $SEPOLIA_PARENT_HASH_SUCC_V2" ]
   [ "${lines[4]}" = "Child tx hash: $SEPOLIA_CHILD_HASH_COUNCIL_SUCC_V2" ]
   [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_COUNCIL_SUCC_V2" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V2" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V2" ]
 }
 
 @test "Test sign succ-v210 clabs on sepolia" {
@@ -1038,8 +1038,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $SEPOLIA_PARENT_HASH_SUCC_V210" ]
   [ "${lines[4]}" = "Child tx hash: $SEPOLIA_CHILD_HASH_CLABS_SUCC_V210" ]
   [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_CLABS_SUCC_V210" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_CLABS_SUCC_V210" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_CLABS_SUCC_V210" ]
 }
 
 @test "Test sign succ-v210 council on sepolia" {
@@ -1051,8 +1051,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $SEPOLIA_PARENT_HASH_SUCC_V210" ]
   [ "${lines[4]}" = "Child tx hash: $SEPOLIA_CHILD_HASH_COUNCIL_SUCC_V210" ]
   [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_COUNCIL_SUCC_V210" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V210" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V210" ]
 }
 
 @test "Test sign succ-v220 clabs on sepolia" {
@@ -1064,8 +1064,8 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $SEPOLIA_PARENT_HASH_SUCC_V220" ]
   [ "${lines[4]}" = "Child tx hash: $SEPOLIA_CHILD_HASH_CLABS_SUCC_V220" ]
   [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_CLABS_SUCC_V220" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_CLABS_SUCC_V220" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_CLABS_SUCC_V220" ]
 }
 
 @test "Test sign succ-v220 council on sepolia" {
@@ -1077,6 +1077,20 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[3]}" = "Parent tx hash: $SEPOLIA_PARENT_HASH_SUCC_V220" ]
   [ "${lines[4]}" = "Child tx hash: $SEPOLIA_CHILD_HASH_COUNCIL_SUCC_V220" ]
   [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_COUNCIL_SUCC_V220" ]
-  [ "${lines[6]}" = "Your account is $ACCOUNT" ]
-  [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220" ]
+  [ "${lines[7]}" = "Your account is $ACCOUNT" ]
+  [ "${lines[8]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220" ]
+}
+
+@test "Test sign warns when signer is not a Safe owner" {
+  TEST_PK=$TEST_PK run just sign succ-v220 clabs
+  [ "$status" -eq 0 ]
+  [[ "${lines[6]}" == *"WARNING: signer $ACCOUNT is NOT an owner of 0x9Eb44Da23433b5cAA1c87e35594D15FcEb08D34d"* ]]
+}
+
+@test "Test check-owner accepts a Safe owner" {
+  SAFE=0x9Eb44Da23433b5cAA1c87e35594D15FcEb08D34d
+  OWNER=$(cast call $SAFE "getOwners()(address[])" -r $RPC_URL | tr -d '[] ' | cut -d, -f1)
+  run just check-owner $SAFE $OWNER $RPC_URL
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = "Signer $OWNER is an owner of $SAFE" ]
 }

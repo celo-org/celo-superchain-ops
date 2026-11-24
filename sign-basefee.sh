@@ -153,18 +153,24 @@ echo ""
 
 # --- Sign ---
 
-if [ -z "${TEST_PK:-}" ]; then
-    if [ -z "${HD_PATH:-}" ]; then
-        echo "Signing with Ledger (default derivation path)..."
-        echo "$TX_DATA" | ./eip712sign -ledger > .tmp
-    else
-        echo "Signing with Ledger ($HD_PATH)..."
-        echo "$TX_DATA" | ./eip712sign -ledger -hd-paths "$HD_PATH" > .tmp
-    fi
+if [ -n "${TEST_PK:-}" ]; then
+    SIGNER_ARGS=(-private-key "${TEST_PK:2}")
+    SIGN_MSG="Signing with test private key..."
+elif [ -n "${HD_PATH:-}" ]; then
+    SIGNER_ARGS=(-ledger -hd-paths "$HD_PATH")
+    SIGN_MSG="Signing with Ledger ($HD_PATH)..."
 else
-    echo "Signing with test private key..."
-    echo "$TX_DATA" | ./eip712sign -private-key "${TEST_PK:2}" > .tmp
+    SIGNER_ARGS=(-ledger)
+    SIGN_MSG="Signing with Ledger (default derivation path)..."
 fi
+
+# Verify the signer owns the cLabs Safe before asking the Ledger to sign
+SIGNER=$(./eip712sign "${SIGNER_ARGS[@]}" -address)
+SIGNER="${SIGNER##*Signer: }"
+just check-owner "$CLABS_SAFE" "$SIGNER" "$RPC_URL"
+
+echo "$SIGN_MSG"
+echo "$TX_DATA" | ./eip712sign "${SIGNER_ARGS[@]}" > .tmp
 
 ACCOUNT=$(grep Signer .tmp)
 ACCOUNT="${ACCOUNT#Signer: }"
