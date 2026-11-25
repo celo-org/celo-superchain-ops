@@ -63,28 +63,27 @@ check-team team:
         ;;
     esac
 
-# Warn, and ask to continue, if the signer is not an owner of the Safe it signs for
-check-owner $safe $signer $rpc_url $other_safe='' $other_team='':
+# Silent if owner is an owner of safe; otherwise warn and ask to continue
+check-owner $safe $owner $rpc_url $other_safe='' $other_team='':
     #!/usr/bin/env bash
     set -euo pipefail
-    is_owner() { cast call "$1" "isOwner(address)(bool)" "$signer" -r "$rpc_url" 2>/dev/null || echo "unknown"; }
+    is_owner() { cast call "$1" "isOwner(address)(bool)" "$owner" -r "$rpc_url" 2>/dev/null || echo "unknown"; }
     case $(is_owner "$safe") in
     "true")
-        echo "Signer $signer is an owner of $safe"
         ;;
     "false")
-        echo -e "\e[1;31mWARNING: signer $signer is NOT an owner of $safe\e[0m"
+        echo -e "\033[1;31mWARNING: $owner is NOT an owner of $safe\033[0m"
         if [ -n "$other_safe" ] && [ "$(is_owner "$other_safe")" = "true" ]; then
-            echo -e "\e[1;33mIt is an owner of the $other_team Safe ($other_safe). Did you mean team=$other_team?\e[0m"
+            echo -e "\033[1;33mIt is an owner of the $other_team Safe ($other_safe). Did you mean team=$other_team?\033[0m"
         fi
-        # Only prompt in interactive, non-test runs; elsewhere the warning is enough
-        if [ -z "${TEST_PK:-}" ] && [ -t 0 ]; then
+        # Prompt only in interactive runs; elsewhere the warning is enough
+        if [ -t 0 ]; then
             read -r -p "Continue signing anyway? [y/N] " ANSWER
             [[ "$ANSWER" =~ ^[yY]$ ]] || { echo "Aborted."; exit 1; }
         fi
         ;;
     *)
-        echo -e "\e[1;33mWARNING: could not verify whether $signer is an owner of $safe (RPC error)\e[0m"
+        echo -e "\033[1;33mWARNING: could not verify whether $owner is an owner of $safe (RPC error)\033[0m"
         ;;
     esac
 
@@ -181,10 +180,14 @@ sign version team hd_path='' grand_child='':
     "clabs")
         CHILD_SAFE_ADDRESS=$CLABS_SAFE_ADDRESS
         CHILD_NONCE=$(cat $UPGRADE_FILE | jq -r .nonce.clabs)
+        OTHER_TEAM="council"
+        OTHER_SAFE_ADDRESS=$COUNCIL_SAFE_ADDRESS
         ;;
     "council")
         CHILD_SAFE_ADDRESS=$COUNCIL_SAFE_ADDRESS
         CHILD_NONCE=$(cat $UPGRADE_FILE | jq -r .nonce.council)
+        OTHER_TEAM="clabs"
+        OTHER_SAFE_ADDRESS=$CLABS_SAFE_ADDRESS
         ;;
     esac
     CHILD_TX_HASH=$(cast call $CHILD_SAFE_ADDRESS \
@@ -202,29 +205,18 @@ sign version team hd_path='' grand_child='':
 
     if [ -n "${TEST_PK:-}" ]; then
         SIGNER_ARGS=(-private-key "${TEST_PK:2}")
-    elif [ -n "${HD_PATH:-}" ]; then
+    else
+        HD_PATH=${HD_PATH:-"m/44'/60'/0'/0/0"}
         SIGNER_ARGS=(-ledger -hd-paths "$HD_PATH")
-    else
-        SIGNER_ARGS=(-ledger)
-    fi
-
-    # Verify the signer owns the Safe it signs for before asking the Ledger to sign
-    SIGNER=$(./eip712sign "${SIGNER_ARGS[@]}" -address)
-    SIGNER="${SIGNER##*Signer: }"
-    if [ -z ${GRAND_CHILD:-} ]; then
-        case $TEAM in
-        "clabs") OTHER_TEAM="council"; OTHER_SAFE_ADDRESS=$COUNCIL_SAFE_ADDRESS ;;
-        "council") OTHER_TEAM="clabs"; OTHER_SAFE_ADDRESS=$CLABS_SAFE_ADDRESS ;;
-        esac
-        just check-owner "$CHILD_SAFE_ADDRESS" "$SIGNER" "$RPC_URL" "$OTHER_SAFE_ADDRESS" "$OTHER_TEAM"
-    else
-        just check-owner "$GRAND_CHILD" "$SIGNER" "$RPC_URL"
+        echo "Signing Ledger wallet under $HD_PATH derivation path..."
+        # Catch a wrong team, app or account index before the Ledger signs
+        SIGNER=$(./eip712sign "${SIGNER_ARGS[@]}" -address)
+        SIGNER="${SIGNER##*Signer: }"
+        just check-owner $CHILD_SAFE_ADDRESS ${GRAND_CHILD:-$SIGNER} $RPC_URL $OTHER_SAFE_ADDRESS $OTHER_TEAM
+        if [ -n "${GRAND_CHILD:-}" ]; then just check-owner $GRAND_CHILD $SIGNER $RPC_URL; fi
     fi
 
     if [ -z ${GRAND_CHILD:-} ]; then
-        if [ -z ${TEST_PK:-} ]; then
-            echo "Signing Ledger wallet under ${HD_PATH:-default} derivation path..."
-        fi
         echo $CHILD_TX_DATA | ./eip712sign "${SIGNER_ARGS[@]}" > .tmp
     else
         echo "Attempting to generate payload for grand child at: $GRAND_CHILD"
@@ -246,9 +238,6 @@ sign version team hd_path='' grand_child='':
         echo "Grand child tx hash: $GRAND_CHILD_TX_HASH"
         echo "Grand child tx data: $GRAND_CHILD_TX_DATA"
 
-        if [ -z ${TEST_PK:-} ]; then
-            echo "Signing Ledger wallet under ${HD_PATH:-default} derivation path..."
-        fi
         echo $GRAND_CHILD_TX_DATA | ./eip712sign "${SIGNER_ARGS[@]}" > .tmp
     fi
     
@@ -302,14 +291,14 @@ print_json grand_child='':
     set -euo pipefail
     GRAND_CHILD={{grand_child}}
     if [ -z ${GRAND_CHILD:-} ]; then
-        echo -e "\e[1;33mCopy and forward following JSON to your facilitator:\e[0m"
+        echo -e "\033[1;33mCopy and forward following JSON to your facilitator:\033[0m"
     else
         echo -e \
-            "\e[1;33mImportant! Your signer is a nested Gnosis Safe wallet.\n" \
+            "\033[1;33mImportant! Your signer is a nested Gnosis Safe wallet.\n" \
             "Regular path supports structure: (Celo Multisig) > (Council Multisig) > (Hardware Wallet).\n" \
             "Your structure is as following: (Celo Multisig) > (Council Multisig) > (Nested Multisig) > (Your Wallet).\n" \
             "Ensure required number of members within your nested Gnosis Safe wallet will run this script.\n" \
-            "Copy and forward full output of current script and following JSON to your facilitator:\e[0m"
+            "Copy and forward full output of current script and following JSON to your facilitator:\033[0m"
     fi
     cat out.json | jq
 
