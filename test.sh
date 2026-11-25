@@ -1084,7 +1084,7 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220" ]
 }
 
-# --- check-owner tests (Mento grand child owns the council Safe, not the cLabs one) ---
+# --- check-owner tests ---
 
 @test "Test check-owner is silent for an owner" {
   run just check-owner $COUNCIL_SAFE $GRAND_CHILD_MULTISIG $MAINNET_RPC_URL
