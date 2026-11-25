@@ -6,6 +6,9 @@ TEST_PK=0xcf14463c272869f083e36ed4a221d3c0720a0288d813c33b90734dd3cde8d9b6
 # constants
 ACCOUNT=0xC2F43D252b2F3868061189F876EB215Cd78108f2
 GRAND_CHILD_MULTISIG=0xD1C635987B6Aa287361d08C6461491Fa9df087f2
+CLABS_SAFE=0x9Eb44Da23433b5cAA1c87e35594D15FcEb08D34d
+COUNCIL_SAFE=0xC03172263409584f7860C25B6eB4985f0f6F4636
+MAINNET_RPC_URL=${RPC_URL:-https://ethereum.publicnode.com}
 SIM_URL_V4="https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0x962ef321746bb075a44226bdd645b469e761fb7dbdeb42869902b6e7ebc3b7ef"
 SIM_URL_V5="https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0x833bca6071ad1cf1c82acbb58fccefe75e06978454431c0597819cb743363bbb"
 SIM_URL_SUCC_V2="https://dashboard.tenderly.co/explorer/vnet/1baaac03-3928-48a7-99b6-2fdf0b2add6d/tx/0xce7dc169f6885f8ca937135a562068e3444e6c7fc299ffb7e2341372ed006dda"
@@ -1079,4 +1082,19 @@ SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220=64edc007adc748bd0eaea5011b287062e2fa45f04e8e
   [ "${lines[5]}" = "Child tx data: $SEPOLIA_CHILD_DATA_COUNCIL_SUCC_V220" ]
   [ "${lines[6]}" = "Your account is $ACCOUNT" ]
   [ "${lines[7]}" = "Your signature for child tx hash: $SEPOLIA_CHILD_SIG_COUNCIL_SUCC_V220" ]
+}
+
+# --- check-owner tests ---
+
+@test "Test check-owner is silent for an owner" {
+  run just check-owner $COUNCIL_SAFE $GRAND_CHILD_MULTISIG $MAINNET_RPC_URL
+  [ "$status" -eq 0 ]
+  [ -z "$output" ]
+}
+
+@test "Test check-owner warns and hints the right team" {
+  run just check-owner $CLABS_SAFE $GRAND_CHILD_MULTISIG $MAINNET_RPC_URL $COUNCIL_SAFE council < /dev/null
+  [ "$status" -eq 0 ]
+  [[ "${lines[0]}" == *"WARNING: $GRAND_CHILD_MULTISIG is NOT an owner of $CLABS_SAFE"* ]]
+  [[ "${lines[1]}" == *"Did you mean team=council?"* ]]
 }

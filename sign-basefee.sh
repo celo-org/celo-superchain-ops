@@ -154,13 +154,11 @@ echo ""
 # --- Sign ---
 
 if [ -z "${TEST_PK:-}" ]; then
-    if [ -z "${HD_PATH:-}" ]; then
-        echo "Signing with Ledger (default derivation path)..."
-        echo "$TX_DATA" | ./eip712sign -ledger > .tmp
-    else
-        echo "Signing with Ledger ($HD_PATH)..."
-        echo "$TX_DATA" | ./eip712sign -ledger -hd-paths "$HD_PATH" > .tmp
-    fi
+    HD_PATH=${HD_PATH:-"m/44'/60'/0'/0/0"}
+    echo "Signing with Ledger ($HD_PATH)..."
+    SIGNER=$(./eip712sign -ledger -hd-paths "$HD_PATH" -address)
+    just check-owner "$CLABS_SAFE" "${SIGNER##*Signer: }" "$RPC_URL"
+    echo "$TX_DATA" | ./eip712sign -ledger -hd-paths "$HD_PATH" > .tmp
 else
     echo "Signing with test private key..."
     echo "$TX_DATA" | ./eip712sign -private-key "${TEST_PK:2}" > .tmp
