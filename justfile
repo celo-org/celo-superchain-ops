@@ -209,7 +209,6 @@ sign version team hd_path='' grand_child='':
         HD_PATH=${HD_PATH:-"m/44'/60'/0'/0/0"}
         SIGNER_ARGS=(-ledger -hd-paths "$HD_PATH")
         echo "Signing Ledger wallet under $HD_PATH derivation path..."
-        # Catch a wrong team, app or account index before the Ledger signs
         SIGNER=$(./eip712sign "${SIGNER_ARGS[@]}" -address)
         SIGNER="${SIGNER##*Signer: }"
         just check-owner $CHILD_SAFE_ADDRESS ${GRAND_CHILD:-$SIGNER} $RPC_URL $OTHER_SAFE_ADDRESS $OTHER_TEAM

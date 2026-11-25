@@ -156,7 +156,6 @@ echo ""
 if [ -z "${TEST_PK:-}" ]; then
     HD_PATH=${HD_PATH:-"m/44'/60'/0'/0/0"}
     echo "Signing with Ledger ($HD_PATH)..."
-    # Catch a wrong app or account index before the Ledger signs
     SIGNER=$(./eip712sign -ledger -hd-paths "$HD_PATH" -address)
     just check-owner "$CLABS_SAFE" "${SIGNER##*Signer: }" "$RPC_URL"
     echo "$TX_DATA" | ./eip712sign -ledger -hd-paths "$HD_PATH" > .tmp
