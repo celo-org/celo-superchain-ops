@@ -72,8 +72,6 @@ just sign_ledger succ-v220 <team> <ledger_app> [account_index] [grand_child]
 
 This produces `out.json` — **send it to the facilitator.**
 
-Before the Ledger signs, the script reads its address and checks on-chain that it owns the `<team>` Safe (with `[grand_child]`: that it owns the grand child, and the grand child owns the `<team>` Safe). If not, it warns, hints at the right team when it can, and asks whether to continue.
-
 #### Examples
 
 ```bash
